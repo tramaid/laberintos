@@ -906,6 +906,14 @@ Recorrer `capturas/mono/` entera. La mono nueva es **más ancha** que muchas mon
 
 Si algo desborda, se corrige **con el `font-size` o el `letter-spacing` de ese elemento**, no cambiando la fuente.
 
+- [ ] **Step 6b: El sublabel del Gran Reserva, que es el caso peor**
+
+Abrir `capturas/mono/390-normal/indice-completa.png` y compararlo contra el mismo archivo en `capturas/base/`.
+
+`.cuatro span` es `--dato`, así que cambia de fuente. El sublabel más largo del sitio es **"EDICIÓN LIMITADA · 2022"**, y en la línea de base **ya envuelve a dos líneas a 390px**, lo que deja la segunda fila de la grilla desalineada: el nombre "Gran Reserva" queda más alto que "Syrah". Eso es estado previo, no una regresión de esta pasada.
+
+Lo que hay que verificar es que **no empeore**: que no pase a tres líneas y que no empuje la fila. Si empeora, el arreglo va en `.cuatro span` —bajarle el `letter-spacing` de `.16em`, o el `font-size` de 11px— y nunca en la fuente.
+
 - [ ] **Step 7: Commit**
 
 ```bash

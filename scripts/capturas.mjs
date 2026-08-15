@@ -30,6 +30,13 @@ const MOMENTOS = [0, 0.36, 0.68, 0.92];
 const SECCIONES = ['.indice', '#malbec', '#reserva', '#gran-reserva',
                    '.desvio', '#syrah', '.familia', '.pie'];
 
+/* Secciones más altas que el viewport, que además se fotografían enteras.
+   .indice a 390px pasa a dos columnas y las dos últimas botellas caen debajo del
+   fold: una de ellas lleva "EDICIÓN LIMITADA · 2022", el sublabel más largo del
+   sitio. Sin esto, el ancho más apretado se verificaría sin ver justo la etiqueta
+   con más riesgo de desbordar. */
+const COMPLETAS = ['.indice'];
+
 const TIEMPO_MAX = 5000;   /* techo de cada espera por condición */
 const RESPALDO = 400;      /* si la condición no se cumple, respaldo corto y se sigue */
 
@@ -39,9 +46,9 @@ let fallaArnes = null; /* falla nuestra: manda el código 2 */
 /* Espera una condición real de la página. Si se agota el tiempo lo avisa y sigue con un
    respaldo corto en vez de explotar: un timeout del arnés no es un error del sitio y no
    debe cambiar el código de salida. */
-async function esperar(pag, fn, que, donde) {
+async function esperar(pag, fn, que, donde, arg) {
   try {
-    await pag.waitForFunction(fn, undefined, { timeout: TIEMPO_MAX });
+    await pag.waitForFunction(fn, arg, { timeout: TIEMPO_MAX });
   } catch (e) {
     /* solo el timeout es tolerable. Si el predicado se rompió (un TypeError adentro,
        por ejemplo) hay que enterarse: se propaga y termina en código 2, en vez de
@@ -140,6 +147,27 @@ try {
         await esperar(pag, IMAGENES_VISIBLES_LISTAS, 'imágenes visibles cargadas', `${donde} · ${sel}`);
         await esperar(pag, NADA_ANIMANDO, 'ninguna animación corriendo', `${donde} · ${sel}`);
         await pag.screenshot({ path: path.join(dir, `${sel.replace(/[#.]/g, '')}.png`) });
+
+        if (hay && COMPLETAS.includes(sel)) {
+          /* Para la captura de sección entera hay que forzar dos cosas que solo pasan
+             cuando algo entra al viewport: el loading="lazy" de las imágenes de abajo
+             y el .is-in que el IntersectionObserver le pone a los [data-reveal]. Sin
+             esto la mitad inferior sale en blanco y con huecos.
+             Que el reveal FUNCIONE se verifica en las capturas de viewport de arriba;
+             esta otra existe para revisar tipografía y maquetado, o sea el estado ya
+             asentado. La página se descarta al cerrar el contexto. */
+          await pag.evaluate(s => {
+            for (const img of document.querySelectorAll(`${s} img`)) img.loading = 'eager';
+            for (const el of document.querySelectorAll(`${s} [data-reveal]`)) el.classList.add('is-in');
+          }, sel);
+          await esperar(pag,
+            s => [...document.querySelectorAll(`${s} img`)].every(i => i.complete && i.naturalWidth > 0),
+            'imágenes de la sección entera cargadas', `${donde} · ${sel} completa`, sel);
+          await esperar(pag, NADA_ANIMANDO, 'ninguna animación corriendo', `${donde} · ${sel} completa`);
+          await pag.locator(sel).screenshot({
+            path: path.join(dir, `${sel.replace(/[#.]/g, '')}-completa.png`),
+          });
+        }
       }
 
       await ctx.close();
