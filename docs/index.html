@@ -627,6 +627,12 @@ document.querySelectorAll('.cuatro .ir, .nav nav a').forEach(a=>{
     if(!destino) return;
     e.preventDefault();
     destino.scrollIntoView({behavior: R.matches ? 'auto' : 'smooth', block:'start'});
+    /* scrollIntoView mueve la pagina pero no el foco: sin esto, activar un link
+       del nav con teclado deja el foco arriba y el Tab siguiente vuelve al
+       indice, dejando el pie a siete tab stops. Ni <section> ni <footer> son
+       focusables de por si, de ahi el tabindex -1. */
+    destino.setAttribute('tabindex','-1');
+    destino.focus({preventScroll:true});
     history.replaceState(null,'',a.getAttribute('href'));
   });
 });
