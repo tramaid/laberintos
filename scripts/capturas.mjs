@@ -1,70 +1,159 @@
 /* Capturas de verificación de docs/index.html.
    Uso: node scripts/capturas.mjs <etiqueta>
    Ej.: node scripts/capturas.mjs base
-   Sale con código 1 si hubo cualquier error de consola. */
+
+   Las esperas son por condición real (panel entrado, nada animando, imágenes cargadas)
+   y no por reloj: una espera fija se queda corta en silencio cuando se agrega un
+   [data-reveal] más y saca la captura a mitad de animación, que después se lee como
+   bug de diseño.
+
+   Códigos de salida: 0 todo bien · 1 el sitio tiró errores de consola · 2 falló el arnés.
+   El 1 es siempre del sitio; el 2 es siempre nuestro. */
 import { chromium } from 'playwright';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
 import fs from 'node:fs/promises';
 
 const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const sitio = 'file:///' + path.join(raiz, 'docs', 'index.html').replace(/\\/g, '/');
+/* pathToFileURL escapa espacios y # de la ruta, que la concatenación a mano rompía */
+const sitio = pathToFileURL(path.join(raiz, 'docs', 'index.html')).href;
 const etiqueta = process.argv[2] ?? 'actual';
 const salida = path.join(raiz, 'capturas', etiqueta);
 
 const ANCHOS = [390, 768, 1280, 1440];
+const ALTO = 900;
 /* El umbral mide 640vh y es sticky: no sirve una captura de página completa.
    Se fotografía en cuatro momentos del recorrido de cámara. */
 const MOMENTOS = [0, 0.36, 0.68, 0.92];
 const SECCIONES = ['#indice', '#malbec', '#reserva', '#gran-reserva',
                    '.desvio', '#syrah', '.familia', '.pie'];
 
-const errores = [];
-const navegador = await chromium.launch();
+const TIEMPO_MAX = 5000;   /* techo de cada espera por condición */
+const RESPALDO = 400;      /* si la condición no se cumple, respaldo corto y se sigue */
 
-for (const ancho of ANCHOS) {
-  for (const movimiento of ['normal', 'reduce']) {
-    const ctx = await navegador.newContext({
-      viewport: { width: ancho, height: 900 },
-      reducedMotion: movimiento === 'reduce' ? 'reduce' : 'no-preference',
-      deviceScaleFactor: 1,
-    });
-    const pag = await ctx.newPage();
-    pag.on('console', m => {
-      if (m.type() === 'error') errores.push(`${ancho}px/${movimiento} · consola · ${m.text()}`);
-    });
-    pag.on('pageerror', e => errores.push(`${ancho}px/${movimiento} · excepción · ${e.message}`));
+const errores = [];   /* errores del sitio: mandan el código 1 */
+let fallaArnes = null; /* falla nuestra: manda el código 2 */
 
-    await pag.goto(sitio, { waitUntil: 'load' });
-    /* el panel de tinta del umbral entra en 1100ms al cargar */
-    await pag.waitForTimeout(1600);
-
-    const dir = path.join(salida, `${ancho}-${movimiento}`);
-    await fs.mkdir(dir, { recursive: true });
-
-    const caja = await (await pag.$('#umbral')).boundingBox();
-    for (const p of MOMENTOS) {
-      await pag.evaluate(y => window.scrollTo(0, y), caja.y + p * (caja.height - 900));
-      await pag.waitForTimeout(700);
-      await pag.screenshot({ path: path.join(dir, `umbral-${String(p).replace('.', '_')}.png`) });
-    }
-
-    for (const sel of SECCIONES) {
-      await pag.evaluate(s => document.querySelector(s)
-        ?.scrollIntoView({ block: 'start', behavior: 'auto' }), sel);
-      /* los reveals duran 900ms más 90ms de stagger por elemento */
-      await pag.waitForTimeout(1500);
-      await pag.screenshot({ path: path.join(dir, `${sel.replace(/[#.]/g, '')}.png`) });
-    }
-
-    await ctx.close();
+/* Espera una condición real de la página. Si se agota el tiempo lo avisa y sigue con un
+   respaldo corto en vez de explotar: un timeout del arnés no es un error del sitio y no
+   debe cambiar el código de salida. */
+async function esperar(pag, fn, que, donde) {
+  try {
+    await pag.waitForFunction(fn, undefined, { timeout: TIEMPO_MAX });
+  } catch {
+    console.warn(`AVISO · ${donde} · no se cumplió "${que}" en ${TIEMPO_MAX}ms; sigo con respaldo de ${RESPALDO}ms`);
+    await pag.waitForTimeout(RESPALDO);
   }
 }
-await navegador.close();
 
-if (errores.length) {
-  console.error(`\n${errores.length} error(es):`);
-  for (const e of errores) console.error('  ' + e);
-  process.exit(1);
+/* el panel de tinta del umbral entra al cargar llevando --pn de 0 a 1.
+   Si no hay .panel (o no se anima) la condición da true igual, para no colgarse. */
+const PANEL_ENTRADO = () => {
+  const p = document.querySelector('.panel');
+  return !p || getComputedStyle(p).getPropertyValue('--pn').trim() === '1.000';
+};
+
+/* en Chromium getAnimations() incluye las transiciones CSS, que es lo que usan los
+   [data-reveal]: cubre los 900ms de duración más el stagger, sea cual sea la cantidad */
+const NADA_ANIMANDO = () => document.getAnimations().every(a => a.playState !== 'running');
+
+/* importa por el loading="lazy": una img sin cargar sale como hueco en la captura */
+const IMAGENES_VISIBLES_LISTAS = () => [...document.querySelectorAll('img')].every(img => {
+  const r = img.getBoundingClientRect();
+  const visible = r.bottom > 0 && r.top < window.innerHeight &&
+                  r.right > 0 && r.left < window.innerWidth;
+  return !visible || (img.complete && img.naturalWidth > 0);
+});
+
+/* dos frames para que la cámara rAF del umbral ya haya leído el scroll nuevo */
+const asentar = pag => pag.evaluate(() =>
+  new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
+
+let navegador;
+try {
+  navegador = await chromium.launch();
+} catch (e) {
+  console.error(`ARNÉS · no se pudo lanzar Chromium: ${e.message}`);
+  process.exit(2);
 }
+
+try {
+  for (const ancho of ANCHOS) {
+    for (const movimiento of ['normal', 'reduce']) {
+      const donde = `${ancho}px/${movimiento}`;
+      const ctx = await navegador.newContext({
+        viewport: { width: ancho, height: ALTO },
+        reducedMotion: movimiento === 'reduce' ? 'reduce' : 'no-preference',
+        deviceScaleFactor: 1,
+      });
+      const pag = await ctx.newPage();
+      pag.on('console', m => {
+        if (m.type() === 'error') errores.push(`${donde} · consola · ${m.text()}`);
+      });
+      pag.on('pageerror', e => errores.push(`${donde} · excepción · ${e.message}`));
+
+      await pag.goto(sitio, { waitUntil: 'load' });
+      await esperar(pag, PANEL_ENTRADO, 'panel del umbral entrado (--pn = 1.000)', donde);
+
+      const dir = path.join(salida, `${ancho}-${movimiento}`);
+      await fs.mkdir(dir, { recursive: true });
+
+      const nodo = await pag.$('#umbral');
+      if (!nodo) throw new Error(`${donde} · no se encontró #umbral: cambió la estructura del sitio`);
+      const caja = await nodo.boundingBox();
+      if (!caja) throw new Error(`${donde} · #umbral no tiene caja visible`);
+
+      /* Con prefers-reduced-motion el sitio achica .umbral a 100vh: como el viewport
+         también mide ALTO, los cuatro momentos caen en el mismo scroll y darían cuatro
+         PNG idénticos. Ahí se saca una sola captura, y se llama umbral.png para que
+         nadie crea estar viendo el último fotograma de un recorrido que no ocurre. */
+      const momentos = movimiento === 'reduce' ? [null] : MOMENTOS;
+      for (const p of momentos) {
+        const y = p === null ? caja.y : caja.y + p * (caja.height - ALTO);
+        await pag.evaluate(v => window.scrollTo(0, v), y);
+        await asentar(pag);
+        await esperar(pag, NADA_ANIMANDO, 'ninguna animación corriendo', `${donde} · umbral ${p ?? 'único'}`);
+        const nombre = p === null ? 'umbral.png' : `umbral-${String(p).replace('.', '_')}.png`;
+        await pag.screenshot({ path: path.join(dir, nombre) });
+      }
+
+      for (const sel of SECCIONES) {
+        const hay = await pag.evaluate(s => {
+          const el = document.querySelector(s);
+          el?.scrollIntoView({ block: 'start', behavior: 'auto' });
+          return !!el;
+        }, sel);
+        /* un selector que no matchea deja la captura repetida de la anterior sin avisar:
+           no es error del sitio, pero hay que verlo */
+        if (!hay) console.warn(`AVISO · ${donde} · el selector ${sel} no matchea nada: la captura repite la anterior`);
+        await asentar(pag);
+        await esperar(pag, IMAGENES_VISIBLES_LISTAS, 'imágenes visibles cargadas', `${donde} · ${sel}`);
+        await esperar(pag, NADA_ANIMANDO, 'ninguna animación corriendo', `${donde} · ${sel}`);
+        await pag.screenshot({ path: path.join(dir, `${sel.replace(/[#.]/g, '')}.png`) });
+      }
+
+      await ctx.close();
+    }
+  }
+} catch (e) {
+  fallaArnes = e;
+} finally {
+  /* en finally para no dejar un Chromium huérfano cuando algo tira: en Windows se
+     acumulan entre corridas */
+  await navegador.close().catch(() => {});
+}
+
+/* los errores del sitio se imprimen siempre, incluso si el arnés se rompió después,
+   para no perder lo que se juntó hasta ahí */
+if (errores.length) {
+  console.error(`\n${errores.length} error(es) del sitio:`);
+  for (const e of errores) console.error('  ' + e);
+}
+
+if (fallaArnes) {
+  console.error(`\nARNÉS · la corrida se cortó: ${fallaArnes.message}`);
+  process.exit(2);
+}
+if (errores.length) process.exit(1);
+
 console.log(`OK · capturas en capturas/${etiqueta}/ · cero errores de consola`);

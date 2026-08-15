@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "capturas": "node scripts/capturas.mjs",
+    "contraste": "node scripts/contraste.mjs"
   },
   "dependencies": {
     "next": "^15.0.0",

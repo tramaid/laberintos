@@ -56,6 +56,10 @@ Salen de `CLAUDE.md` y del spec:
 
 Sin esto no hay forma de saber si un cambio rompió algo. La línea de base se saca **antes** de tocar una sola línea del sitio.
 
+> **Los scripts de acá abajo quedaron viejos.** Se escribieron tal cual, y después una revisión de calidad encontró cosas que los hacían poco confiables justamente como herramienta de verificación: `contraste.mjs` repetía a mano los hexadecimales del CSS (podía dar verde para un color que el sitio no usa), y `capturas.mjs` esperaba por reloj en vez de por condición, con margen suficientemente fino como para fotografiar a mitad de animación sin avisar.
+>
+> Se arreglaron antes de empezar la tarea 2. **La fuente de verdad son `scripts/capturas.mjs` y `scripts/contraste.mjs` en el repo**, no el código pegado acá. Lo de abajo queda como registro de por dónde arrancó.
+
 **Files:**
 - Create: `scripts/capturas.mjs`
 - Create: `scripts/contraste.mjs`
@@ -371,7 +375,9 @@ document.querySelectorAll('.cuatro .ir, .nav nav a').forEach(a=>{
 node scripts/capturas.mjs nav
 ```
 
-Esperado: `OK · cero errores de consola`. Comparar `capturas/nav/1280-normal/umbral-0.png` contra `capturas/base/1280-normal/umbral-0.png`: el nav tiene que verse **idéntico**. Es `mix-blend-mode: difference` sobre `<b>` y `<a>` igual que sobre `<span>`; si cambió de color o de posición, algo salió mal.
+Esperado: `OK · cero errores de consola`. Comparar `capturas/nav/1280-normal/umbral-0.png` contra `capturas/base/1280-normal/umbral-0.png`: el nav tiene que verse **idéntico**.
+
+**`indice.png` es la excepción y va a dar diferente a propósito.** En la línea de base, `#indice` no existía todavía, así que el `?.scrollIntoView` del script fue un no-op y esa captura salió siendo una copia exacta de `umbral-0_92.png`, en las ocho carpetas. Recién con el `id` del paso 2 empieza a fotografiar la sección de verdad. **No lo rastrees como regresión.** Es `mix-blend-mode: difference` sobre `<b>` y `<a>` igual que sobre `<span>`; si cambió de color o de posición, algo salió mal.
 
 - [ ] **Step 5: Commit**
 
@@ -584,35 +590,12 @@ Acá aparecen los dos arreglos de contraste. La regla del spec —"si un token d
 
 **Files:**
 - Modify: `docs/index.html:44-47` (bloque `:root`)
-- Modify: `scripts/contraste.mjs`
 
-- [ ] **Step 1: Corregir `--muted-2`**
+**`scripts/contraste.mjs` ya no se toca.** Lee el bloque `:root` de `docs/index.html` directamente, así que alcanza con cambiar el CSS y el script se entera solo. Antes el hex vivía en los dos archivos y podían desincronizarse, que era la única forma de que el script diera verde para un color que el sitio no usa.
 
-`#7d766b` da ~4.4:1 sobre tinta: no pasa. Se aclara a `#837c70`, que da ~4.8:1.
+Por eso el orden de esta tarea cambió: **primero se agregan los tokens, después se mide.** Al medir, la columna de origen tiene que decir `css` en las siete filas; si alguna sigue diciendo `propuesto`, ese token no llegó al `:root`.
 
-En `scripts/contraste.mjs`, cambiar la línea de `--muted-2`:
-
-```js
-  ['--muted-2',        '#7d766b', INK,   true,  'labels dt y .edicion sobre tinta'],
-```
-
-por:
-
-```js
-  ['--muted-2',        '#837c70', INK,   true,  'labels dt y .edicion sobre tinta'],
-```
-
-- [ ] **Step 2: Correr el contraste y confirmar que ahora pasa todo**
-
-```bash
-node scripts/contraste.mjs
-```
-
-Esperado: **código de salida 0**, todas las filas de texto en `PASA`. `--muted-2` con `#837c70` alrededor de 4.8:1.
-
-Si `#837c70` todavía no llegara a 4.5, subir de a un escalón (`#888176`, `#8d867b`) y volver a correr hasta que pase. Anotar el valor final.
-
-- [ ] **Step 3: Agregar los tokens al `:root`**
+- [ ] **Step 1: Agregar los tokens al `:root`**
 
 Reemplazar las líneas 44-47:
 
@@ -644,9 +627,24 @@ por:
      #6f685e tambien se descarto: 3.60:1 sobre ink. Va --muted-2. */
 ```
 
-**Ajustar los números** a lo que haya impreso el script en el Step 2 si difieren.
+Los contrastes anotados en los comentarios son los que ya midió el script en la tarea 1: `--texto-2` 7.82, `--muted-claro` 4.84, `--et-syrah-texto` 6.71, `--muted` 5.33. **Ajustalos** si el paso 2 imprime otra cosa.
 
-- [ ] **Step 4: Reemplazar los colores sueltos**
+`--muted-2` es el único valor **nuevo**: `#7d766b` daba 4.40:1 y no pasaba, así que se aclara a `#837c70`. El 4.79:1 del comentario es una estimación mía y hay que confirmarla en el paso siguiente.
+
+- [ ] **Step 2: Medir y confirmar que ahora pasa todo**
+
+```bash
+node scripts/contraste.mjs
+```
+
+Esperado: **código de salida 0**, las cinco filas de texto en `PASA`, y la columna de origen diciendo **`css` en las siete filas**.
+
+Dos formas de fallar, con arreglos distintos:
+
+- **Alguna fila sigue diciendo `propuesto`.** Ese token no llegó al `:root` o quedó mal escrito. Volvé al paso 1.
+- **`--muted-2` con `#837c70` no llega a 4.5:1.** Subí de a un escalón —`#888176`, después `#8d867b`— y volvé a medir hasta que pase. Anotá el valor final en el comentario del CSS.
+
+- [ ] **Step 3: Reemplazar los colores sueltos**
 
 Once reemplazos en el CSS. Ninguno cambia una medida, solo el color:
 
@@ -667,7 +665,7 @@ Once reemplazos en el CSS. Ninguno cambia una medida, solo el color:
 
 Las líneas 261 y 262 son las que **cambian visiblemente**: los labels del bloque claro del Syrah se oscurecen de `#8a8377` (3.11:1) a `#6b6459` (4.84:1). Es el arreglo de accesibilidad, no un capricho.
 
-- [ ] **Step 5: Verificar que no quedó ningún hexadecimal fuera de `:root`**
+- [ ] **Step 4: Verificar que no quedó ningún hexadecimal fuera de `:root`**
 
 Un `sed` por rango de líneas no sirve: las líneas ya se corrieron. La búsqueda va por contenido, descartando las líneas que **definen** un token (las que tienen `--algo:`):
 
@@ -685,7 +683,7 @@ Esperado: **exactamente cinco líneas**, todas legítimas y documentadas en el s
 
 Si aparece una sexta, es un color que se escapó del reemplazo.
 
-- [ ] **Step 6: Capturas**
+- [ ] **Step 5: Capturas**
 
 ```bash
 node scripts/capturas.mjs color
@@ -696,10 +694,10 @@ Esperado: cero errores. Comparar contra la base:
 - `malbec.png`, `reserva.png`, `gran-reserva.png` — los labels apenas más claros (`#7d766b` → `#837c70`).
 - Todo lo demás, **idéntico**.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 6: Commit**
 
 ```bash
-git add docs/index.html scripts/contraste.mjs
+git add docs/index.html
 git commit -m "Color en tokens, con dos arreglos de contraste
 
 --muted-2 pasa de #7d766b (4.40:1) a #837c70 (4.79:1). #8a8377 se descarta:
@@ -932,6 +930,8 @@ node scripts/capturas.mjs final
 
 Esperado: `OK · capturas en capturas/final/ · cero errores de consola`, código de salida 0.
 
+Los tres códigos de salida del script significan cosas distintas: **0** todo bien, **1** el sitio tiró errores de consola, **2** se rompió el arnés de captura. Un 2 no dice nada sobre el sitio — hay que arreglar el script y volver a correr.
+
 - [ ] **Step 2: Contraste**
 
 ```bash
@@ -942,7 +942,11 @@ Esperado: código de salida 0, todas las filas de texto en `PASA`.
 
 - [ ] **Step 3: Movimiento reducido**
 
-Recorrer las carpetas `*-reduce` de `capturas/final/`. Con `prefers-reduced-motion: reduce`, la regla de la línea 366-368 apaga el umbral entero. Confirmar en los cuatro anchos:
+Recorrer las carpetas `*-reduce` de `capturas/final/`. Con `prefers-reduced-motion: reduce`, la regla de la línea 366-368 apaga el umbral entero: colapsa a `100vh`, esconde el blanco, el manifiesto y el apagón, y deja la toma A quieta.
+
+Por eso en esas carpetas hay **una sola** captura de umbral, `umbral.png`, y no cuatro: sin recorrido de cámara, los cuatro momentos serían el mismo fotograma.
+
+Confirmar en los cuatro anchos:
 - Todo el contenido **visible** — ningún bloque en `opacity: 0`, que es el modo en que los `[data-reveal]` fallan.
 - Nada en movimiento.
 - El umbral colapsado a `100vh` con la toma A quieta y el título visible.
