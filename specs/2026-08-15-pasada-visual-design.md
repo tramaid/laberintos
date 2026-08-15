@@ -60,11 +60,24 @@ cuatro escalones:
 | `--h3` | `clamp(34px, 4.2vw, 58px)`   | `.vino__texto h2`                      |
 | `--h4` | `clamp(30px, 3.6vw, 50px)`   | `.indice h2`, `.desvio h2`, `.familia h2`, `.manifiesto h2` |
 
-Los valores son los que ya están en pantalla, no valores nuevos. Cambios
-visibles, los dos únicos:
+Cinco de los siete quedan **idénticos**, porque su valor viejo y su token nuevo
+son el mismo `clamp()`: `.titulo h1`, `.vino__texto h2`, `.pie h2`,
+`.desvio h2` y `.indice h2`. Verificado byte a byte y por computed style.
 
-- `.manifiesto h2` baja su tope de 56 a 50 px.
-- `.familia h2` baja su tope de 54 a 50 px.
+Los otros dos sí cambian, y **cambian en los cuatro anchos**, no solo en el
+tope. Es fácil leer mal un `clamp()`: al cambiar `clamp(28px, 4.2vw, 56px)` por
+`clamp(30px, 3.6vw, 50px)` se mueven el mínimo, la pendiente y el máximo a la
+vez. Medido:
+
+| elemento | 390 | 768 | 1280 | 1440 |
+|---|---|---|---|---|
+| `.manifiesto h2` antes | 28 | 32,26 | 53,76 | 56 |
+| `.manifiesto h2` después | **30** | 30 | 46,08 | 50 |
+| `.familia h2` antes | 30 | 30 | 48,64 | 54 |
+| `.familia h2` después | 30 | 30 | 46,08 | 50 |
+
+A 390 el manifiesto **crece** 2 px: es lo único de toda la pasada que crece.
+Se verificó que los quiebres de línea no cambian y que no desborda.
 
 Ningún otro título cambia de tamaño.
 
