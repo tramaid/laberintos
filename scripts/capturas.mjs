@@ -25,7 +25,9 @@ const ALTO = 900;
 /* El umbral mide 640vh y es sticky: no sirve una captura de página completa.
    Se fotografía en cuatro momentos del recorrido de cámara. */
 const MOMENTOS = [0, 0.36, 0.68, 0.92];
-const SECCIONES = ['#indice', '#malbec', '#reserva', '#gran-reserva',
+/* .indice va por clase, como .desvio/.familia/.pie: la sección es
+   <section class="indice">, nunca tuvo id. */
+const SECCIONES = ['.indice', '#malbec', '#reserva', '#gran-reserva',
                    '.desvio', '#syrah', '.familia', '.pie'];
 
 const TIEMPO_MAX = 5000;   /* techo de cada espera por condición */
@@ -40,7 +42,11 @@ let fallaArnes = null; /* falla nuestra: manda el código 2 */
 async function esperar(pag, fn, que, donde) {
   try {
     await pag.waitForFunction(fn, undefined, { timeout: TIEMPO_MAX });
-  } catch {
+  } catch (e) {
+    /* solo el timeout es tolerable. Si el predicado se rompió (un TypeError adentro,
+       por ejemplo) hay que enterarse: se propaga y termina en código 2, en vez de
+       mentir diciendo que la condición "no se cumplió a tiempo". */
+    if (e?.name !== 'TimeoutError') throw e;
     console.warn(`AVISO · ${donde} · no se cumplió "${que}" en ${TIEMPO_MAX}ms; sigo con respaldo de ${RESPALDO}ms`);
     await pag.waitForTimeout(RESPALDO);
   }
@@ -102,6 +108,10 @@ try {
       if (!nodo) throw new Error(`${donde} · no se encontró #umbral: cambió la estructura del sitio`);
       const caja = await nodo.boundingBox();
       if (!caja) throw new Error(`${donde} · #umbral no tiene caja visible`);
+      /* boundingBox() es relativo al viewport y acá hace falta la coordenada de
+         documento: se le suma el scroll actual en vez de confiar en que esté en 0. */
+      const desplazado = await pag.evaluate(() => window.scrollY);
+      const tope = caja.y + desplazado;
 
       /* Con prefers-reduced-motion el sitio achica .umbral a 100vh: como el viewport
          también mide ALTO, los cuatro momentos caen en el mismo scroll y darían cuatro
@@ -109,7 +119,7 @@ try {
          nadie crea estar viendo el último fotograma de un recorrido que no ocurre. */
       const momentos = movimiento === 'reduce' ? [null] : MOMENTOS;
       for (const p of momentos) {
-        const y = p === null ? caja.y : caja.y + p * (caja.height - ALTO);
+        const y = p === null ? tope : tope + p * (caja.height - ALTO);
         await pag.evaluate(v => window.scrollTo(0, v), y);
         await asentar(pag);
         await esperar(pag, NADA_ANIMANDO, 'ninguna animación corriendo', `${donde} · umbral ${p ?? 'único'}`);

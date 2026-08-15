@@ -38,15 +38,25 @@ function tokensDeCss(archivo) {
   /* Se quitan los comentarios antes de parsear: las notas del CSS mencionan nombres de
      token y si no se limpian se confunden con declaraciones reales. */
   const limpio = texto.replace(/\/\*[\s\S]*?\*\//g, '');
-  const abre = limpio.search(/:root\s*\{/);
-  if (abre === -1) return morir(`no se encontró el bloque :root en ${archivo}`);
-  const desde = limpio.indexOf('{', abre) + 1;
+  const bloques = [...limpio.matchAll(/:root[^{]*\{/g)];
+  if (bloques.length === 0) return morir(`no se encontró el bloque :root en ${archivo}`);
+  /* Solo se lee el primero. Si hubiera otro (dentro de un @media, por ejemplo) los
+     valores de acá abajo pueden no ser los que se ven en pantalla. */
+  if (bloques.length > 1) {
+    console.warn(`AVISO · hay ${bloques.length} bloques :root en ${archivo} y este script solo lee el primero.`);
+    console.warn('AVISO · si los otros redefinen estos tokens, el contraste calculado NO refleja lo que se ve.');
+  }
+  const desde = bloques[0].index + bloques[0][0].length;
   const hasta = limpio.indexOf('}', desde);
   if (hasta === -1) return morir(`el bloque :root de ${archivo} no cierra con }`);
 
+  /* Se parte por ';' en lugar de exigirlo al final de cada declaración: omitir el
+     punto y coma en la última es CSS válido, y con un regex que lo exigía ese token
+     se perdía en silencio y caía al hex propuesto. */
   const mapa = new Map();
-  for (const m of limpio.slice(desde, hasta).matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
-    mapa.set(m[1], m[2].trim());
+  for (const trozo of limpio.slice(desde, hasta).split(';')) {
+    const m = /^\s*(--[\w-]+)\s*:\s*([\s\S]+)$/.exec(trozo);
+    if (m) mapa.set(m[1], m[2].trim());
   }
   if (mapa.size === 0) return morir(`el bloque :root de ${archivo} no tiene declaraciones legibles`);
   return mapa;
@@ -106,11 +116,24 @@ console.log(`fuente de los colores: ${path.relative(raiz, HTML).replace(/\\/g, '
 console.log(`fondos: --ink ${FONDOS['--ink']} · --papel ${FONDOS['--papel']}\n`);
 
 let fallo = false;
+const faltantes = [];
 for (const [nombre, propuesto, tokenFondo, texto, rol] of PARES) {
   const [color, origen] = colorDeToken(nombre, propuesto);
+  if (origen === 'propuesto') faltantes.push(nombre);
   const r = contraste(color, FONDOS[tokenFondo]);
-  const estado = !texto ? 'n/a ' : r >= 4.5 ? 'PASA' : 'FALLA';
+  const estado = !texto ? 'n/a' : r >= 4.5 ? 'PASA' : 'FALLA';
   if (texto && r < 4.5) fallo = true;
-  console.log(`${estado}  ${r.toFixed(2).padStart(6)}:1  ${nombre.padEnd(18)} ${color}  ${origen.padEnd(9)} ${rol}`);
+  /* padEnd(5) porque FALLA mide uno más que PASA y n/a: sin esto la fila que falla
+     queda corrida justo respecto de las demás. */
+  console.log(`${estado.padEnd(5)} ${r.toFixed(2).padStart(6)}:1  ${nombre.padEnd(18)} ${color}  ${origen.padEnd(9)} ${rol}`);
+}
+
+/* Resumen para que el estado se lea de un vistazo sin mirar la columna de origen.
+   Hoy son 3 de 7 desde el CSS; después de crear los tokens que faltan tienen que ser 7. */
+const desdeCss = PARES.length - faltantes.length;
+console.log(`\n${desdeCss} de ${PARES.length} tokens desde el CSS, ${faltantes.length} propuestos.`);
+if (faltantes.length) {
+  console.log(`Todavía no existen en :root: ${faltantes.join(', ')}.`);
+  console.log('Mientras digan "propuesto", el sitio NO usa el color que se midió acá.');
 }
 process.exit(fallo ? 1 : 0);

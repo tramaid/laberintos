@@ -377,7 +377,7 @@ node scripts/capturas.mjs nav
 
 Esperado: `OK · cero errores de consola`. Comparar `capturas/nav/1280-normal/umbral-0.png` contra `capturas/base/1280-normal/umbral-0.png`: el nav tiene que verse **idéntico**.
 
-**`indice.png` es la excepción y va a dar diferente a propósito.** En la línea de base, `#indice` no existía todavía, así que el `?.scrollIntoView` del script fue un no-op y esa captura salió siendo una copia exacta de `umbral-0_92.png`, en las ocho carpetas. Recién con el `id` del paso 2 empieza a fotografiar la sección de verdad. **No lo rastrees como regresión.** Es `mix-blend-mode: difference` sobre `<b>` y `<a>` igual que sobre `<span>`; si cambió de color o de posición, algo salió mal.
+**`indice.png` tiene que verse igual que en la base.** El `id="indice"` de este paso existe para que el link del nav tenga a dónde ir, no para las capturas: el script fotografía esa sección por clase (`.indice`), igual que a `.desvio`, `.familia` y `.pie`. Agregar el `id` no cambia lo que se captura. Es `mix-blend-mode: difference` sobre `<b>` y `<a>` igual que sobre `<span>`; si cambió de color o de posición, algo salió mal.
 
 - [ ] **Step 5: Commit**
 
