@@ -169,7 +169,7 @@ implementación nunca quede bloqueada ni tenga que adivinar.
 | # | Entrada | Si no llega |
 |---|---------|-------------|
 | 1 | ~~Dominio final del sitio~~ | **Confirmado 2026-08-15: todavía no hay dominio.** Se **elimina** la etiqueta canonical en vez de publicar `REEMPLAZAR`, y no se agrega `og:url`. `og:image` queda relativo, con un comentario en el HTML que explica qué hay que cambiar el día que haya dominio. |
-| 2 | Cosechas confirmadas | Se mantienen las de las fichas técnicas (2024 / 2023 / 2022), que es lo que el sitio publica hoy. **No se tocan.** Queda anotado como riesgo abierto: las etiquetas de las botellas dicen 2022 / 2019 / 2019. |
+| 2 | ~~Cosechas confirmadas~~ | **Resuelto 2026-08-15: vale la ficha técnica.** 2024 / 2023 / 2022, que es lo que el sitio ya publicaba: no hubo que cambiar nada en pantalla. Las etiquetas de las botellas dicen 2022 / 2019 / 2019 y están desactualizadas; si se rehacen etiquetas o piezas gráficas, la fuente es la ficha. **El riesgo legal queda cerrado.** |
 | 3 | ~~URLs de Instagram y Tienda online~~ | **Resuelto.** Ver 4.1. |
 | 4 | ~~Qué hacer con "Origen" en el nav~~ | **Confirmado 2026-08-15: se quita del nav.** Quedan "Vinos" y "Encontralo", que sí llevan a una sección real. Construir Origen queda para otra pasada. |
 | 5 | ~~La foto de `.desvio__foto`~~ | **Confirmado 2026-08-15: se borra el CSS muerto** (`docs/index.html:325-329`). El desvío queda como está: solo texto sobre papel. |

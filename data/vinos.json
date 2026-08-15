@@ -1,7 +1,7 @@
 {
   "_nota": "Datos de las fichas tecnicas oficiales. Ver _conflictos. `orden` es el recorrido del sitio: los tres Malbec en ascenso y el Syrah al final, porque cambia de provincia y de variedad. `composicion.texto` es de que lado va el texto y `composicion.tx` cuanto se corre la escena en horizontal (%) para que la botella caiga del lado contrario; se puede correr porque el fondo de los renders es negro y los cantos van enmascarados.",
   "_conflictos": [
-    "COSECHAS: los mockups y las etiquetas de las botellas dicen otros años que las fichas. Varietal Malbec: etiqueta 2022 / ficha 2024. Reserva: etiqueta 2019 / ficha 2023. Gran Reserva: etiqueta 2019 / ficha 2022. Hay que definir cuál es la añada en venta antes de publicar.",
+    "COSECHAS: RESUELTO el 2026-08-15. Vale la ficha tecnica, que es el dato real: Varietal Malbec 2024, Reserva 2023, Gran Reserva 2022. Son las que el sitio ya publicaba, asi que no hubo que cambiar nada en pantalla. Las etiquetas de las botellas y los mockups dicen 2022 / 2019 / 2019 y estan desactualizados: si se rehacen etiquetas o piezas graficas, la fuente es esta.",
     "ORIGEN: los mockups dicen 'Mendoza' a secas. Las fichas dan Ugarteche, Lujan de Cuyo (Varietal y Reserva) y Altamira, Valle de Uco (Gran Reserva). Los mockups estan menos precisos que la realidad.",
     "CRIANZA DEL VARIETAL: el mockup en ingles dice '12 MESES EN ROBLE' y '14.0% VOL'. La ficha dice SIN roble y 13,4%. El dato del mockup es inventado.",
     "SUELO de Ugarteche: 60 + 15 + 24 = 99%. Falta un 1% en la ficha original.",
