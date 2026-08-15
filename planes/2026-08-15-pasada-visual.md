@@ -971,11 +971,23 @@ grep -c "desvio__foto" docs/index.html     # 0
 - [ ] **Step 5: Hexadecimales fuera de `:root`**
 
 ```bash
-grep -cE '#[0-9a-fA-F]{3,6}' docs/index.html
-grep -nE '#[0-9a-fA-F]{3,6}' docs/index.html | grep -vE ':\s*--[a-z]' | wc -l
+grep -nE '#[0-9a-fA-F]{3,6}' docs/index.html | grep -vE ':\s*--[a-z]'
 ```
 
-Esperado del segundo: `5`, las cinco líneas legítimas enumeradas en la tarea 7, paso 5. Ninguna más.
+Esperado: **nueve líneas**, ninguna más. Se leen así:
+
+**Tres son comentarios**, no colores vivos: las líneas del bloque `:root` que explican en prosa por qué se descartaron `#7d766b`, `#8a8377` y `#6f685e`. El filtro no las saca porque no tienen la forma `--token:`. No son un problema — son la documentación del descarte.
+
+**Seis son declaraciones reales**, y las seis son legítimas:
+
+1. `<meta name="theme-color" content="#0b0a09">` — va en el `<head>`; ahí no hay variables CSS.
+2. `.camara{background:#000}` — el negro absoluto detrás de las capas. No es el negro de marca: es la ausencia de imagen.
+3. `.nav{...color:#fff}` — bajo `mix-blend-mode: difference` este blanco no pinta: invierte lo que haya detrás. Es un operando de mezcla, igual que los `#000` de las máscaras. Tokenizarlo sugeriría que se puede cambiar por otro color de marca, y no se puede: cambiarlo rompe la inversión.
+4. `-webkit-mask-image:...#000 9%, #000 91%...` — canal de máscara.
+5. `mask-image:...` — la misma máscara, línea siguiente.
+6. `.pie__marca{...color:#ffffff}` — blanco puro al 5,5% de opacidad; lo que importa ahí es la opacidad.
+
+Si aparece una **séptima declaración**, ahí sí es un color que se escapó.
 
 - [ ] **Step 6: Comparar final contra base, sección por sección**
 
