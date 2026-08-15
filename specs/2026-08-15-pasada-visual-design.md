@@ -148,14 +148,13 @@ Confirmado el 2026-08-15:
 
 - **Instagram** apunta a `https://www.instagram.com/laberintosvinos`, con
   `target="_blank" rel="noopener"`, igual que la firma del estudio.
-- **Tienda online se queda en el pie**, porque la tienda se va a construir.
-  Pero deja de ser un `<a href="#">`: un link que no lleva a ningún lado
-  manda al visitante arriba de todo y se siente roto. Queda como texto
-  plano con la marca "Próximamente", en `--muted`. Cuando exista la tienda,
-  el cambio es volver a envolverlo en un `<a>` con la URL real.
+- **Tienda online** apunta a `https://laberintosvinos.mitiendanube.com/`, la
+  tienda que ya está en línea, también con `target="_blank" rel="noopener"`.
 
-La tienda se va a hacer como theme de la tienda PepperLabs, igual que
-Inyesoft y Materiales Matheu. Queda fuera del alcance de esta pasada.
+La tienda actual está en TiendaNube. Se va a **rehacer** como theme de la
+tienda PepperLabs, igual que Inyesoft y Materiales Matheu, pero eso queda
+fuera del alcance de esta pasada: el día que pase, lo único que cambia en
+este sitio es la URL de ese `<a>`.
 
 **Regla dura heredada de `CLAUDE.md`, que esta pasada no relaja:** no se
 inventa ningún dato de vino. Cosecha, alcohol, crianza y origen son
