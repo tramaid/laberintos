@@ -46,11 +46,20 @@
 
   /* --- ritmo --- */
   /* --- geometría del umbral, medida sobre las fotos --- */
-  --umbral-alto: 640vh;
-  --umbral-corte: 0.36;      /* donde la fachada entrega al corredor */
-  --umbral-blanco-in: 0.60;  /* el papel empieza a subir */
-  --umbral-blanco-sat: 0.71; /* papel pleno */
-  --umbral-apagon: 0.95;     /* arranca el fundido a negro */
+  /* Actualizados el 2026-08-15 junto con docs/index.html, que es donde el
+     umbral está funcionando. Se acortó de 640vh a 600vh cortando SOLO el
+     silencio del final: la frase completa esperaba 656px sin que cambiara
+     nada. Todo lo demás cae a la misma distancia absoluta que antes, por eso
+     las fracciones subieron: el scroll útil pasó de 540vh a 500vh y cada
+     punto de corte se multiplicó por 1.08.
+     Si se construye el umbral en Next, estos son los valores buenos: los
+     de antes dejaban el tramo muerto. */
+  --umbral-alto: 600vh;      /* era 640vh */
+  --umbral-corte: 0.389;     /* era 0.36 · donde la fachada entrega al corredor */
+  --umbral-blanco-in: 0.648; /* era 0.60 · el papel empieza a subir */
+  --umbral-blanco-sat: 0.767;/* era 0.71 · papel pleno */
+  --umbral-apagon: 0.948;    /* era 0.95 · arranca el fundido a negro. Este es el
+                                único que no se reescaló: es el tramo que se acortó */
 
   --seccion: clamp(90px, 12vh, 160px);
   --ancho: 1180px;
