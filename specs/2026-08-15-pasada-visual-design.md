@@ -1,9 +1,22 @@
 # Pasada visual y de contenido sobre `docs/`
 
 Fecha: 2026-08-15
-Estado: aprobado. Cuatro de las seis entradas de la sección 4 están resueltas.
-Las dos abiertas —las cosechas y la ficha del Syrah— no bloquean: tienen
-comportamiento por defecto definido y ninguna de las dos cambia código.
+Estado: **implementado y verificado** el 2026-08-15, en la branch
+`pasada-visual`. Cinco de las seis entradas de la sección 4 quedaron resueltas;
+la única abierta son **las cosechas**, que es el riesgo legal y no bloquea.
+
+Contrastes finales, medidos con `scripts/contraste.mjs`, no estimados:
+
+| token | valor | sobre | contraste |
+|---|---|---|---|
+| `--texto-2` | `#a9a297` | tinta | 7.82:1 |
+| `--muted-2` | `#837c70` | tinta | 4.79:1 |
+| `--muted-claro` | `#6b6459` | papel | 4.84:1 |
+| `--et-syrah-texto` | `#7a3f37` | papel | 6.71:1 |
+| `--muted` | `#8a8479` | tinta | 5.33:1 |
+
+Las cinco filas de texto pasan el 4.5:1, y las siete salen del `:root` del
+sitio: el script lee los valores que el sitio usa de verdad, no una copia.
 
 ## Qué es esto
 

@@ -1024,7 +1024,8 @@ git commit -m "Spec: pasada visual implementada y verificada"
 Nada de esto bloquea, pero conviene no perderlo:
 
 1. **Las cosechas.** Etiquetas dicen 2022/2019/2019, fichas dicen 2024/2023/2022. El sitio publica las de las fichas y esta pasada no las tocó. **Es el único riesgo legal abierto.**
-2. **La ficha técnica del Syrah.** Sigue el aviso de "pendiente".
+2. **La ficha del Syrah, todavía incompleta.** El 2026-08-15 llegaron cuatro datos —terroir, cosecha, crianza y partida— y están publicados. Siguen faltando vinificación, altitud y el análisis, incluido el **alcohol**, que es declaración legal. Y la crianza dice "7 meses" **sin vasija**: si se confirma que es roble, se completa ahí y en `data/vinos.json`, donde `crianza_roble` está en `null` a propósito.
+3. **El panel del umbral no cumple lo que su propio comentario declara.** El CSS dice que la parte sólida del degradado "tiene que cubrir TODO el ancho del título". Medido: termina en x=302 y la tinta del `h1` llega a 518 (1280) y 543 (1440), pasando incluso el tramo semitransparente. La causa es que el `translate3d(-14%)` corre el panel 100 px a la izquierda y el 56% se mide sobre el ancho del panel, no sobre la pantalla. **Es preexistente** —`.titulo h1` quedó pixel-idéntico a la base— y a ojo se lee bien porque la escenografía ahí es oscura. Pero el comentario promete algo que no pasa. Queda para una pasada que pueda tocar la geometría del panel.
 3. **El dominio.** Cuando exista: canonical, `og:url` y `og:image` absoluto. El HTML tiene el comentario con la lista.
 4. **Las sombras de las botellas del índice.** `CLAUDE.md` dice "sin sombras" y el índice tiene `drop-shadow`. Requiere una decisión de diseño que no se tomó.
 5. **Tres bloques oscuros seguidos** (Malbec, Reserva, Gran Reserva), que `CLAUDE.md` también prohíbe.
