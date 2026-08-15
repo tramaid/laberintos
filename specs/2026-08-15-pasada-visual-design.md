@@ -140,7 +140,7 @@ implementación nunca quede bloqueada ni tenga que adivinar.
 | 3 | ~~URLs de Instagram y Tienda online~~ | **Resuelto.** Ver 4.1. |
 | 4 | ~~Qué hacer con "Origen" en el nav~~ | **Confirmado 2026-08-15: se quita del nav.** Quedan "Vinos" y "Encontralo", que sí llevan a una sección real. Construir Origen queda para otra pasada. |
 | 5 | ~~La foto de `.desvio__foto`~~ | **Confirmado 2026-08-15: se borra el CSS muerto** (`docs/index.html:325-329`). El desvío queda como está: solo texto sobre papel. |
-| 6 | Ficha técnica del Syrah | Queda el aviso de "Ficha técnica pendiente" tal como está hoy. |
+| 6 | ~~Ficha técnica del Syrah~~ | **Parcialmente resuelto 2026-08-15.** Ver 4.2. |
 
 ### 4.1 Resuelto — el pie, columna "Seguinos"
 
@@ -155,6 +155,52 @@ La tienda actual está en TiendaNube. Se va a **rehacer** como theme de la
 tienda PepperLabs, igual que Inyesoft y Materiales Matheu, pero eso queda
 fuera del alcance de esta pasada: el día que pase, lo único que cambia en
 este sitio es la URL de ese `<a>`.
+
+### 4.2 Parcialmente resuelto — los datos del Syrah
+
+El 2026-08-15 el cliente pasó cuatro datos que antes no existían:
+
+```
+Terroir: Valle del Zonda, San Juan
+Cosecha: 23
+Crianza: 7 meses
+Partida Especial: 300 botellas
+```
+
+Qué cambió en el sitio:
+
+- **`Origen` gana precisión**: "Valle del Zonda, San Juan" reemplaza al
+  "San Juan, Argentina" que se publicaba.
+- **`Crianza` es una fila nueva** de la tabla, con el valor **"7 meses" y nada
+  más**. El dato que llegó **no dice en qué vasija**, y los otros vinos sí
+  ("12 meses en roble", "24 meses, roble francés"). Escribir "en roble" sería
+  inventar una declaración legal. En `data/vinos.json` la clave
+  `crianza_roble` queda en `null` a propósito y se agregó `crianza`.
+- **La partida limitada** entra como `<p class="edicion">`, reutilizando el
+  tratamiento que el Gran Reserva ya tiene. Sin CSS nuevo.
+- **El párrafo de cata se eliminó.** Ver 4.3.
+- **El aviso pasa de "pendiente" a "parcial"**: decir que falta la crianza
+  cuando ya la tenemos sería falso.
+
+**Sigue faltando**, y por eso el aviso se queda: vinificación, maceración,
+fermentaciones, altitud, suelo, vendimia, guardas y el análisis —alcohol,
+acidez y azúcar—. El alcohol es declaración legal y no lo tenemos.
+
+### 4.3 Corrección al §3.6 — el párrafo del Syrah no se reescribe: se elimina
+
+El spec §3.6 pedía **reescribir** el párrafo. Se reescribió, y una revisión lo
+desarmó proposición por proposición: las cinco cosas que decía ya estaban
+dichas en la sección del desvío, dos pantallas antes, y una de ellas —"otro
+suelo y otra uva"— era el `<h2>` de esa sección **copiado palabra por
+palabra**.
+
+El diagnóstico de fondo: los otros tres párrafos describen el vino en la copa
+—aromas, barrica, estructura— y de este no hay ficha de cata. Dentro de la
+regla de no inventar, **cualquier** párrafo ahí repite o el desvío o la tabla.
+
+Los datos de 4.2 resolvieron el problema por otro lado: la tabla pasó de tres
+filas a cuatro y apareció la línea de edición, así que la sección se sostiene
+con el mismo peso que las otras tres **sin párrafo**.
 
 **Regla dura heredada de `CLAUDE.md`, que esta pasada no relaja:** no se
 inventa ningún dato de vino. Cosecha, alcohol, crianza y origen son
