@@ -1,7 +1,9 @@
 # Pasada visual y de contenido sobre `docs/`
 
 Fecha: 2026-08-15
-Estado: aprobado, pendiente de plan de implementación
+Estado: aprobado. Cuatro de las seis entradas de la sección 4 están resueltas.
+Las dos abiertas —las cosechas y la ficha del Syrah— no bloquean: tienen
+comportamiento por defecto definido y ninguna de las dos cambia código.
 
 ## Qué es esto
 
@@ -133,11 +135,11 @@ implementación nunca quede bloqueada ni tenga que adivinar.
 
 | # | Entrada | Si no llega |
 |---|---------|-------------|
-| 1 | Dominio final del sitio | Se **elimina** la etiqueta canonical y no se agrega `og:url`. No se publica una URL falsa. `og:image` queda relativo y se anota como pendiente. |
+| 1 | ~~Dominio final del sitio~~ | **Confirmado 2026-08-15: todavía no hay dominio.** Se **elimina** la etiqueta canonical en vez de publicar `REEMPLAZAR`, y no se agrega `og:url`. `og:image` queda relativo, con un comentario en el HTML que explica qué hay que cambiar el día que haya dominio. |
 | 2 | Cosechas confirmadas | Se mantienen las de las fichas técnicas (2024 / 2023 / 2022), que es lo que el sitio publica hoy. **No se tocan.** Queda anotado como riesgo abierto: las etiquetas de las botellas dicen 2022 / 2019 / 2019. |
 | 3 | ~~URLs de Instagram y Tienda online~~ | **Resuelto.** Ver 4.1. |
-| 4 | Qué hacer con "Origen" en el nav | Se **quita** del nav. Es la única opción que no miente: la sección no existe. |
-| 5 | La foto de `.desvio__foto` | Se **borra el CSS muerto** (`docs/index.html:325-329`). |
+| 4 | ~~Qué hacer con "Origen" en el nav~~ | **Confirmado 2026-08-15: se quita del nav.** Quedan "Vinos" y "Encontralo", que sí llevan a una sección real. Construir Origen queda para otra pasada. |
+| 5 | ~~La foto de `.desvio__foto`~~ | **Confirmado 2026-08-15: se borra el CSS muerto** (`docs/index.html:325-329`). El desvío queda como está: solo texto sobre papel. |
 | 6 | Ficha técnica del Syrah | Queda el aviso de "Ficha técnica pendiente" tal como está hoy. |
 
 ### 4.1 Resuelto — el pie, columna "Seguinos"
