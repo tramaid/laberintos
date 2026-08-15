@@ -66,9 +66,12 @@
   --dato:    ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --paso: clamp(14px, 1.1vw, 17px);
-  --h1: clamp(38px, 7vw, 92px);
-  --h2: clamp(28px, 4.2vw, 56px);
-  --h3: clamp(20px, 2.4vw, 30px);
+  /* Cuatro escalones, uno por voz. Los valores son los que ya estaban en
+     pantalla: esto no cambia tamanios, deja de repetirlos siete veces. */
+  --h1: clamp(38px, 6vw, 84px);    /* el cierre del pie */
+  --h2: clamp(34px, 5.4vw, 72px);  /* el titulo del umbral */
+  --h3: clamp(34px, 4.2vw, 58px);  /* los cuatro vinos */
+  --h4: clamp(30px, 3.6vw, 50px);  /* indice, desvio, familia, manifiesto */
   --etiqueta: 11px;          /* eyebrows y labels, siempre con tracking .16em */
 
   /* --- movimiento --- */
@@ -149,7 +152,7 @@ a{color:inherit;text-decoration:none}
 }
 .titulo{position:absolute;left:0;right:0;top:38vh;z-index:7;pointer-events:none;
  opacity:calc(1 - var(--p,0) * 6);transform:translate3d(0,calc(var(--p,0) * -2vh),0)}
-.titulo h1{font-size:clamp(34px,5.4vw,72px);letter-spacing:-.01em;max-width:13ch}
+.titulo h1{font-size:var(--h2);letter-spacing:-.01em;max-width:13ch}
 /* el titular no usa el canal centrado: se va al margen, que es donde la
    escenografía es más oscura y el texto no pelea con la piedra */
 .titulo .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
@@ -160,7 +163,7 @@ a{color:inherit;text-decoration:none}
 /* el manifiesto: tinta sobre papel, dentro del mismo sticky */
 .manifiesto{position:absolute;inset:0;z-index:8;display:grid;align-items:center;justify-items:start;
  color:var(--ink);opacity:var(--mf,0);pointer-events:none}
-.manifiesto h2{font-size:var(--h2);max-width:20ch}
+.manifiesto h2{font-size:var(--h4);max-width:20ch}
 .manifiesto .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
 .manifiesto .linea{display:block;opacity:var(--l1,0);transform:translate3d(0,calc((1 - var(--l1,0)) * 22px),0)}
 .manifiesto .linea:nth-child(2){opacity:var(--l2,0);transform:translate3d(0,calc((1 - var(--l2,0)) * 22px),0)}
@@ -214,7 +217,7 @@ a{color:inherit;text-decoration:none}
 .vino--der .vino__texto p, .vino--der .pendiente{margin-left:auto}
 .vino .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
 .vino__texto{position:relative;z-index:2;max-width:min(42ch,44vw)}
-.vino__texto h2{font-size:clamp(34px,4.2vw,58px);margin-top:12px;max-width:11ch}
+.vino__texto h2{font-size:var(--h3);margin-top:12px;max-width:11ch}
 /* el Gran Reserva tiene el nombre más largo: si no lo dejás quebrar en dos
    líneas, empuja la caja de datos fuera de la pantalla */
 .vino__texto p{margin-top:20px;color:var(--texto-2);font-size:clamp(16px,1.3vw,19px);max-width:36ch}
@@ -291,7 +294,7 @@ a{color:inherit;text-decoration:none}
 .pie__marca{position:absolute;right:-20%;top:52%;width:min(52vw,640px);
  transform:translateY(-50%);color:#ffffff;opacity:.055;z-index:1;pointer-events:none}
 .pie__marca svg{width:100%;height:auto;display:block}
-.pie h2{font-size:clamp(38px,6vw,84px);letter-spacing:-.03em}
+.pie h2{font-size:var(--h1);letter-spacing:-.03em}
 .pie__cta{display:inline-flex;align-items:center;gap:14px;margin-top:30px;
  font-family:var(--dato);font-size:13px;letter-spacing:.16em;text-transform:uppercase;
  border-bottom:1px solid currentColor;padding-bottom:8px;
@@ -327,18 +330,18 @@ a{color:inherit;text-decoration:none}
  background:linear-gradient(180deg, var(--ink) 0%, transparent 22%, transparent 55%, var(--ink) 100%)}
 .familia .canal{position:relative;z-index:2;max-width:none;margin:0;
  padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
-.familia h2{font-size:clamp(30px,3.8vw,54px)}
+.familia h2{font-size:var(--h4)}
 .desvio{background:var(--papel);color:var(--ink);
  padding:clamp(110px,15vh,170px) 0 clamp(30px,4vh,50px);margin-bottom:-1px}
 /* la tira y el bloque del Syrah son UN solo momento claro: el borde entre
    los dos no debe verse. Por eso el .vino--claro no tiene padding arriba. */
 .desvio .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
-.desvio h2{font-size:clamp(30px,3.6vw,50px);margin-top:14px}
+.desvio h2{font-size:var(--h4);margin-top:14px}
 .desvio .bajada{margin-top:18px;color:var(--muted-claro);max-width:42ch;font-size:clamp(15px,1.2vw,18px)}
 .desvio .etiqueta{color:var(--muted-claro)}
 .indice{background:var(--papel);color:var(--ink);padding:clamp(100px,14vh,170px) 0 clamp(70px,10vh,120px)}
 .indice .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
-.indice h2{font-size:clamp(30px,3.6vw,50px);max-width:16ch}
+.indice h2{font-size:var(--h4);max-width:16ch}
 .indice .bajada{margin-top:18px;color:var(--muted-claro);max-width:44ch;font-size:clamp(15px,1.2vw,18px)}
 .cuatro{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,2.4vw,40px);
  margin-top:clamp(40px,6vh,72px);align-items:end}
