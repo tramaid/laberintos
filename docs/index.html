@@ -324,11 +324,6 @@ a{color:inherit;text-decoration:none}
 .desvio h2{font-size:clamp(30px,3.6vw,50px);margin-top:14px}
 .desvio .bajada{margin-top:18px;color:var(--muted-claro);max-width:42ch;font-size:clamp(15px,1.2vw,18px)}
 .desvio .etiqueta{color:var(--muted-claro)}
-.desvio__foto{margin-top:clamp(40px,6vh,70px);line-height:0;position:relative}
-/* el borde superior de la foto cortaba seco contra el papel: se funde */
-.desvio__foto::before{content:"";position:absolute;inset:0 0 auto 0;height:26%;z-index:1;
- background:linear-gradient(180deg, var(--papel) 0%, transparent 100%)}
-.desvio__foto img{width:100%;height:auto;display:block}
 .indice{background:var(--papel);color:var(--ink);padding:clamp(100px,14vh,170px) 0 clamp(70px,10vh,120px)}
 .indice .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
 .indice h2{font-size:clamp(30px,3.6vw,50px);max-width:16ch}
@@ -437,7 +432,7 @@ a{color:inherit;text-decoration:none}
     </div>
   </div>
 </section><article id="malbec" class="vino" data-view style="--acento:var(--et-malbec);--tx:25">
-  <div class="vino__escena"><img src="assets/escena-62e6ed3e.webp" alt=""></div>
+  <div class="vino__escena"><img src="assets/escena-62e6ed3e.webp" alt="" loading="lazy"></div>
   <div class="vino__grad"></div>
   <div class="canal vino__texto">
     <p class="linea-vino" data-reveal>Varietal</p>
@@ -453,7 +448,7 @@ a{color:inherit;text-decoration:none}
     </dl>
   </div>
 </article><article id="reserva" class="vino vino--der vino--arriba" data-view style="--acento:var(--et-reserva);--tx:6">
-  <div class="vino__escena"><img src="assets/escena-00df0e6c.webp" alt=""></div>
+  <div class="vino__escena"><img src="assets/escena-00df0e6c.webp" alt="" loading="lazy"></div>
   <div class="vino__grad"></div>
   <div class="canal vino__texto">
     <p class="linea-vino" data-reveal>Reserva</p>
@@ -462,7 +457,7 @@ a{color:inherit;text-decoration:none}
     <dl class="datos" data-reveal><dt>Cosecha</dt><dd>2023</dd><dt>Origen</dt><dd>Ugarteche, Luján de Cuyo</dd><dt>Altitud</dt><dd>950 msnm</dd><dt>Crianza</dt><dd>12 meses en roble</dd><dt>Guarda</dt><dd>9 años</dd><dt>Alcohol</dt><dd>13,9%</dd></dl>
   </div>
 </article><article id="gran-reserva" class="vino vino--alto" data-view style="--acento:var(--et-gran);--tx:4">
-  <div class="vino__escena"><img src="assets/escena-5c39331c.webp" alt=""></div>
+  <div class="vino__escena"><img src="assets/escena-5c39331c.webp" alt="" loading="lazy"></div>
   <div class="vino__grad"></div>
   <div class="canal vino__texto">
     <p class="linea-vino" data-reveal>Gran Reserva</p>
@@ -481,7 +476,7 @@ a{color:inherit;text-decoration:none}
   
 </section>
 <article id="syrah" class="vino vino--der vino--claro" data-view style="--tx:0">
-  <div class="vino__escena"><img src="assets/escena-c10573db.webp" alt=""></div>
+  <div class="vino__escena"><img src="assets/escena-c10573db.webp" alt="" loading="lazy"></div>
   <div class="vino__grad"></div>
   <div class="canal vino__texto">
     <p class="linea-vino" data-reveal>Varietal</p>
