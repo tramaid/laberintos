@@ -40,9 +40,16 @@ Los lugares donde se usa no cambian: `.etiqueta`, `.nav nav`, `.datos` (`dt` y
 `dd`), `.linea-vino`, `.edicion`, `.pendiente`, `.cuatro span`,
 `.pie__cols h3`, `.pie__cta`, `.pie__legal`.
 
-Razón funcional además de la de marca: los números de las fichas —2024, 950
-msnm, 13,4%, 24 meses— quedan alineados en columna, que es lo que hace legible
-una tabla de datos.
+Razón funcional además de la de marca, **corregida después de medirla**: el
+borrador de este spec decía que los números de las fichas "hoy bailan". No es
+cierto en cualquier equipo. En la máquina donde se midió, `ui-monospace` ya
+resolvía a una mono y la columna —2024, 950 msnm, 13,4%, 24 meses— ya caía
+alineada.
+
+Lo que se gana no es que **ahora** alineen, sino que alineen **en todos lados**.
+Antes eso dependía de a qué resolviera la mono del sistema en cada equipo, que
+es exactamente lo que el token dejaba librado al azar. Es un argumento más
+chico que el del borrador, pero es el verdadero.
 
 Special Elite queda solo como display, que es de donde viene: la etiqueta de la
 botella. Barlow Condensed queda solo como texto corrido.
