@@ -250,7 +250,12 @@ a{color:inherit;text-decoration:none}
  color:var(--acento);opacity:.9}
 .edicion{font-family:var(--dato);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
  color:var(--muted-2);margin-top:14px;border-left:1px solid var(--acento);padding-left:12px}
-.pendiente{margin-top:26px;font-family:var(--dato);font-size:12px;letter-spacing:.1em;
+/* El selector va con .vino__texto adelante a proposito: como .pendiente es un
+   <p> adentro de .vino__texto, la regla .vino__texto p le ganaba por
+   especificidad (0,1,1 contra 0,1,0) y le pisaba el font-size y el max-width.
+   El aviso renderizaba a 16px, del mismo cuerpo que el texto principal, en vez
+   de los 12px de nota al pie que declara aca. */
+.vino__texto .pendiente{margin-top:26px;font-family:var(--dato);font-size:12px;letter-spacing:.1em;
  color:var(--muted-2);border-top:1px solid var(--linea);padding-top:16px;max-width:34ch}
 
 /* Cuatro bloques negros seguidos son mucho negro. Esta banda clara corta a
