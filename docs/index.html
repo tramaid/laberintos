@@ -481,8 +481,10 @@ a{color:inherit;text-decoration:none}
   <div class="canal vino__texto">
     <p class="linea-vino" data-reveal>Varietal</p>
     <h2 data-reveal>Syrah</h2>
-    <p class="edicion" data-reveal>Partida especial · 300 botellas</p>
-    <dl class="datos" data-reveal><dt>Cosecha</dt><dd>2023</dd><dt>Origen</dt><dd>Valle del Zonda, San Juan</dd><dt>Varietal</dt><dd>100% Syrah</dd><dt>Crianza</dt><dd>7 meses</dd></dl><p class="pendiente" data-reveal>Ficha técnica parcial. Faltan los datos de vinificación, altitud y análisis: alcohol, acidez y azúcar.</p>
+    <!-- espacios duros: sin ellos quiebra como "300 / BOTELLAS" y el numero
+         queda huerfano de su unidad -->
+    <p class="edicion" data-reveal>Partida especial · 300&nbsp;botellas</p>
+    <dl class="datos" data-reveal><dt>Cosecha</dt><dd>2023</dd><dt>Origen</dt><dd>Valle del Zonda, San&nbsp;Juan</dd><dt>Varietal</dt><dd>100% Syrah</dd><dt>Crianza</dt><dd>7 meses</dd></dl><p class="pendiente" data-reveal>Ficha técnica parcial. Faltan los datos de vinificación, altitud y análisis.</p>
   </div>
 </article>
 
