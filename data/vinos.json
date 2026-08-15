@@ -5,7 +5,7 @@
     "ORIGEN: los mockups dicen 'Mendoza' a secas. Las fichas dan Ugarteche, Lujan de Cuyo (Varietal y Reserva) y Altamira, Valle de Uco (Gran Reserva). Los mockups estan menos precisos que la realidad.",
     "CRIANZA DEL VARIETAL: el mockup en ingles dice '12 MESES EN ROBLE' y '14.0% VOL'. La ficha dice SIN roble y 13,4%. El dato del mockup es inventado.",
     "SUELO de Ugarteche: 60 + 15 + 24 = 99%. Falta un 1% en la ficha original.",
-    "SYRAH: no hay ficha tecnica. Es el unico de los cuatro sin datos.",
+    "SYRAH: sigue sin ficha tecnica. El 2026-08-15 el cliente paso cuatro datos sueltos (terroir, cosecha, crianza y partida) que no reemplazan la ficha: ver _falta y _fuente del vino.",
     "NOTACION: las fichas escriben la acidez como '6,6% g/L'. El signo de porcentaje sobra: la unidad es g/L."
   ],
   "vinos": [
@@ -113,9 +113,10 @@
       "id": "varietal-syrah",
       "linea": "Varietal",
       "nombre": "Syrah",
+      "edicion": "Partida especial, 300 botellas",
       "cosecha": 2023,
       "varietal": "100% Syrah",
-      "vinedo": "San Juan, Argentina",
+      "vinedo": "Valle del Zonda, San Juan",
       "altitud_msnm": null,
       "suelo": null,
       "vendimia": null,
@@ -124,6 +125,7 @@
       "fermentacion_alcoholica": null,
       "fermentacion_malolactica": null,
       "crianza_roble": null,
+      "crianza": "7 meses",
       "guarda_botella_meses": null,
       "guarda_recomendada_anios": null,
       "alcohol": null,
@@ -134,7 +136,8 @@
       "imagen_botella": "varietal-syrah.webp",
       "imagen_escena": "syrah-claro.webp",
       "ficha_pdf": null,
-      "_falta": "Ficha tecnica completa. Solo hay cosecha y origen, leidos de la etiqueta.",
+      "_falta": "Vinificacion, maceracion, fermentaciones, altitud, suelo, vendimia, guardas y el analisis (alcohol, acidez, azucar). Ya hay cosecha, origen, crianza y partida.",
+      "_fuente": "Terroir, cosecha, crianza y partida los paso el cliente el 2026-08-15. Ojo: la crianza dice '7 meses' y NO especifica vasija. No sabemos si es roble, asi que crianza_roble queda en null y el sitio publica '7 meses' a secas.",
       "composicion": {
         "texto": "derecha",
         "tx": 0
