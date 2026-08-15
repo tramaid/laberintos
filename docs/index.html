@@ -388,9 +388,18 @@ a{color:inherit;text-decoration:none}
 @media (prefers-reduced-motion:reduce){
  .umbral{height:100vh}.capa{transform:none!important}.blanco,.manifiesto,.apagon{display:none}
  #tomaB{display:none}#tomaA{opacity:1!important}.titulo{opacity:1!important;transform:none!important}}
-</style><link rel="preload" as="image" href="assets/hero-z1800-5e9c19e3.webp" fetchpriority="high">
-<link rel="preload" as="image" href="assets/hero-z600-cff8ca4c.webp" fetchpriority="high">
-<link rel="preload" as="image" href="assets/hero-z0-e25b2e00.webp" fetchpriority="high">
+</style><!-- Se precargan las CINCO capas de tomaA, que es la que esta en pantalla al
+     entrar. Antes se precargaban las tres de tomaB, que no se ve hasta el 36%
+     del recorrido: el navegador priorizaba la toma equivocada y las capas de
+     la primera llegaban tarde y desordenadas.
+     Van de la mas pesada a la mas liviana porque la toma no se muestra hasta
+     que estan las cinco, asi que manda la ultima en llegar.
+     tomaB no se precarga a proposito: hay 640vh de scroll hasta el corte. -->
+<link rel="preload" as="image" href="assets/hero-z260-ccb01e3d.webp" fetchpriority="high">
+<link rel="preload" as="image" href="assets/hero-z700-2ea3e047.webp" fetchpriority="high">
+<link rel="preload" as="image" href="assets/hero-z0-07f77410.webp" fetchpriority="high">
+<link rel="preload" as="image" href="assets/hero-z1500-059cc8e5.webp" fetchpriority="high">
+<link rel="preload" as="image" href="assets/hero-z2600-625c67d7.webp" fetchpriority="high">
 </head><body>
 
 <header class="nav"><b>LABERINTOS</b>
@@ -588,7 +597,17 @@ const av=(t,p)=>tramo(p,t.de,t.a)*t.empuje;
   t.overscan=Math.max(1,49.63/t.vy)*1.03;
   t.capas=[...t.marco.querySelectorAll('.capa')];
   t.marco.style.setProperty('--vx',t.vx); t.marco.style.setProperty('--vy',t.vy);
+  t.listo=false;
 });
+/* Una toma no se muestra hasta que TODAS sus capas terminaron de cargar.
+   Sin esto la escena se arma a pedazos al entrar: las capas llegan al reves
+   de la profundidad -la del fondo del tunel pesa 10 KB y llega primero, el
+   muro pesa 161 KB y llega ultimo-, asi que se veian fragmentos flotando
+   sobre el negro durante casi un segundo. Se veia como un destello raro.
+   Vale .complete a secas, no naturalWidth: si una imagen falla, complete
+   igual pasa a true y la toma se muestra. Con naturalWidth quedaria negro
+   para siempre, que es peor que una capa faltante. */
+const revisar=t=>t.listo||(t.listo=t.capas.every(c=>c.complete));
 A.baseFin=(B.vano*B.overscan*esc(B.z,av(B,CORTE)))/(A.vano*A.overscan*esc(A.z,av(A,CORTE)));
 B.marco.style.setProperty('--base',B.overscan.toFixed(4));
 function medir(){
@@ -610,8 +629,12 @@ function frame(){
       for(const c of t.capas) c.style.setProperty('--s',esc(+c.style.getPropertyValue('--z'),a).toFixed(5));
     }
     A.marco.style.setProperty('--base',(A.overscan*(1+(A.baseFin-1)*clamp(p/CORTE))).toFixed(4));
-    A.el.style.setProperty('--o',(1-suave(tramo(p,CORTE-0.05,CORTE+0.05))).toFixed(3));
-    B.el.style.setProperty('--o','1');
+    A.el.style.setProperty('--o',revisar(A)?(1-suave(tramo(p,CORTE-0.05,CORTE+0.05))).toFixed(3):'0');
+    /* tomaB estaba en 1 desde el primer frame. Como esta DEBAJO de tomaA, si
+       tomaA todavia no cargo se ve la segunda toma sola: la escena equivocada.
+       Ahora sube entre 0.20 y 0.28, bastante antes del corte en 0.36 y mientras
+       tomaA -que esta en 1 hasta 0.31- todavia la tapa por completo. */
+    B.el.style.setProperty('--o',revisar(B)?suave(tramo(p,0.20,0.28)).toFixed(3):'0');
 
     // 1) el corte cae a negro y vuelve. Entra un poco más lento de lo que sale:
     //    oscurecerse se siente natural, aclararse de golpe se siente como un error.
