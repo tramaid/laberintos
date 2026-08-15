@@ -1,0 +1,28 @@
+export type Vino = {
+  id: string;
+  linea: string;
+  nombre: string;
+  edicion?: string;
+  cosecha: number | null;
+  varietal: string;
+  vinedo: string | null;
+  altitud_msnm: number | null;
+  suelo: string | null;
+  vendimia: string | null;
+  vinificacion: string | null;
+  maceracion: string | null;
+  fermentacion_alcoholica: string | null;
+  fermentacion_malolactica: string | null;
+  crianza_roble: string | null;
+  guarda_botella_meses: number | null;
+  guarda_recomendada_anios: number | null;
+  alcohol: number | null;
+  acidez_total: number | null;
+  acidez_volatil: number | null;
+  azucar: number | null;
+  descripcion: string | null;
+  imagen_botella: string;
+  imagen_escena: string;
+  ficha_pdf: string | null;
+  _falta?: string;
+};

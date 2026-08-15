@@ -1,0 +1,62 @@
+/* ============================================================
+   LABERINTOS — tokens
+   Los colores de sustrato salen MEDIDOS de los renders de las
+   botellas, no elegidos: se muestreó la mediana del 30% más
+   claro de cada etiqueta. Al lado va el contraste real contra
+   la tinta, para que nadie tenga que adivinar si un texto se lee.
+   ============================================================ */
+:root{
+  /* --- sustratos --- */
+  --ink:        #0b0a09;   /* el negro del sitio */
+  --ink-2:      #16130f;   /* un escalón arriba, para separar bloques oscuros */
+  --papel:      #efe9df;   /* el claro. Contraste con ink: 16.5:1 */
+  --papel-2:    #e3dbcd;
+
+  /* --- etiquetas, medidas de las botellas --- */
+  --et-malbec:  #dcdbd8;   /* mármol blanco   · 14.29:1 con ink */
+  --et-reserva: #bfae9c;   /* piedra beige    ·  9.18:1 con ink */
+  --et-gran:    #d7d5d2;   /* plata sobre negro · 13.51:1 con ink */
+  --et-syrah:   #c07d74;   /* terracota       ·  6.05:1 con ink */
+
+  /* Regla dura: sobre --et-syrah SIEMPRE tinta, nunca blanco.
+     Blanco sobre terracota da 2.7:1 y no pasa ningún estándar. */
+
+  --linea:      #2a2622;
+  --linea-clara:#cfc6b6;
+  --muted:      #8a8479;
+  --muted-claro:#6b6459;
+
+  /* --- tipografía --- */
+  --display: "Special Elite", "Courier New", monospace;  /* la de la etiqueta: máquina de escribir */
+  --texto:   "Barlow Condensed", system-ui, sans-serif;
+  --dato:    ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --paso: clamp(14px, 1.1vw, 17px);
+  --h1: clamp(38px, 7vw, 92px);
+  --h2: clamp(28px, 4.2vw, 56px);
+  --h3: clamp(20px, 2.4vw, 30px);
+  --etiqueta: 11px;          /* eyebrows y labels, siempre con tracking .16em */
+
+  /* --- movimiento --- */
+  --dur: 900ms;
+  --dist: 40px;
+  --stagger: 90ms;
+  --hover: 450ms;
+  --ease: cubic-bezier(.16,1,.3,1);
+
+  /* --- ritmo --- */
+  /* --- geometría del umbral, medida sobre las fotos --- */
+  --umbral-alto: 640vh;
+  --umbral-corte: 0.36;      /* donde la fachada entrega al corredor */
+  --umbral-blanco-in: 0.60;  /* el papel empieza a subir */
+  --umbral-blanco-sat: 0.71; /* papel pleno */
+  --umbral-apagon: 0.95;     /* arranca el fundido a negro */
+
+  --seccion: clamp(90px, 12vh, 160px);
+  --ancho: 1180px;
+  --canal: clamp(20px, 4vw, 40px);
+}
+
+/* Sin border-radius y sin sombras en todo el sitio.
+   La marca es piedra tallada: los bordes son rectos. */
+*{ border-radius: 0 }

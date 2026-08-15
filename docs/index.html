@@ -1,0 +1,638 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Laberintos — Vinos de Mendoza y San Juan</title>
+<meta name="description" content="No todos los caminos buscan una salida. Malbec de Luján de Cuyo y Valle de Uco, y Syrah de San Juan. Bodega Laberintos, Argentina.">
+<meta name="theme-color" content="#0b0a09">
+<link rel="icon" href="assets/laberinto.svg" type="image/svg+xml">
+<link rel="canonical" href="https://REEMPLAZAR.github.io/laberintos/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Laberintos">
+<meta property="og:title" content="Laberintos — Vinos">
+<meta property="og:description" content="No todos los caminos buscan una salida.">
+<meta property="og:image" content="assets/og.jpg">
+<meta property="og:locale" content="es_AR">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Barlow+Condensed:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Laberintos — umbral</title>
+<style>/* ============================================================
+   LABERINTOS — tokens
+   Los colores de sustrato salen MEDIDOS de los renders de las
+   botellas, no elegidos: se muestreó la mediana del 30% más
+   claro de cada etiqueta. Al lado va el contraste real contra
+   la tinta, para que nadie tenga que adivinar si un texto se lee.
+   ============================================================ */
+:root{
+  /* --- sustratos --- */
+  --ink:        #0b0a09;   /* el negro del sitio */
+  --ink-2:      #16130f;   /* un escalón arriba, para separar bloques oscuros */
+  --papel:      #efe9df;   /* el claro. Contraste con ink: 16.5:1 */
+  --papel-2:    #e3dbcd;
+
+  /* --- etiquetas, medidas de las botellas --- */
+  --et-malbec:  #dcdbd8;   /* mármol blanco   · 14.29:1 con ink */
+  --et-reserva: #bfae9c;   /* piedra beige    ·  9.18:1 con ink */
+  --et-gran:    #d7d5d2;   /* plata sobre negro · 13.51:1 con ink */
+  --et-syrah:   #c07d74;   /* terracota       ·  6.05:1 con ink */
+
+  /* Regla dura: sobre --et-syrah SIEMPRE tinta, nunca blanco.
+     Blanco sobre terracota da 2.7:1 y no pasa ningún estándar. */
+
+  --linea:      #2a2622;
+  --linea-clara:#cfc6b6;
+  --muted:      #8a8479;
+  --muted-claro:#6b6459;
+
+  /* --- tipografía --- */
+  --display: "Special Elite", "Courier New", monospace;  /* la de la etiqueta: máquina de escribir */
+  --texto:   "Barlow Condensed", system-ui, sans-serif;
+  --dato:    ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --paso: clamp(14px, 1.1vw, 17px);
+  --h1: clamp(38px, 7vw, 92px);
+  --h2: clamp(28px, 4.2vw, 56px);
+  --h3: clamp(20px, 2.4vw, 30px);
+  --etiqueta: 11px;          /* eyebrows y labels, siempre con tracking .16em */
+
+  /* --- movimiento --- */
+  --dur: 900ms;
+  --dist: 40px;
+  --stagger: 90ms;
+  --hover: 450ms;
+  --ease: cubic-bezier(.16,1,.3,1);
+
+  /* --- ritmo --- */
+  --seccion: clamp(90px, 12vh, 160px);
+  --ancho: 1180px;
+  --canal: clamp(20px, 4vw, 40px);
+}
+
+/* Sin border-radius y sin sombras en todo el sitio.
+   La marca es piedra tallada: los bordes son rectos. */
+*{ border-radius: 0 }
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--ink);color:var(--papel);font-family:var(--texto);
+ font-size:var(--paso);line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2{margin:0;font-family:var(--display);font-weight:400;line-height:.98}
+p{margin:0} img{display:block;max-width:100%}
+/* faltaba en el prototipo: sin esto los enlaces salen azules del navegador */
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+.canal{max-width:var(--ancho);margin:0 auto;padding:0 var(--canal)}
+.etiqueta{font-family:var(--dato);font-size:var(--etiqueta);letter-spacing:.16em;text-transform:uppercase}
+
+/* 340vh. El recorrido de cámara ocupa hasta el 72%; el 28% final es el blanco. */
+/* 440vh. El recorrido de cámara llega al 82%: el tramo oscuro es más largo
+   que antes en términos absolutos Y en proporción. */
+/* 580vh. El tramo oscuro sigue midiendo ~360vh —lo mismo que antes— y todo
+   lo que se agregó va al blanco: la frase pasa de 123vh a 220vh de aire. */
+/* 640vh. Lo agregado no va al efecto de entrada de las líneas —ese tiempo
+   ya estaba bien— sino al silencio de después: la frase completa se sostiene
+   el doble que antes. */
+.umbral{height:640vh;position:relative}
+.camara{position:sticky;top:0;height:100vh;overflow:hidden;background:#000}
+.toma{position:absolute;inset:0;opacity:var(--o,0)}
+.marco{position:absolute;left:49.63%;top:49.63%;width:var(--mw);height:var(--mh);
+ transform:translate(calc(var(--vx) * -1%), calc(var(--vy) * -1%)) scale(var(--base,1));
+ transform-origin:calc(var(--vx) * 1%) calc(var(--vy) * 1%)}
+.capa{position:absolute;display:block;transform:scale(var(--s,1));backface-visibility:hidden}
+#tomaA{z-index:3} #tomaB{z-index:2}
+
+/* dos luces distintas y con distinto trabajo:
+   --fl  = el fogonazo que esconde el corte entre tomas (radial, screen)
+   --bl  = el blanco final, plano y total, que se convierte en página        */
+/* El corte NO se esconde en luz: se esconde en oscuridad.
+   Si el blanco aparece dos veces, el blanco del final deja de ser un
+   acontecimiento. La luz pasa una sola vez en todo el umbral. */
+.blanco{position:absolute;inset:0;z-index:6;pointer-events:none;background:var(--papel);opacity:var(--bl,0)}
+/* el blanco no corta seco contra el vino: se apaga. Esta capa de tinta sube
+   por encima de todo al final del umbral, así el último fotograma del sticky
+   ya es negro y la sección siguiente entra sin escalón. */
+.apagon{position:absolute;inset:0;z-index:9;pointer-events:none;background:var(--ink);opacity:var(--ap,0)}
+
+/* El título se perdía sobre la piedra clara. Un panel de tinta entra desde
+   el margen izquierdo al cargar y se va con el título: le da fondo sin
+   taparle la escenografía, porque el borde derecho es un degradado. */
+.panel{position:absolute;left:0;top:0;bottom:0;width:min(58%, 720px);z-index:6;pointer-events:none;
+ /* la parte sólida tiene que cubrir TODO el ancho del título, no la mitad:
+    con el degradado arrancando al 42% el borde derecho del titular caía a
+    2:1 contra la piedra clara. Medido, no estimado. */
+ background:linear-gradient(90deg, var(--ink) 0%, var(--ink) 56%,
+            color-mix(in srgb, var(--ink) 74%, transparent) 78%, transparent 100%);
+ transform:translate3d(calc(var(--pn,0) * -14% - var(--p,0) * 12%),0,0);
+ opacity:calc(var(--pn,0) * (1 - var(--p,0) * 5))}
+@media(max-width:820px){
+  /* en vertical el panel no puede entrar de costado: cortaría la escena por
+     la mitad con un borde recto. Entra desde arriba y muere antes del piso. */
+  .panel{width:100%;height:78%;bottom:auto;
+    background:linear-gradient(180deg, var(--ink) 0%, var(--ink) 58%,
+               color-mix(in srgb, var(--ink) 72%, transparent) 80%, transparent 100%);
+    transform:translate3d(0, calc(var(--pn,0) * -8% - var(--p,0) * 10%), 0)}
+}
+.titulo{position:absolute;left:0;right:0;top:38vh;z-index:7;pointer-events:none;
+ opacity:calc(1 - var(--p,0) * 6);transform:translate3d(0,calc(var(--p,0) * -2vh),0)}
+.titulo h1{font-size:clamp(34px,5.4vw,72px);letter-spacing:-.01em;max-width:13ch}
+/* el titular no usa el canal centrado: se va al margen, que es donde la
+   escenografía es más oscura y el texto no pelea con la piedra */
+.titulo .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
+.titulo p{margin-top:18px;color:var(--muted);max-width:34ch}
+.entrar{display:inline-flex;gap:12px;align-items:center;margin-top:26px;
+ border-bottom:1px solid currentColor;padding-bottom:5px}
+
+/* el manifiesto: tinta sobre papel, dentro del mismo sticky */
+.manifiesto{position:absolute;inset:0;z-index:8;display:grid;align-items:center;justify-items:start;
+ color:var(--ink);opacity:var(--mf,0);pointer-events:none}
+.manifiesto h2{font-size:var(--h2);max-width:20ch}
+.manifiesto .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
+.manifiesto .linea{display:block;opacity:var(--l1,0);transform:translate3d(0,calc((1 - var(--l1,0)) * 22px),0)}
+.manifiesto .linea:nth-child(2){opacity:var(--l2,0);transform:translate3d(0,calc((1 - var(--l2,0)) * 22px),0)}
+.manifiesto .linea:nth-child(3){opacity:var(--l3,0);transform:translate3d(0,calc((1 - var(--l3,0)) * 22px),0)}
+.manifiesto .marca{margin-top:34px;color:var(--muted-claro);opacity:var(--l3,0)}
+
+.nav{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;
+ align-items:center;padding:18px var(--canal);font-family:var(--display);font-size:15px;
+ letter-spacing:.06em;mix-blend-mode:difference;color:#fff}
+.nav nav{display:flex;gap:22px;font-family:var(--dato);font-size:var(--etiqueta);
+ letter-spacing:.16em;text-transform:uppercase}
+@media(max-width:700px){.nav nav{display:none}}
+
+.vino{position:relative;min-height:104vh;display:grid;align-items:center;overflow:hidden;--acento:var(--et-malbec)}
+.vino__escena{position:absolute;inset:0;overflow:hidden;background:var(--ink)}
+/* --tx corre la escena en horizontal para que la botella caiga del lado
+   contrario al texto. Se puede porque el fondo de los renders es negro: el
+   hueco que deja no se ve. Los valores salen de medir dónde empieza y
+   termina el contenido de cada foto, no de probar a ojo. */
+/* Antes: caja de 130% de alto → cover recortaba y se veía apenas el 69% del
+   ancho de la foto. Zoom de más y la botella pegada al borde inferior.
+   Ahora 112% con el desplazamiento del parallax reducido en proporción:
+   se ve más escena, y queda aire de piso debajo de la botella. */
+.vino__escena img{position:absolute;left:0;right:0;top:-8%;height:112%;width:100%;object-fit:cover;
+ object-position:center 56%;
+ transform:translate3d(calc(var(--tx,0) * 1%), calc((var(--pv,.5) - .5) * -9%), 0);opacity:.9;
+ /* al correr la escena queda a la vista el canto de la foto: la máscara lo
+    disuelve contra el fondo de tinta en vez de cortarlo con una línea recta */
+ -webkit-mask-image:linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+ mask-image:linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%)}
+/* Las escenas nuevas ya no tienen el aire siempre del mismo lado: tres lo
+   tienen a la derecha y el Gran Reserva a la izquierda. El texto va donde
+   está el aire, y eso da la alternancia sola —medida, no inventada. */
+.vino__grad{position:absolute;inset:0;
+ background:linear-gradient(90deg, var(--ink) 0%, var(--ink) 34%,
+ color-mix(in srgb, var(--ink) 72%, transparent) 54%, transparent 74%)}
+.vino--der .vino__grad{
+ background:linear-gradient(270deg, var(--ink) 0%, var(--ink) 34%,
+ color-mix(in srgb, var(--ink) 72%, transparent) 54%, transparent 74%)}
+/* OJO: en este markup `.canal` y `.vino__texto` son EL MISMO elemento.
+   Ponerle display:flex acomodaba los párrafos en fila. Se empuja con
+   margin-left:auto, que es lo que corresponde a un bloque con ancho máximo. */
+.vino--der .vino__texto{margin-left:auto;margin-right:0;text-align:right;
+ padding-left:var(--canal);padding-right:clamp(20px,3.2vw,48px)}
+/* NO reordenar con `order`: en una grilla reordena todos los items sueltos y
+   se desarman los pares etiqueta/valor. Alcanza con alinear a la derecha. */
+.vino--der .datos{margin-left:auto;justify-items:end;text-align:right}
+.vino--der .edicion{border-left:0;border-right:1px solid var(--acento);
+ padding-left:0;padding-right:12px}
+.vino--der .vino__texto h2{margin-left:auto}
+.vino--der .vino__texto p, .vino--der .pendiente{margin-left:auto}
+.vino .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
+.vino__texto{position:relative;z-index:2;max-width:min(42ch,44vw)}
+.vino__texto h2{font-size:clamp(34px,4.2vw,58px);margin-top:12px;max-width:11ch}
+/* el Gran Reserva tiene el nombre más largo: si no lo dejás quebrar en dos
+   líneas, empuja la caja de datos fuera de la pantalla */
+.vino__texto p{margin-top:20px;color:#a9a297;font-size:clamp(16px,1.3vw,19px);max-width:36ch}
+.datos{display:grid;grid-template-columns:auto 1fr;gap:13px 30px;margin-top:38px;
+ font-family:var(--dato);font-size:clamp(14px,1.1vw,16px);align-items:baseline;
+ border-top:1px solid #2a2622;padding-top:26px;max-width:34ch}
+.datos dt{color:#7d766b;font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+.datos dd{margin:0}
+@media(max-width:820px){
+  /* en vertical el degradado horizontal no sirve y la botella se le mete
+     detrás a la tabla: la escena se corre abajo y el texto se queda arriba */
+  .vino__grad{background:linear-gradient(180deg,var(--ink) 0%,var(--ink) 46%,
+    color-mix(in srgb, var(--ink) 78%, transparent) 72%, transparent 96%)}
+  .vino__texto{max-width:none}
+  .vino{align-items:start;padding-top:11vh}
+  .vino__escena img{object-position:center 78%}
+}
+
+/* Las cuatro escenas tienen el lado oscuro a la izquierda, así que el texto
+   va siempre ahí. La variación no puede venir del lado: viene de la altura
+   del bloque, de la posición vertical y del acento de cada etiqueta. */
+.vino--alto{min-height:112vh}
+.vino--abajo{align-items:end;padding-bottom:14vh}
+.vino--arriba{align-items:start;padding-top:18vh}
+.vino + .vino{border-top:1px solid #1c1916}
+.linea-vino{font-family:var(--dato);font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+ color:var(--acento);opacity:.9}
+.edicion{font-family:var(--dato);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+ color:#7d766b;margin-top:14px;border-left:1px solid var(--acento);padding-left:12px}
+.pendiente{margin-top:26px;font-family:var(--dato);font-size:12px;letter-spacing:.1em;
+ color:#6f685e;border-top:1px solid #2a2622;padding-top:16px;max-width:34ch}
+
+/* Cuatro bloques negros seguidos son mucho negro. Esta banda clara corta a
+   la mitad de la serie y, de paso, hace lo que ninguna escena puede: mostrar
+   las cuatro etiquetas juntas, que son el sistema gráfico de la marca. */
+
+/* Tira que separa los tres Malbec del Syrah. Es corta a propósito: no es una
+   sección, es una respiración. También rompe la racha de tres bloques oscuros. */
+
+/* El Syrah cambia de provincia y de variedad, así que cambia de fondo.
+   La tira "Otro suelo. Otra uva." y este bloque son un solo momento claro:
+   el corte de color ES el argumento. */
+.vino--claro{background:var(--papel);color:var(--ink);--acento:#7a3f37;padding-top:0}
+.vino--claro .vino__escena{background:var(--papel)}
+.vino--claro .vino__escena img{opacity:1}
+/* El bloque claro NO lleva degradado en horizontal: el muro del render ya es
+   claro y la tinta da 9,7:1 en su peor punto, medido. La capa de papel solo
+   servía para velar la escena. Se saca. */
+.vino--claro .vino__grad{background:none}
+@media(max-width:820px){
+  /* en vertical sí hace falta: ahí la botella queda debajo del texto */
+  .vino--claro .vino__grad{background:linear-gradient(180deg,
+    var(--papel) 0%, var(--papel) 30%, color-mix(in srgb, var(--papel) 82%, transparent) 60%, transparent 88%)}
+  .vino--claro{align-items:start;padding-top:12vh}
+}
+.vino--claro .vino__texto p{color:var(--muted-claro)}
+.vino--claro .datos{border-top-color:var(--linea-clara)}
+.vino--claro .datos dt{color:#8a8377}
+.vino--claro .pendiente{color:#8a8377;border-top-color:var(--linea-clara)}
+/* el terracota de la etiqueta da 1.91:1 sobre este muro: para texto va la
+   versión oscurecida, que llega a 4.73:1. Medido. */
+
+/* Cierra la sección de vinos y devuelve el sitio al negro para lo que sigue. */
+
+/* ============================================================
+   PIE — cierra el sitio. Oscuro, como el umbral: el recorrido
+   termina donde empezó.
+   ============================================================ */
+.pie{position:relative;background:var(--ink);color:var(--papel);overflow:hidden;
+ padding:clamp(110px,15vh,160px) 0 clamp(34px,5vh,54px)}
+.pie .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal);
+ position:relative;z-index:2}
+/* el laberinto como marca de agua, saliendo por el borde: 4,5 KB */
+.pie__marca{position:absolute;right:-20%;top:52%;width:min(52vw,640px);
+ transform:translateY(-50%);color:#ffffff;opacity:.055;z-index:1;pointer-events:none}
+.pie__marca svg{width:100%;height:auto;display:block}
+.pie h2{font-size:clamp(38px,6vw,84px);letter-spacing:-.03em}
+.pie__cta{display:inline-flex;align-items:center;gap:14px;margin-top:30px;
+ font-family:var(--dato);font-size:13px;letter-spacing:.16em;text-transform:uppercase;
+ border-bottom:1px solid currentColor;padding-bottom:8px;
+ transition:gap var(--hover) var(--ease)}
+@media(hover:hover){.pie__cta:hover{gap:26px}}
+.pie__frase{margin-top:26px;color:var(--muted);max-width:36ch;font-size:clamp(15px,1.2vw,18px)}
+.pie__cols{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(20px,3vw,48px);
+ margin-top:clamp(56px,9vh,110px);padding-top:clamp(30px,4vh,44px);border-top:1px solid #23211f}
+.pie__cols h3{font-family:var(--dato);font-size:11px;font-weight:400;letter-spacing:.16em;
+ text-transform:uppercase;color:var(--muted)}
+.pie__cols ul{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:9px;font-size:14px}
+.pie__cols a{border-bottom:1px solid transparent;transition:border-color var(--hover) var(--ease)}
+@media(hover:hover){.pie__cols a:hover{border-bottom-color:currentColor}}
+
+/* crédito de estudio: va con los legales, en el mismo peso.
+   Firmar más fuerte que el cliente en su propio sitio es de mal gusto. */
+.pie__firma{display:inline-flex;align-items:baseline;gap:7px}
+.pie__firma a{border-bottom:1px solid transparent;color:var(--papel);
+ transition:border-color var(--hover) var(--ease)}
+@media(hover:hover){.pie__firma a:hover{border-bottom-color:currentColor}}
+.pie__legal{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+ margin-top:clamp(44px,7vh,80px);padding-top:22px;border-top:1px solid #23211f;
+ font-family:var(--dato);font-size:11px;letter-spacing:.1em;color:var(--muted)}
+.pie__legal b{color:var(--papel);font-weight:400}
+@media(max-width:820px){
+  .pie__cols{grid-template-columns:1fr 1fr;gap:34px 20px}
+  .pie__marca{right:-38%;width:110vw;opacity:.05}
+}
+.familia{position:relative;background:var(--ink);min-height:100vh;display:grid;align-items:end;
+ padding-bottom:clamp(90px,14vh,150px);overflow:hidden}
+.familia img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.95}
+.familia::after{content:"";position:absolute;inset:0;
+ background:linear-gradient(180deg, var(--ink) 0%, transparent 22%, transparent 55%, var(--ink) 100%)}
+.familia .canal{position:relative;z-index:2;max-width:none;margin:0;
+ padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
+.familia h2{font-size:clamp(30px,3.8vw,54px)}
+.desvio{background:var(--papel);color:var(--ink);
+ padding:clamp(110px,15vh,170px) 0 clamp(30px,4vh,50px);margin-bottom:-1px}
+/* la tira y el bloque del Syrah son UN solo momento claro: el borde entre
+   los dos no debe verse. Por eso el .vino--claro no tiene padding arriba. */
+.desvio .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
+.desvio h2{font-size:clamp(30px,3.6vw,50px);margin-top:14px}
+.desvio .bajada{margin-top:18px;color:var(--muted-claro);max-width:42ch;font-size:clamp(15px,1.2vw,18px)}
+.desvio .etiqueta{color:var(--muted-claro)}
+.desvio__foto{margin-top:clamp(40px,6vh,70px);line-height:0;position:relative}
+/* el borde superior de la foto cortaba seco contra el papel: se funde */
+.desvio__foto::before{content:"";position:absolute;inset:0 0 auto 0;height:26%;z-index:1;
+ background:linear-gradient(180deg, var(--papel) 0%, transparent 100%)}
+.desvio__foto img{width:100%;height:auto;display:block}
+.indice{background:var(--papel);color:var(--ink);padding:clamp(100px,14vh,170px) 0 clamp(70px,10vh,120px)}
+.indice .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
+.indice h2{font-size:clamp(30px,3.6vw,50px);max-width:16ch}
+.indice .bajada{margin-top:18px;color:var(--muted-claro);max-width:44ch;font-size:clamp(15px,1.2vw,18px)}
+.cuatro{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,2.4vw,40px);
+ margin-top:clamp(40px,6vh,72px);align-items:end}
+
+/* Las botellas del índice llevan a su sección. Si son tocables tienen que
+   parecerlo: la botella se levanta y el nombre se subraya al pasar. */
+.cuatro .ir{display:block;color:inherit;text-decoration:none}
+.cuatro .ir img{transition:transform var(--hover) var(--ease), filter var(--hover) var(--ease)}
+.cuatro .ir b{position:relative;display:inline-block}
+.cuatro .ir b::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:1px;
+ background:currentColor;transform:scaleX(0);transform-origin:left;
+ transition:transform var(--hover) var(--ease)}
+@media (hover:hover){
+  .cuatro .ir:hover img{transform:translateY(-10px);filter:drop-shadow(0 26px 34px rgba(0,0,0,.24))}
+  .cuatro .ir:hover b::after{transform:scaleX(1)}
+}
+.cuatro .ir:focus-visible{outline:2px solid var(--ink);outline-offset:8px}
+.cuatro .ir figcaption::before{content:"Ver ";font-family:var(--dato);font-size:10px;
+ letter-spacing:.16em;text-transform:uppercase;color:var(--muted-claro);display:block;margin-bottom:10px}
+@media (prefers-reduced-motion:reduce){.cuatro .ir img{transition:none}}
+.cuatro figure{margin:0}
+/* los renders de botella vienen a resolución completa: sin tope de altura
+   la grilla los estira y se comen la sección entera */
+.cuatro img{display:block;margin:0 auto;width:auto;max-width:100%;
+ max-height:min(42vh,380px);filter:drop-shadow(0 18px 30px rgba(0,0,0,.18))}
+.cuatro figcaption{margin-top:24px;text-align:center;border-top:1px solid var(--linea-clara);padding-top:14px}
+.cuatro b{display:block;font-family:var(--display);font-size:clamp(16px,1.5vw,21px);font-weight:400}
+.cuatro span{display:block;font-family:var(--dato);font-size:11px;letter-spacing:.16em;
+ text-transform:uppercase;color:var(--muted-claro);margin-top:8px}
+@media(max-width:820px){.cuatro{grid-template-columns:repeat(2,1fr);gap:34px 20px}}
+[data-reveal]{opacity:0;transform:translate3d(0,var(--dist),0);
+ transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease);transition-delay:var(--d,0ms)}
+[data-reveal].is-in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+ .umbral{height:100vh}.capa{transform:none!important}.blanco,.manifiesto,.apagon{display:none}
+ #tomaB{display:none}#tomaA{opacity:1!important}.titulo{opacity:1!important;transform:none!important}}
+</style><link rel="preload" as="image" href="assets/hero-z1800-5e9c19e3.webp" fetchpriority="high">
+<link rel="preload" as="image" href="assets/hero-z600-cff8ca4c.webp" fetchpriority="high">
+<link rel="preload" as="image" href="assets/hero-z0-e25b2e00.webp" fetchpriority="high">
+</head><body>
+
+<header class="nav"><b>LABERINTOS</b>
+  <nav><span>Vinos</span><span>Origen</span><span>Encontralo</span></nav></header>
+
+<section class="umbral" id="umbral">
+  <div class="camara" id="camara">
+    <div class="toma" id="tomaB"><div class="marco">
+<img class="capa" alt="" decoding="async" style="--z:1800;left:43.933%;top:29.147%;width:11.200%;height:19.964%;transform-origin:49.881% 49.904%" src="assets/hero-z1800-5e9c19e3.webp">
+<img class="capa" alt="" decoding="async" style="--z:600;left:35.692%;top:14.559%;width:27.692%;height:49.214%;transform-origin:49.933% 49.886%" src="assets/hero-z600-cff8ca4c.webp">
+<img class="capa" alt="" decoding="async" style="--z:0;left:0.000%;top:0.000%;width:100.000%;height:100.000%;transform-origin:49.520% 39.110%" src="assets/hero-z0-e25b2e00.webp">
+    </div></div>
+    <div class="toma" id="tomaA"><div class="marco">
+<img class="capa" alt="" decoding="async" style="--z:2600;left:44.967%;top:41.232%;width:9.467%;height:16.825%;transform-origin:49.683% 49.914%" src="assets/hero-z2600-625c67d7.webp">
+<img class="capa" alt="" decoding="async" style="--z:1500;left:40.633%;top:33.531%;width:18.133%;height:32.227%;transform-origin:49.835% 49.955%" src="assets/hero-z1500-059cc8e5.webp">
+<img class="capa" alt="" decoding="async" style="--z:700;left:29.077%;top:13.055%;width:41.231%;height:73.206%;transform-origin:49.946% 49.961%" src="assets/hero-z700-2ea3e047.webp">
+<img class="capa" alt="" decoding="async" style="--z:260;left:10.667%;top:0.000%;width:78.111%;height:100.000%;transform-origin:49.933% 49.630%" src="assets/hero-z260-ccb01e3d.webp">
+<img class="capa" alt="" decoding="async" style="--z:0;left:0.000%;top:0.000%;width:100.000%;height:100.000%;transform-origin:49.670% 49.630%" src="assets/hero-z0-07f77410.webp">
+    </div></div>
+    <div class="panel"></div>
+    <div class="blanco"></div>
+
+    <div class="apagon"></div>
+    <div class="manifiesto"><div class="canal">
+      <h2>
+        <span class="linea">Hay caminos que se recorren.</span>
+        <span class="linea">Y otros que se comparten.</span>
+        <span class="linea">Los mejores no tienen apuro.</span>
+      </h2>
+      <p class="etiqueta marca">Laberintos · Mendoza, Argentina</p>
+    </div></div>
+
+    <div class="titulo"><div class="canal">
+      <h1>La vida tiene<br>LABERINTOS…</h1>
+      <p>No todos los caminos buscan una salida.</p>
+      <span class="etiqueta entrar">Entrar &nbsp;→</span>
+    </div></div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+<section class="indice" aria-label="Los cuatro vinos">
+  <div class="canal">
+    <p class="etiqueta" style="color:var(--muted-claro)" data-reveal>Elegí tu camino</p>
+    <h2 data-reveal>Cuatro laberintos.<br>Cuatro recorridos.</h2>
+    <p class="bajada" data-reveal>Cada etiqueta es un laberinto distinto. El circular de los
+      varietales, el cuadrado del Reserva, el triangular de la edición limitada.</p>
+    <div class="cuatro">
+      <figure data-reveal><a class="ir" href="#malbec"><img src="assets/botella-962b8686.webp" alt="Malbec" loading="lazy"><figcaption><b>Malbec</b><span>Varietal · 2024</span></figcaption></a></figure>
+      <figure data-reveal><a class="ir" href="#reserva"><img src="assets/botella-126577df.webp" alt="Malbec Reserva" loading="lazy"><figcaption><b>Malbec Reserva</b><span>Reserva · 2023</span></figcaption></a></figure>
+      <figure data-reveal><a class="ir" href="#gran-reserva"><img src="assets/botella-0c7f4325.webp" alt="Gran Reserva" loading="lazy"><figcaption><b>Gran Reserva</b><span>Edición limitada · 2022</span></figcaption></a></figure>
+      <figure data-reveal><a class="ir" href="#syrah"><img src="assets/botella-78883291.webp" alt="Syrah" loading="lazy"><figcaption><b>Syrah</b><span>Varietal · 2023</span></figcaption></a></figure>
+    </div>
+  </div>
+</section><article id="malbec" class="vino" data-view style="--acento:var(--et-malbec);--tx:25">
+  <div class="vino__escena"><img src="assets/escena-62e6ed3e.webp" alt=""></div>
+  <div class="vino__grad"></div>
+  <div class="canal vino__texto">
+    <p class="linea-vino" data-reveal>Varietal</p>
+    <h2 data-reveal>Malbec</h2>
+    <p data-reveal>Tinto Malbec clásico con matices morados, que captura los aromas de
+      ciruelas y frutos rojos acompañados de notas de cerezas.</p>
+    <dl class="datos" data-reveal>
+      <dt>Cosecha</dt><dd>2024</dd>
+      <dt>Origen</dt><dd>Ugarteche, Luján de Cuyo</dd>
+      <dt>Altitud</dt><dd>950 msnm</dd>
+      <dt>Crianza</dt><dd>Sin roble</dd>
+      <dt>Alcohol</dt><dd>13,4%</dd>
+    </dl>
+  </div>
+</article><article id="reserva" class="vino vino--der vino--arriba" data-view style="--acento:var(--et-reserva);--tx:6">
+  <div class="vino__escena"><img src="assets/escena-00df0e6c.webp" alt=""></div>
+  <div class="vino__grad"></div>
+  <div class="canal vino__texto">
+    <p class="linea-vino" data-reveal>Reserva</p>
+    <h2 data-reveal>Malbec Reserva</h2>
+    <p data-reveal>Un Malbec con 12 meses en barrica: esa sutil vainilla aportada por la madera le da su estructura sin perder la nota frutal.</p>
+    <dl class="datos" data-reveal><dt>Cosecha</dt><dd>2023</dd><dt>Origen</dt><dd>Ugarteche, Luján de Cuyo</dd><dt>Altitud</dt><dd>950 msnm</dd><dt>Crianza</dt><dd>12 meses en roble</dd><dt>Guarda</dt><dd>9 años</dd><dt>Alcohol</dt><dd>13,9%</dd></dl>
+  </div>
+</article><article id="gran-reserva" class="vino vino--alto" data-view style="--acento:var(--et-gran);--tx:4">
+  <div class="vino__escena"><img src="assets/escena-5c39331c.webp" alt=""></div>
+  <div class="vino__grad"></div>
+  <div class="canal vino__texto">
+    <p class="linea-vino" data-reveal>Gran Reserva</p>
+    <h2 data-reveal>Gran Reserva Malbec</h2><p class="edicion" data-reveal>Edición especial · partida limitada</p>
+    <p data-reveal>Un Malbec con 24 meses de barrica de roble francés, obteniendo así una estructura delicada y elegante de larga persistencia en boca.</p>
+    <dl class="datos" data-reveal><dt>Cosecha</dt><dd>2022</dd><dt>Origen</dt><dd>Altamira, Valle de Uco</dd><dt>Altitud</dt><dd>1200 msnm</dd><dt>Crianza</dt><dd>24 meses, roble francés</dd><dt>Guarda</dt><dd>14 años</dd><dt>Alcohol</dt><dd>14,2%</dd></dl>
+  </div>
+</article>
+<section class="desvio" aria-label="San Juan">
+  <div class="canal">
+    <p class="etiqueta" data-reveal>Y después</p>
+    <h2 data-reveal>Otro suelo.<br>Otra uva.</h2>
+    <p class="bajada" data-reveal>Los tres Malbec vienen de Mendoza. El cuarto no: cruza a San Juan
+      y cambia de variedad. Es el único camino que sale del mapa.</p>
+  </div>
+  
+</section>
+<article id="syrah" class="vino vino--der vino--claro" data-view style="--tx:0">
+  <div class="vino__escena"><img src="assets/escena-c10573db.webp" alt=""></div>
+  <div class="vino__grad"></div>
+  <div class="canal vino__texto">
+    <p class="linea-vino" data-reveal>Varietal</p>
+    <h2 data-reveal>Syrah</h2>
+    <p data-reveal>Tinto de San Juan. Cosecha 2023.</p>
+    <dl class="datos" data-reveal><dt>Cosecha</dt><dd>2023</dd><dt>Origen</dt><dd>San Juan, Argentina</dd><dt>Varietal</dt><dd>100% Syrah</dd></dl><p class="pendiente" data-reveal>Ficha técnica pendiente. Es el único de los cuatro sin datos de vinificación, crianza y análisis.</p>
+  </div>
+</article>
+
+
+<section class="familia" aria-label="Los cuatro vinos">
+  <img src="assets/familia-baa49356.webp" alt="Las cuatro botellas Laberintos" loading="lazy">
+  <div class="canal">
+    <h2 data-reveal>Cuatro caminos.<br>Un solo laberinto.</h2>
+  </div>
+</section>
+
+
+<footer class="pie" aria-label="Contacto">
+  <div class="pie__marca" aria-hidden="true"><svg id="Capa_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1254 1254"> <path d="M519.17,1132.67c16.66-.4,32.09-13.72,31.48-30.97.02-46.37,0-92.74,0-139.11,0-14.36-7.1-24.41-20.47-30.04-16.59-6.99-33.31-13.79-49.44-21.72-74.8-37.37-132.71-107.6-154.99-188.14-50.82-170.99,58.53-356.28,232.39-395.24,8.72-2.07,17.83-3.48,25.88-7.09,25.93-10.41,25.85-49.82.11-60.7-6.54-3.32-13.53-3.22-20.48-1.94-153.46,25.91-280.93,154.61-309.84,306.71-7.83,32.98-60.46,35.9-65.22-3,10.77-78.84,50.09-152.94,100.06-214.36,71.51-86.97,175.65-143.93,287.49-157.73,24.05-4.15,37.55-35.61,19.55-56.07-8.29-9.42-18.96-11.73-30.53-10.17-80.29,10.28-157.82,39.11-224.06,85.76C-29.67,472.18,75.68,1028.92,518.67,1132.67" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M682.12,1201.98c222.04-16,420.12-179.63,489.73-389.36,99.63-276.96-57.38-607.17-328.34-716.03-259.61-116.44-577.06,4.99-713.29,250.04-204.21,344.71,12.86,783.68,402.47,851.27,26.15,3.38,65.31,13.39,69.01-24.92-.1-158.45-.06-316.89-.08-475.34.4-20.87-24.18-22.19-29.03-51.11-14.91-71.97,91.34-95.89,107.82-23.56,9.46,48.68-29.31,46.8-29.94,78.61.47,111.09-.36,222.19.63,333.28.07,41.13,0,82.25.05,123.38-2.46,22.46,6.4,44.47,30.47,43.75" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M682.62,122.51c224.74,19.06,411.62,207.84,448.72,427.2,35.59,194.75-57.83,401.38-222.36,509.61-48.53,32.65-103.05,57.11-159.9,71.3-20.25,7.57-47.06-5.12-46.46-28.92,0-46.37.43-92.75-.25-139.11-.22-15.06,11.17-27.52,22.72-31.03,272.73-89.14,285.44-470.1,26.54-586.44-22.4-10.14-45.77-16.93-70-21.09-15.43-2.65-26.63-10.96-30.29-26.08-11.92-96.27,181.74,5.49,210.18,36.97,59.52,49.5,105.17,115.61,127.92,189.72,8.35,24.84,7.48,65.99,42.58,65.24,24.07,1.19,39.24-25.06,30.02-47.08-17.82-78.19-56.75-150.74-109.03-211.34-66.32-76.26-160.48-127.01-260.89-139.64-48.95,1-58.41-64.34-10.5-69.3" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M1034.52,652.42c-16.81.44-30.88,12.15-32.93,29.01-2.33,19.21-6.59,38.03-12.18,56.49-16.52,54.99-44.91,106.14-83.28,149.05-21.85,24.74-46.99,45.66-74.6,63.77-18.47,12.12-38.09,22.28-58.45,31.01-12.44,5.33-18.82,15.68-19.67,29.02-1.54,20.75,23.04,40.28,43.68,31.48,35.68-13.57,67.88-33,98-56.01,49.82-37.6,90.35-86.3,121.46-140.12,24.77-42.55,39.82-89.34,47.87-137.67,6.48-24.23,3.7-54.13-29.4-56.02" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M573.16,392.38c-67.26,10.08-126.2,59.11-159.31,117.07-7.98,18.29-23.62,38.11-18.23,58.94,9.31,30.33,55.36,26.5,63.68-2.93,21.39-58.41,68.55-93.12,127.29-111.24,30.49-13.87,18.51-64.68-12.94-61.83" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M701.57,723.14c86.41-70.96,28.63-216.02-83.43-206.01-101.58,4.9-147.76,141.67-67.52,205.64" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M218.76,652.42c-19.35-.71-35.59,19.1-32.42,37.92,8.25,65.99,30.31,129.24,67.47,184.72,43.68,66.71,105.77,120.2,176.91,156.3,7.77,3.88,15.89,7.13,23.97,10.35,24.56,9.77,47.43-12.42,44.12-33.9-2.01-13-8.57-21.56-20.59-27.1-46.19-21.56-89.63-50.08-124.98-86.94-41.18-43.06-71.69-95.98-88.87-152.89-5.99-19.56-10.49-39.52-12.66-59.93-1.62-15.31-15.1-28.52-32.46-28.51" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M833.08,652.4c63.38,4.57,18.85,87.75.54,118.51-20.01,32.78-104.37,123.08-133.17,60.01-15.01-49.25,65.35-45.67,93.05-125.45,8.3-21.33,10.43-52.38,39.58-53.07" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M675.63,392.38c-32.04,5.7-34.6,50.54-6.44,62.81,51.39,14.99,94.84,42.7,118.32,91.59,3.14,6.07,5.54,12.6,7.51,19.15,6.32,21.01,31.55,30.17,49.12,19.72,41.54-25.03-15.45-96.97-36.46-122.06-34.37-36.11-80.44-68.26-131.54-71.21" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M427.39,652.4c-63.38,4.57-18.85,87.75-.54,118.51,20.01,32.78,104.37,123.08,133.17,60.01,15.01-49.25-65.35-45.67-93.05-125.45-8.3-21.33-10.43-52.38-39.58-53.07" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> </svg></div>
+  <div class="canal">
+    <p class="etiqueta muted" data-reveal>Encontralo</p>
+    <h2 data-reveal>Escribinos.</h2>
+    <a class="pie__cta" href="https://wa.me/541148632188" data-reveal>WhatsApp &nbsp;&rarr;</a>
+    <p class="pie__frase" data-reveal>La vida tiene LABERINTOS…</p>
+
+    <div class="pie__cols">
+      <div data-reveal>
+        <h3>Contacto</h3>
+        <ul>
+          <li><a href="tel:+541148632188">+54 11 4863-2188</a></li>
+          <li><a href="mailto:laberintosvinos@gmail.com">laberintosvinos@gmail.com</a></li>
+        </ul>
+      </div>
+      <div data-reveal>
+        <h3>Dónde estamos</h3>
+        <!-- PENDIENTE: verificar el código postal. "01423" no tiene formato argentino -->
+        <ul><li>Estrada 411, Belén de Escobar<br>Buenos Aires, Argentina</li></ul>
+      </div>
+      <div data-reveal>
+        <h3>Seguinos</h3>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Tienda online</a></li>
+        </ul>
+      </div>
+      <div data-reveal>
+        <h3>Exportamos</h3>
+        <ul><li>Argentina<br>México<br>Estados Unidos</li></ul>
+      </div>
+    </div>
+
+    <div class="pie__legal">
+      <span><b>Beber con moderación.</b> Prohibida su venta a menores de 18 años.</span>
+      <span>Sitio para mayores de 18 años</span>
+      <span>© 2026 Laberintos · Mendoza, Argentina</span>
+      <span class="pie__firma">Diseño <a href="https://tramaid.com.ar" target="_blank" rel="noopener">TRAMA</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+const suave=q=>q*q*(3-2*q);
+const tramo=(p,a,b)=>clamp((p-a)/(b-a));
+const PERSP=1000, CORTE=0.36;   // el viaje de cámara llega hasta 0.72
+const esc=(z,av)=>(PERSP+z)/(PERSP+z-av);
+const umbral=document.getElementById('umbral'), cam=document.getElementById('camara');
+const blanco=document.querySelector('.blanco'), apagon=document.querySelector('.apagon');
+const manif=document.querySelector('.manifiesto');
+const R=matchMedia('(prefers-reduced-motion: reduce)');
+
+const A={el:document.getElementById('tomaA'),marco:document.querySelector('#tomaA .marco'),
+  de:0,a:0.44,empuje:880,vx:49.67,vy:49.63,vano:1.94,z:2600,ar:3344/1882};
+const B={el:document.getElementById('tomaB'),marco:document.querySelector('#tomaB .marco'),
+  de:0.30,a:0.72,empuje:620,vx:49.52,vy:39.11,vano:2.84,z:1800,ar:3344/1882};
+const av=(t,p)=>tramo(p,t.de,t.a)*t.empuje;
+[A,B].forEach(t=>{
+  t.overscan=Math.max(1,49.63/t.vy)*1.03;
+  t.capas=[...t.marco.querySelectorAll('.capa')];
+  t.marco.style.setProperty('--vx',t.vx); t.marco.style.setProperty('--vy',t.vy);
+});
+A.baseFin=(B.vano*B.overscan*esc(B.z,av(B,CORTE)))/(A.vano*A.overscan*esc(A.z,av(A,CORTE)));
+B.marco.style.setProperty('--base',B.overscan.toFixed(4));
+function medir(){
+  const w=cam.clientWidth,h=cam.clientHeight;
+  [A,B].forEach(t=>{const mw=Math.max(w,h*t.ar);
+    t.marco.style.setProperty('--mw',mw+'px'); t.marco.style.setProperty('--mh',(mw/t.ar)+'px');});
+}
+medir(); addEventListener('resize',medir);
+const escenas=[...document.querySelectorAll('[data-view]')];
+
+function frame(){
+  if(!R.matches){
+    const r=umbral.getBoundingClientRect();
+    const p=clamp(-r.top/(r.height-innerHeight));
+    cam.style.setProperty('--p',p.toFixed(4));
+
+    for(const t of [A,B]){
+      const a=av(t,p);
+      for(const c of t.capas) c.style.setProperty('--s',esc(+c.style.getPropertyValue('--z'),a).toFixed(5));
+    }
+    A.marco.style.setProperty('--base',(A.overscan*(1+(A.baseFin-1)*clamp(p/CORTE))).toFixed(4));
+    A.el.style.setProperty('--o',(1-suave(tramo(p,CORTE-0.05,CORTE+0.05))).toFixed(3));
+    B.el.style.setProperty('--o','1');
+
+    // 1) el corte cae a negro y vuelve. Entra un poco más lento de lo que sale:
+    //    oscurecerse se siente natural, aclararse de golpe se siente como un error.
+    // 2) blanco final: sube desde 0.62, satura en 0.76 y se sostiene
+    blanco.style.setProperty('--bl', suave(tramo(p,0.60,0.71)).toFixed(3));
+    // 3) el texto entra sobre el blanco ya saturado, línea por línea
+    manif.style.setProperty('--mf', suave(tramo(p,0.620,0.670)).toFixed(3));
+    manif.style.setProperty('--l1', suave(tramo(p,0.640,0.690)).toFixed(3));
+    manif.style.setProperty('--l2', suave(tramo(p,0.705,0.755)).toFixed(3));
+    manif.style.setProperty('--l3', suave(tramo(p,0.765,0.815)).toFixed(3));
+
+    // el apagón arranca cuando la frase ya se está yendo y cierra en negro
+    apagon.style.setProperty('--ap', suave(tramo(p,0.950,0.998)).toFixed(3));
+
+    for(const e of escenas){
+      const q=e.getBoundingClientRect();
+      e.style.setProperty('--pv',clamp((innerHeight-q.top)/(innerHeight+q.height)).toFixed(4));
+    }
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+// el panel entra una sola vez, al cargar: --pn de 0 a 1 en 1100ms
+(function(){
+  const el=document.querySelector('.panel'); let t0=null;
+  const ease=q=>1-Math.pow(1-q,4);
+  (function paso(ts){ if(!t0) t0=ts;
+    const q=Math.min(1,(ts-t0)/1100);
+    el.style.setProperty('--pn', ease(q).toFixed(3));
+    if(q<1) requestAnimationFrame(paso);
+  })(performance.now());
+})();
+
+
+/* navegación del índice: scroll suave, y sin animación si el sistema lo pide */
+document.querySelectorAll('.cuatro .ir').forEach(a=>{
+  a.addEventListener('click', e=>{
+    const destino = document.querySelector(a.getAttribute('href'));
+    if(!destino) return;
+    e.preventDefault();
+    destino.scrollIntoView({behavior: R.matches ? 'auto' : 'smooth', block:'start'});
+    history.replaceState(null,'',a.getAttribute('href'));
+  });
+});
+
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting) return;
+  const g=[...e.target.parentElement.querySelectorAll('[data-reveal]')];
+  const i=g.indexOf(e.target); if(i>0) e.target.style.setProperty('--d',i*90+'ms');
+  e.target.classList.add('is-in'); io.unobserve(e.target);
+}),{threshold:.15,rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('[data-reveal]').forEach(e=>io.observe(e));
+</script></body></html>

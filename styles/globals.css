@@ -1,0 +1,37 @@
+@import './tokens.css';
+
+*{ box-sizing: border-box }
+html{ -webkit-text-size-adjust: 100%; scroll-behavior: auto }
+body{
+  margin: 0; background: var(--ink); color: var(--papel);
+  font-family: var(--texto); font-size: var(--paso); line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+h1,h2,h3{ margin: 0; font-family: var(--display); font-weight: 400; line-height: .98 }
+p{ margin: 0 }
+img{ display: block; max-width: 100% }
+a{ color: inherit; text-decoration: none }
+:focus-visible{ outline: 2px solid currentColor; outline-offset: 3px }
+
+.canal{ max-width: var(--ancho); margin: 0 auto; padding: 0 var(--canal) }
+.seccion{ padding: var(--seccion) 0 }
+.claro{ background: var(--papel); color: var(--ink) }
+.claro .muted{ color: var(--muted-claro) }
+.muted{ color: var(--muted) }
+
+.etiqueta{
+  font-family: var(--dato); font-size: var(--etiqueta);
+  letter-spacing: .16em; text-transform: uppercase;
+}
+
+/* --- reveal: la primitiva 3 de motion.js, en CSS --- */
+[data-reveal]{
+  opacity: 0; transform: translate3d(0, var(--dist), 0);
+  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+  transition-delay: var(--d, 0ms);
+}
+[data-reveal].is-in{ opacity: 1; transform: none }
+
+@media (prefers-reduced-motion: reduce){
+  [data-reveal]{ opacity: 1 !important; transform: none !important; transition: none !important }
+}
