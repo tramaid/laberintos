@@ -19,7 +19,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Barlow+Condensed:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Barlow+Condensed:wght@300;400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
 <style>/* ============================================================
    LABERINTOS — tokens
    Los colores de sustrato salen MEDIDOS de los renders de las
@@ -63,7 +63,10 @@
   /* --- tipografía --- */
   --display: "Special Elite", "Courier New", monospace;  /* la de la etiqueta: máquina de escribir */
   --texto:   "Barlow Condensed", system-ui, sans-serif;
-  --dato:    ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* IBM Plex Mono: la mono del sistema se veia distinta en cada equipo y no
+     compartia nada con la marca. Ademas alinea en columna los numeros de las
+     fichas. El fallback queda por si la fuente no carga. */
+  --dato:    "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --paso: clamp(14px, 1.1vw, 17px);
   /* Cuatro escalones, uno por voz. Los valores son los que ya estaban en
