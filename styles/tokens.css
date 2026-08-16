@@ -58,8 +58,16 @@
   --umbral-corte: 0.389;     /* era 0.36 · donde la fachada entrega al corredor */
   --umbral-blanco-in: 0.648; /* era 0.60 · el papel empieza a subir */
   --umbral-blanco-sat: 0.767;/* era 0.71 · papel pleno */
-  --umbral-apagon: 0.948;    /* era 0.95 · arranca el fundido a negro. Este es el
-                                único que no se reescaló: es el tramo que se acortó */
+  /* Ya NO es un fundido a negro. Había una capa de tinta que subía al final,
+     pensada para que la sección siguiente —los vinos, oscuros— entrara sin
+     escalón; cuando se metió el índice entre medio, que es papel, esa capa
+     quedó poniendo una pantalla negra entera entre dos pantallas claras. Se
+     eliminó el 2026-08-15. Ahora en este punto se apaga el TEXTO del
+     manifiesto y el blanco se sostiene, así la cámara termina en papel liso y
+     empalma con el papel del índice sin unión visible.
+     Es el único valor que no se reescaló al pasar de 640vh a 600vh: es
+     justamente el tramo que se acortó. */
+  --umbral-salida: 0.948;    /* era --umbral-apagon: 0.95 */
 
   --seccion: clamp(90px, 12vh, 160px);
   --ancho: 1180px;
