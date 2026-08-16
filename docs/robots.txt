@@ -1,2 +1,12 @@
+# Queda ABIERTO a proposito, aunque el sitio todavia no deba aparecer en Google.
+# Lo que lo mantiene fuera de los buscadores es <meta name="robots" content="noindex">
+# en index.html, no un Disallow aca.
+#
+# Por que: un Disallow impide RASTREAR pero no impide INDEXAR -la URL puede
+# aparecer igual en los resultados, sin contenido- y de paso frena a los robots
+# que arman la vista previa cuando alguien comparte el link. Para que el noindex
+# funcione, el robot tiene que poder leer la pagina.
+#
+# No cambiar esto por un Disallow sin leer el comentario del <head>.
 User-agent: *
 Allow: /
