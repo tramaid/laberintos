@@ -40,14 +40,14 @@ const MOMENTOS = [0, 0.36, 0.68, 0.92, 0.99];
 /* .indice va por clase, como .desvio/.familia/.pie: la sección es
    <section class="indice">, nunca tuvo id. */
 const SECCIONES = ['.indice', '#malbec', '#reserva', '#gran-reserva',
-                   '.desvio', '#syrah', '.familia', '.pie'];
+                   '.desvio', '#syrah', '.familia', '.donde', '.pie'];
 
 /* Secciones más altas que el viewport, que además se fotografían enteras.
    .indice a 390px pasa a dos columnas y las dos últimas botellas caen debajo del
    fold: una de ellas lleva "EDICIÓN LIMITADA · 2022", el sublabel más largo del
    sitio. Sin esto, el ancho más apretado se verificaría sin ver justo la etiqueta
    con más riesgo de desbordar. */
-const COMPLETAS = ['.indice'];
+const COMPLETAS = ['.indice', '.donde'];
 
 const TIEMPO_MAX = 5000;   /* techo de cada espera por condición */
 const RESPALDO = 400;      /* si la condición no se cumple, respaldo corto y se sigue */

@@ -474,6 +474,41 @@ a{color:inherit;text-decoration:none}
   .familia{min-height:74vh;padding-bottom:clamp(56px,9vh,90px)}
   .familia img{object-position:37% 58%}
 }
+
+/* ============================================================
+   DONDE ENCONTRARNOS — los puntos de venta, agrupados por
+   localidad. Sobre papel: corta los dos bloques oscuros que
+   quedaban pegados al final (la foto de familia y el pie).
+   ============================================================ */
+.donde{background:var(--papel);color:var(--ink);
+ padding:clamp(100px,14vh,170px) 0 clamp(80px,11vh,130px)}
+.donde .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
+.donde .etiqueta{color:var(--muted-claro)}
+.donde h2{font-size:var(--h4)}
+.donde .bajada{margin-top:18px;color:var(--muted-claro);max-width:44ch;font-size:clamp(15px,1.2vw,18px)}
+.puntos{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(30px,4vw,56px) clamp(20px,3vw,44px);
+ margin-top:clamp(44px,6vh,76px)}
+/* la localidad es un label, no un titulo: va en la tipografia de dato, como los
+   dt de las fichas, y el filete la separa igual que a las tablas */
+.localidad h3{margin:0;font-family:var(--dato);font-size:var(--etiqueta);font-weight:400;
+ letter-spacing:.16em;text-transform:uppercase;color:var(--muted-claro);
+ border-top:1px solid var(--linea-clara);padding-top:14px}
+.localidad ul{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:24px}
+.localidad b{display:block;font-family:var(--display);font-weight:400;
+ font-size:clamp(16px,1.4vw,20px);line-height:1.15}
+.localidad span{display:block;margin-top:7px;color:var(--muted-claro);font-size:clamp(14px,1.1vw,16px)}
+/* el @ es el dato mas util de todos: si la vinoteca se muda, su Instagram lo
+   dice y esta direccion no. Por eso es link y no texto. */
+.localidad a{display:inline-block;margin-top:9px;font-family:var(--dato);font-size:12px;
+ letter-spacing:.08em;border-bottom:1px solid var(--linea-clara);padding-bottom:2px;
+ transition:border-color var(--hover) var(--ease)}
+@media(hover:hover){.localidad a:hover{border-bottom-color:currentColor}}
+@media(prefers-reduced-motion:reduce){.localidad a{transition:none}}
+@media(max-width:820px){
+  /* en vertical una sola columna: dos localidades al lado se aprietan y las
+     direcciones largas quiebran feo */
+  .puntos{grid-template-columns:1fr;gap:32px}
+}
 .desvio{background:var(--papel);color:var(--ink);
  padding:clamp(110px,15vh,170px) 0 clamp(30px,4vh,50px);margin-bottom:-1px}
 /* la tira y el bloque del Syrah son UN solo momento claro: el borde entre
@@ -507,7 +542,13 @@ a{color:inherit;text-decoration:none}
 @media (prefers-reduced-motion:reduce){.cuatro .ir img{transition:none}}
 .cuatro figure{margin:0}
 /* los renders de botella vienen a resolución completa: sin tope de altura
-   la grilla los estira y se comen la sección entera */
+   la grilla los estira y se comen la sección entera.
+   Las cuatro llevan width/height en el markup y son las UNICAS del sitio que
+   los necesitan: el resto de las imágenes son position:absolute y no reservan
+   espacio. Sin esos atributos la sección estaba colapsada hasta que las
+   imágenes llegaban, y al llegar empujaba 756px todo lo de abajo. Medido: el
+   documento pasaba de 14217 a 14973 px. Cualquiera scrolleando ahí se comía el
+   salto, y el link del nav aterrizaba donde la sección ESTABA. */
 .cuatro img{display:block;margin:0 auto;width:auto;max-width:100%;
  max-height:min(42vh,380px);filter:drop-shadow(0 18px 30px rgba(0,0,0,.18))}
 .cuatro figcaption{margin-top:24px;text-align:center;border-top:1px solid var(--linea-clara);padding-top:14px}
@@ -540,7 +581,7 @@ a{color:inherit;text-decoration:none}
        vuelve aca como <a href="#origen">Origen</a>. -->
   <!-- la marca al pie del panel: el mismo recurso que cierra el manifiesto del
        umbral. Es un <p>, no un <a>, para no entrar en los selectores del nav -->
-  <nav id="menu-panel"><a href="#indice">Vinos</a><a href="#pie">Encontralo</a><p
+  <nav id="menu-panel"><a href="#indice">Vinos</a><a href="#donde">Encontralo</a><p
     class="etiqueta menu__marca">Laberintos · Mendoza, Argentina</p></nav>
   <!-- Sin ícono: el sitio no usa iconografía, es tipográfico. El botón dice lo
        que hace, y dice CERRAR cuando está abierto. -->
@@ -597,10 +638,10 @@ a{color:inherit;text-decoration:none}
     <p class="bajada" data-reveal>Cada etiqueta es un laberinto distinto. El circular de los
       varietales, el cuadrado del Reserva, el triangular de la edición limitada.</p>
     <div class="cuatro">
-      <figure data-reveal><a class="ir" href="#malbec"><img src="assets/botella-962b8686.webp" alt="Malbec" loading="lazy"><figcaption><b>Malbec</b><span>Varietal · 2024</span></figcaption></a></figure>
-      <figure data-reveal><a class="ir" href="#reserva"><img src="assets/botella-126577df.webp" alt="Malbec Reserva" loading="lazy"><figcaption><b>Malbec Reserva</b><span>Reserva · 2023</span></figcaption></a></figure>
-      <figure data-reveal><a class="ir" href="#gran-reserva"><img src="assets/botella-0c7f4325.webp" alt="Gran Reserva" loading="lazy"><figcaption><b>Gran Reserva</b><span>Edición limitada · 2022</span></figcaption></a></figure>
-      <figure data-reveal><a class="ir" href="#syrah"><img src="assets/botella-78883291.webp" alt="Syrah" loading="lazy"><figcaption><b>Syrah</b><span>Varietal · 2023</span></figcaption></a></figure>
+      <figure data-reveal><a class="ir" href="#malbec"><img src="assets/botella-962b8686.webp" alt="Malbec" loading="lazy" width="640" height="2682"><figcaption><b>Malbec</b><span>Varietal · 2024</span></figcaption></a></figure>
+      <figure data-reveal><a class="ir" href="#reserva"><img src="assets/botella-126577df.webp" alt="Malbec Reserva" loading="lazy" width="610" height="2634"><figcaption><b>Malbec Reserva</b><span>Reserva · 2023</span></figcaption></a></figure>
+      <figure data-reveal><a class="ir" href="#gran-reserva"><img src="assets/botella-0c7f4325.webp" alt="Gran Reserva" loading="lazy" width="680" height="2594"><figcaption><b>Gran Reserva</b><span>Edición limitada · 2022</span></figcaption></a></figure>
+      <figure data-reveal><a class="ir" href="#syrah"><img src="assets/botella-78883291.webp" alt="Syrah" loading="lazy" width="644" height="2574"><figcaption><b>Syrah</b><span>Varietal · 2023</span></figcaption></a></figure>
     </div>
   </div>
 </section><article id="malbec" class="vino" data-view style="--acento:var(--et-malbec);--tx:25">
@@ -686,11 +727,76 @@ a{color:inherit;text-decoration:none}
   </div>
 </section>
 
+<!-- Los puntos de venta. Van sobre papel y no sobre tinta a proposito: la foto
+     de familia y el pie son los dos oscuros, y sin este corte quedaban dos
+     bloques negros pegados al final del recorrido.
+     PENDIENTE DE VERIFICAR: el pie dice que la bodega esta en Estrada 411,
+     Belen de Escobar, y Villa uva esta en Estrada 611, Escobar. Misma calle,
+     mismo partido, numero distinto: o son dos lugares a dos cuadras, o uno de
+     los dos esta mal transcripto. -->
+<section class="donde" id="donde" aria-label="Dónde encontrarnos">
+  <div class="canal">
+    <p class="etiqueta" data-reveal>Dónde encontrarnos</p>
+    <h2 data-reveal>Siete puertas.</h2>
+    <p class="bajada" data-reveal>El vino viene de Mendoza y de San Juan.
+      Hoy se consigue en estos siete lugares de Buenos Aires.</p>
+    <div class="puntos">
+      <div class="localidad" data-reveal>
+        <h3>Matheu</h3>
+        <ul>
+          <li><b>Lacoste - Vinería &amp; Cía.</b><span>Juan León 68</span>
+            <a href="https://www.instagram.com/lacostevineria" target="_blank" rel="noopener">@lacostevineria</a></li>
+          <li><b>Bodegón Tras Cartón</b><span>San Martín 172</span>
+            <a href="https://www.instagram.com/bodegon_trascarton" target="_blank" rel="noopener">@bodegon_trascarton</a></li>
+        </ul>
+      </div>
+      <div class="localidad" data-reveal>
+        <h3>Belén de Escobar</h3>
+        <ul>
+          <li><b>Villa uva - Tienda de vinos</b><span>Estrada 611</span>
+            <a href="https://www.instagram.com/villa.uva" target="_blank" rel="noopener">@villa.uva</a></li>
+        </ul>
+      </div>
+      <div class="localidad" data-reveal>
+        <h3>Ingeniero Maschwitz</h3>
+        <ul>
+          <li><b>Le petit vinos</b><span>Colectora Este Ramal Escobar 2147, Local&nbsp;12</span>
+            <a href="https://www.instagram.com/lepetitvins" target="_blank" rel="noopener">@lepetitvins</a></li>
+        </ul>
+      </div>
+      <div class="localidad" data-reveal>
+        <h3>Zárate</h3>
+        <ul>
+          <li><b>Vinoteca Estilo vinos</b><span>Independencia 1001</span>
+            <a href="https://www.instagram.com/estilovinos" target="_blank" rel="noopener">@estilovinos</a></li>
+        </ul>
+      </div>
+      <div class="localidad" data-reveal>
+        <h3>El Palomar</h3>
+        <ul>
+          <li><b>Vinoteca Deltawine</b><span>De los Robles 3021</span>
+            <a href="https://www.instagram.com/deltawine02" target="_blank" rel="noopener">@deltawine02</a></li>
+        </ul>
+      </div>
+      <div class="localidad" data-reveal>
+        <h3>Santos Lugares</h3>
+        <ul>
+          <li><b>Nativo Vinoteca</b><span>Av. La Plata 3741</span>
+            <a href="https://www.instagram.com/nativovinoteca" target="_blank" rel="noopener">@nativovinoteca</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 <footer class="pie" id="pie" aria-label="Contacto">
   <div class="pie__marca" aria-hidden="true"><svg id="Capa_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1254 1254"> <path d="M519.17,1132.67c16.66-.4,32.09-13.72,31.48-30.97.02-46.37,0-92.74,0-139.11,0-14.36-7.1-24.41-20.47-30.04-16.59-6.99-33.31-13.79-49.44-21.72-74.8-37.37-132.71-107.6-154.99-188.14-50.82-170.99,58.53-356.28,232.39-395.24,8.72-2.07,17.83-3.48,25.88-7.09,25.93-10.41,25.85-49.82.11-60.7-6.54-3.32-13.53-3.22-20.48-1.94-153.46,25.91-280.93,154.61-309.84,306.71-7.83,32.98-60.46,35.9-65.22-3,10.77-78.84,50.09-152.94,100.06-214.36,71.51-86.97,175.65-143.93,287.49-157.73,24.05-4.15,37.55-35.61,19.55-56.07-8.29-9.42-18.96-11.73-30.53-10.17-80.29,10.28-157.82,39.11-224.06,85.76C-29.67,472.18,75.68,1028.92,518.67,1132.67" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M682.12,1201.98c222.04-16,420.12-179.63,489.73-389.36,99.63-276.96-57.38-607.17-328.34-716.03-259.61-116.44-577.06,4.99-713.29,250.04-204.21,344.71,12.86,783.68,402.47,851.27,26.15,3.38,65.31,13.39,69.01-24.92-.1-158.45-.06-316.89-.08-475.34.4-20.87-24.18-22.19-29.03-51.11-14.91-71.97,91.34-95.89,107.82-23.56,9.46,48.68-29.31,46.8-29.94,78.61.47,111.09-.36,222.19.63,333.28.07,41.13,0,82.25.05,123.38-2.46,22.46,6.4,44.47,30.47,43.75" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M682.62,122.51c224.74,19.06,411.62,207.84,448.72,427.2,35.59,194.75-57.83,401.38-222.36,509.61-48.53,32.65-103.05,57.11-159.9,71.3-20.25,7.57-47.06-5.12-46.46-28.92,0-46.37.43-92.75-.25-139.11-.22-15.06,11.17-27.52,22.72-31.03,272.73-89.14,285.44-470.1,26.54-586.44-22.4-10.14-45.77-16.93-70-21.09-15.43-2.65-26.63-10.96-30.29-26.08-11.92-96.27,181.74,5.49,210.18,36.97,59.52,49.5,105.17,115.61,127.92,189.72,8.35,24.84,7.48,65.99,42.58,65.24,24.07,1.19,39.24-25.06,30.02-47.08-17.82-78.19-56.75-150.74-109.03-211.34-66.32-76.26-160.48-127.01-260.89-139.64-48.95,1-58.41-64.34-10.5-69.3" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M1034.52,652.42c-16.81.44-30.88,12.15-32.93,29.01-2.33,19.21-6.59,38.03-12.18,56.49-16.52,54.99-44.91,106.14-83.28,149.05-21.85,24.74-46.99,45.66-74.6,63.77-18.47,12.12-38.09,22.28-58.45,31.01-12.44,5.33-18.82,15.68-19.67,29.02-1.54,20.75,23.04,40.28,43.68,31.48,35.68-13.57,67.88-33,98-56.01,49.82-37.6,90.35-86.3,121.46-140.12,24.77-42.55,39.82-89.34,47.87-137.67,6.48-24.23,3.7-54.13-29.4-56.02" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M573.16,392.38c-67.26,10.08-126.2,59.11-159.31,117.07-7.98,18.29-23.62,38.11-18.23,58.94,9.31,30.33,55.36,26.5,63.68-2.93,21.39-58.41,68.55-93.12,127.29-111.24,30.49-13.87,18.51-64.68-12.94-61.83" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M701.57,723.14c86.41-70.96,28.63-216.02-83.43-206.01-101.58,4.9-147.76,141.67-67.52,205.64" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M218.76,652.42c-19.35-.71-35.59,19.1-32.42,37.92,8.25,65.99,30.31,129.24,67.47,184.72,43.68,66.71,105.77,120.2,176.91,156.3,7.77,3.88,15.89,7.13,23.97,10.35,24.56,9.77,47.43-12.42,44.12-33.9-2.01-13-8.57-21.56-20.59-27.1-46.19-21.56-89.63-50.08-124.98-86.94-41.18-43.06-71.69-95.98-88.87-152.89-5.99-19.56-10.49-39.52-12.66-59.93-1.62-15.31-15.1-28.52-32.46-28.51" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M833.08,652.4c63.38,4.57,18.85,87.75.54,118.51-20.01,32.78-104.37,123.08-133.17,60.01-15.01-49.25,65.35-45.67,93.05-125.45,8.3-21.33,10.43-52.38,39.58-53.07" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M675.63,392.38c-32.04,5.7-34.6,50.54-6.44,62.81,51.39,14.99,94.84,42.7,118.32,91.59,3.14,6.07,5.54,12.6,7.51,19.15,6.32,21.01,31.55,30.17,49.12,19.72,41.54-25.03-15.45-96.97-36.46-122.06-34.37-36.11-80.44-68.26-131.54-71.21" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M427.39,652.4c-63.38,4.57-18.85,87.75-.54,118.51,20.01,32.78,104.37,123.08,133.17,60.01,15.01-49.25-65.35-45.67-93.05-125.45-8.3-21.33-10.43-52.38-39.58-53.07" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> </svg></div>
   <div class="canal">
-    <p class="etiqueta muted" data-reveal>Encontralo</p>
+    <!-- decia "Encontralo", igual que el link del nav. Ahora "Encontralo" lleva a
+         los puntos de venta, que es lo que esa palabra promete; el pie es la
+         bodega: contacto, exportacion y legales. -->
+    <p class="etiqueta muted" data-reveal>La bodega</p>
     <h2 data-reveal>Escribinos.</h2>
     <a class="pie__cta" href="https://wa.me/541148632188" data-reveal>WhatsApp &nbsp;&rarr;</a>
     <p class="pie__frase" data-reveal>La vida tiene LABERINTOS…</p>
