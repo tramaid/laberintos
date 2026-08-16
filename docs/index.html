@@ -173,7 +173,13 @@ a{color:inherit;text-decoration:none}
 /* .titulo lleva pointer-events:none para no capturar el toque sobre la escena.
    Como "Entrar" ahora es un enlace de verdad, se le devuelve el puntero SOLO a
    el: el resto del titulo tiene que seguir siendo intocable. */
-.entrar{display:inline-flex;gap:12px;align-items:center;margin-top:26px;
+/* El area de toque se estira hacia ARRIBA hasta 44px y el margen se achica en
+   la misma cantidad (26 - 21 = 5): el texto y el subrayado quedan en el pixel
+   exacto donde estaban, y el blanco de arriba —que era margen muerto— pasa a
+   ser tocable. Importa: en telefono este es el unico atajo para saltear las
+   seis pantallas del umbral, y con 23px de alto era dificil de acertar. */
+.entrar{display:inline-flex;gap:12px;align-items:center;margin-top:5px;
+ padding-top:21px;min-height:44px;box-sizing:border-box;
  border-bottom:1px solid currentColor;padding-bottom:5px;pointer-events:auto}
 
 /* el manifiesto: tinta sobre papel, dentro del mismo sticky */
@@ -203,6 +209,8 @@ a{color:inherit;text-decoration:none}
    al desktop, donde el nav tiene que verse.
    ============================================================ */
 .menu__boton{display:none}
+/* solo existe dentro del panel abierto: en la barra de desktop no va */
+.menu__marca{display:none}
 @media(max-width:700px){
   .nav nav{display:none}
   /* La barra mide 58,5px y la marca cae en y=18. El área de toque de 44px del
@@ -225,7 +233,10 @@ a{color:inherit;text-decoration:none}
   body.menu-abierto .nav{mix-blend-mode:normal;color:var(--papel)}
   body.menu-abierto .nav nav{display:flex;flex-direction:column;gap:0;
     position:fixed;inset:0;background:var(--ink);
-    padding:clamp(88px,16vh,160px) 0 0;
+    /* Con los links pegados arriba quedaban dos renglones flotando sobre un
+       panel vacio: leia como inacabado, no como aire. Bajan a un tercio de la
+       pantalla y la marca cierra al pie, asi el panel esta compuesto. */
+    padding:clamp(120px,30vh,260px) 0 clamp(26px,5vh,48px);
     /* los links del panel no son labels: van en la tipografía de la marca,
        en caja mixta, como todos los títulos del sitio */
     font-family:var(--display);font-size:clamp(32px,9vw,44px);
@@ -234,6 +245,10 @@ a{color:inherit;text-decoration:none}
   /* el canal de la izquierda es el mismo del resto del sitio */
   body.menu-abierto .nav nav a{display:flex;align-items:center;min-height:56px;
     padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
+  /* margin-top:auto la empuja al piso del panel, sea cual sea la cantidad de
+     links. --muted sobre --ink da 5.33:1 */
+  body.menu-abierto .nav nav .menu__marca{display:block;margin:auto 0 0;
+    padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal);color:var(--muted)}
 }
 @keyframes menu-entra{from{opacity:0}to{opacity:1}}
 @media(prefers-reduced-motion:reduce){body.menu-abierto .nav nav{animation:none}}
@@ -500,7 +515,10 @@ a{color:inherit;text-decoration:none}
 <header class="nav"><b>LABERINTOS</b>
   <!-- "Origen" se saco: esa seccion no existe en el sitio. Cuando se construya,
        vuelve aca como <a href="#origen">Origen</a>. -->
-  <nav id="menu-panel"><a href="#indice">Vinos</a><a href="#pie">Encontralo</a></nav>
+  <!-- la marca al pie del panel: el mismo recurso que cierra el manifiesto del
+       umbral. Es un <p>, no un <a>, para no entrar en los selectores del nav -->
+  <nav id="menu-panel"><a href="#indice">Vinos</a><a href="#pie">Encontralo</a><p
+    class="etiqueta menu__marca">Laberintos · Mendoza, Argentina</p></nav>
   <!-- Sin ícono: el sitio no usa iconografía, es tipográfico. El botón dice lo
        que hace, y dice CERRAR cuando está abierto. -->
   <button type="button" class="menu__boton" id="menu-boton"
@@ -596,7 +614,7 @@ a{color:inherit;text-decoration:none}
     <p class="linea-vino" data-reveal>Gran Reserva</p>
     <h2 data-reveal>Gran Reserva Malbec</h2><p class="edicion" data-reveal>Edición especial · partida limitada</p>
     <p data-reveal>Un Malbec con 24 meses de barrica de roble francés, obteniendo así una estructura delicada y elegante de larga persistencia en boca.</p>
-    <dl class="datos" data-reveal><dt>Cosecha</dt><dd>2022</dd><dt>Origen</dt><dd>Altamira, Valle de Uco</dd><dt>Altitud</dt><dd>1200 msnm</dd><dt>Crianza</dt><dd>24 meses, roble francés</dd><dt>Guarda</dt><dd>14 años</dd><dt>Alcohol</dt><dd>14,2%</dd></dl>
+    <dl class="datos" data-reveal><dt>Cosecha</dt><dd>2022</dd><dt>Origen</dt><dd>Altamira, Valle de Uco</dd><dt>Altitud</dt><dd>1200 msnm</dd><dt>Crianza</dt><dd>24 meses, roble&nbsp;francés</dd><dt>Guarda</dt><dd>14 años</dd><dt>Alcohol</dt><dd>14,2%</dd></dl>
   </div>
 </article>
 <section class="desvio" aria-label="San Juan">

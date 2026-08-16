@@ -22,8 +22,15 @@ const salida = path.join(raiz, 'capturas', etiqueta);
 
 const ANCHOS = [390, 768, 1280, 1440];
 const ALTO = 900;
-/* El umbral mide 640vh y es sticky: no sirve una captura de página completa.
-   Se fotografía en cuatro momentos del recorrido de cámara. */
+/* El umbral es sticky y mide varias pantallas: no sirve una captura de página
+   completa. Se fotografía en cuatro momentos del recorrido de cámara.
+
+   OJO con umbral-0_36.png: cae dentro del fundido entre las dos tomas, o sea
+   dos imágenes superpuestas a media opacidad. La composición de capas escaladas
+   no es reproducible bit a bit entre corridas, así que ESA captura NO sirve como
+   control por hash: se compara mirándola. Las otras tres sí son deterministas.
+   Se sigue sacando igual porque el corte es el momento más frágil del umbral y
+   hay que poder verlo. */
 const MOMENTOS = [0, 0.36, 0.68, 0.92];
 /* .indice va por clase, como .desvio/.familia/.pie: la sección es
    <section class="indice">, nunca tuvo id. */
@@ -78,9 +85,26 @@ const IMAGENES_VISIBLES_LISTAS = () => [...document.querySelectorAll('img')].eve
   return !visible || (img.complete && img.naturalWidth > 0);
 });
 
-/* dos frames para que la cámara rAF del umbral ya haya leído el scroll nuevo */
-const asentar = pag => pag.evaluate(() =>
-  new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
+/* Espera a que la cámara del umbral haya leído el scroll nuevo. Antes eran dos
+   frames fijos, y no alcanzaba: en el fundido entre tomas —donde --o cambia
+   rápido— un frame de atraso se ve, y umbral-0_36.png salía distinto entre dos
+   corridas del MISMO código. Eso arruina la captura como control de regresión.
+   Ahora se espera a que --o se repita en dos frames seguidos. */
+const asentar = pag => pag.evaluate(() => new Promise(r => {
+  const toma = document.getElementById('tomaA');
+  if (!toma) return requestAnimationFrame(() => requestAnimationFrame(r));
+  const leer = () => getComputedStyle(toma).opacity;
+  let previo = leer(), iguales = 0, vueltas = 0;
+  const paso = () => {
+    const ahora = leer();
+    iguales = ahora === previo ? iguales + 1 : 0;
+    previo = ahora;
+    /* el tope de 30 frames es un seguro: media cámara lenta no debe colgar la corrida */
+    if (iguales >= 2 || ++vueltas > 30) return r();
+    requestAnimationFrame(paso);
+  };
+  requestAnimationFrame(paso);
+}));
 
 let navegador;
 try {
