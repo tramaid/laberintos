@@ -170,8 +170,11 @@ a{color:inherit;text-decoration:none}
    escenografía es más oscura y el texto no pelea con la piedra */
 .titulo .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
 .titulo p{margin-top:18px;color:var(--muted);max-width:34ch}
+/* .titulo lleva pointer-events:none para no capturar el toque sobre la escena.
+   Como "Entrar" ahora es un enlace de verdad, se le devuelve el puntero SOLO a
+   el: el resto del titulo tiene que seguir siendo intocable. */
 .entrar{display:inline-flex;gap:12px;align-items:center;margin-top:26px;
- border-bottom:1px solid currentColor;padding-bottom:5px}
+ border-bottom:1px solid currentColor;padding-bottom:5px;pointer-events:auto}
 
 /* el manifiesto: tinta sobre papel, dentro del mismo sticky */
 .manifiesto{position:absolute;inset:0;z-index:8;display:grid;align-items:center;justify-items:start;
@@ -447,7 +450,7 @@ a{color:inherit;text-decoration:none}
     <div class="titulo"><div class="canal">
       <h1>La vida tiene<br>LABERINTOS…</h1>
       <p>No todos los caminos buscan una salida.</p>
-      <span class="etiqueta entrar">Entrar &nbsp;→</span>
+      <a class="etiqueta entrar" href="#indice">Entrar &nbsp;→</a>
     </div></div>
   </div>
 </section>
@@ -692,7 +695,7 @@ requestAnimationFrame(frame);
 
 
 /* navegación del índice: scroll suave, y sin animación si el sistema lo pide */
-document.querySelectorAll('.cuatro .ir, .nav nav a').forEach(a=>{
+document.querySelectorAll('.cuatro .ir, .nav nav a, .entrar').forEach(a=>{
   a.addEventListener('click', e=>{
     const destino = document.querySelector(a.getAttribute('href'));
     if(!destino) return;
