@@ -31,7 +31,12 @@ const ALTO = 900;
    control por hash: se compara mirándola. Las otras tres sí son deterministas.
    Se sigue sacando igual porque el corte es el momento más frágil del umbral y
    hay que poder verlo. */
-const MOMENTOS = [0, 0.36, 0.68, 0.92];
+/* El quinto momento, 0.99, se agrego tarde y por una razon concreta: con solo
+   cuatro, el ultimo caia en 0.92 y NADA fotografiaba el cierre del umbral. Ahi
+   habia una pantalla negra entera —una capa de tinta que sobraba— y el arnes no
+   la vio nunca; la encontro una persona mirando el sitio. El cierre es la union
+   con la seccion siguiente y necesita guardia propia. */
+const MOMENTOS = [0, 0.36, 0.68, 0.92, 0.99];
 /* .indice va por clase, como .desvio/.familia/.pie: la sección es
    <section class="indice">, nunca tuvo id. */
 const SECCIONES = ['.indice', '#malbec', '#reserva', '#gran-reserva',

@@ -136,10 +136,12 @@ a{color:inherit;text-decoration:none}
    Si el blanco aparece dos veces, el blanco del final deja de ser un
    acontecimiento. La luz pasa una sola vez en todo el umbral. */
 .blanco{position:absolute;inset:0;z-index:6;pointer-events:none;background:var(--papel);opacity:var(--bl,0)}
-/* el blanco no corta seco contra el vino: se apaga. Esta capa de tinta sube
-   por encima de todo al final del umbral, así el último fotograma del sticky
-   ya es negro y la sección siguiente entra sin escalón. */
-.apagon{position:absolute;inset:0;z-index:9;pointer-events:none;background:var(--ink);opacity:var(--ap,0)}
+/* Aca vivía .apagon, una capa de tinta que subía al final del umbral para que
+   el último fotograma del sticky fuera negro. Tenía sentido cuando lo que
+   seguía eran los vinos, que son oscuros. Después se metió el índice entre
+   medio, que es papel, y esa capa quedó poniendo una pantalla negra entera
+   entre dos pantallas claras. Se eliminó: ahora el blanco se sostiene hasta el
+   final y lo único que se apaga es el texto del manifiesto. */
 
 /* El título se perdía sobre la piedra clara. Un panel de tinta entra desde
    el margen izquierdo al cargar y se va con el título: le da fondo sin
@@ -183,8 +185,11 @@ a{color:inherit;text-decoration:none}
  border-bottom:1px solid currentColor;padding-bottom:5px;pointer-events:auto}
 
 /* el manifiesto: tinta sobre papel, dentro del mismo sticky */
+/* --mf es la entrada de la frase y --salida su apagado al final del umbral.
+   Van multiplicadas y no sumadas: una sube al principio y la otra baja al
+   cierre, asi que el texto solo esta visible cuando las dos valen 1. */
 .manifiesto{position:absolute;inset:0;z-index:8;display:grid;align-items:center;justify-items:start;
- color:var(--ink);opacity:var(--mf,0);pointer-events:none}
+ color:var(--ink);opacity:calc(var(--mf,0) * var(--salida,1));pointer-events:none}
 .manifiesto h2{font-size:var(--h4);max-width:20ch}
 .manifiesto .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
 .manifiesto .linea{display:block;opacity:var(--l1,0);transform:translate3d(0,calc((1 - var(--l1,0)) * 22px),0)}
@@ -507,7 +512,7 @@ a{color:inherit;text-decoration:none}
  transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease);transition-delay:var(--d,0ms)}
 [data-reveal].is-in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){
- .umbral{height:100vh}.capa{transform:none!important}.blanco,.manifiesto,.apagon{display:none}
+ .umbral{height:100vh}.capa{transform:none!important}.blanco,.manifiesto{display:none}
  #tomaB{display:none}#tomaA{opacity:1!important}.titulo{opacity:1!important;transform:none!important}}
 </style><!-- Se precargan las CINCO capas de tomaA, que es la que esta en pantalla al
      entrar. Antes se precargaban las tres de tomaB, que no se ve hasta el 36%
@@ -551,8 +556,6 @@ a{color:inherit;text-decoration:none}
     </div></div>
     <div class="panel"></div>
     <div class="blanco"></div>
-
-    <div class="apagon"></div>
     <div class="manifiesto"><div class="canal">
       <h2>
         <span class="linea">Hay caminos que se recorren.</span>
@@ -717,7 +720,7 @@ const PERSP=1000, CORTE=0.389;   // era 0.36 · el viaje de camara llega hasta 0
 const CRUCE=0.054;               // era 0.05 · medio ancho del fundido entre tomas
 const esc=(z,av)=>(PERSP+z)/(PERSP+z-av);
 const umbral=document.getElementById('umbral'), cam=document.getElementById('camara');
-const blanco=document.querySelector('.blanco'), apagon=document.querySelector('.apagon');
+const blanco=document.querySelector('.blanco');
 const manif=document.querySelector('.manifiesto');
 const R=matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -784,10 +787,16 @@ function frame(){
     manif.style.setProperty('--l2', suave(tramo(p,0.761,0.815)).toFixed(3));    // eran 0.705 y 0.755
     manif.style.setProperty('--l3', suave(tramo(p,0.826,0.880)).toFixed(3));    // eran 0.765 y 0.815
 
-    /* El apagon es el unico que NO se reescala por 1.08: es justo el tramo que
-       se acorto. Dura lo mismo que antes en distancia absoluta (26vh), pero
-       arranca antes, porque el silencio previo pasa de 73vh a 34vh. */
-    apagon.style.setProperty('--ap', suave(tramo(p,0.948,0.998)).toFixed(3));
+    /* El cierre: se apaga el TEXTO, no la pantalla.
+       Antes aca subia una capa de tinta sobre todo. Ese apagon existia para que
+       el ultimo fotograma del sticky fuera negro y la seccion siguiente entrara
+       sin escalon —y era cierto cuando lo que seguia eran los vinos, que son
+       oscuros. Despues se metio el indice entre medio, que es papel, y el
+       apagon quedo metiendo una pantalla negra entre dos pantallas claras.
+       Ahora el blanco se sostiene y lo que se va es la frase: la camara termina
+       en papel liso. Como el indice usa el mismo --papel, cuando el sticky se
+       suelta y la camara se desliza hacia arriba no hay union visible. */
+    manif.style.setProperty('--salida', (1-suave(tramo(p,0.948,0.998))).toFixed(3));
 
     for(const e of escenas){
       const q=e.getBoundingClientRect();
