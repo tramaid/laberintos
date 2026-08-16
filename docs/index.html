@@ -191,7 +191,52 @@ a{color:inherit;text-decoration:none}
  letter-spacing:.06em;mix-blend-mode:difference;color:#fff}
 .nav nav{display:flex;gap:22px;font-family:var(--dato);font-size:var(--etiqueta);
  letter-spacing:.16em;text-transform:uppercase}
-@media(max-width:700px){.nav nav{display:none}}
+/* ============================================================
+   MENÚ DE TELÉFONO — abajo de 700px los links inline no entran en
+   la barra. Antes se escondían y no los reemplazaba nada: no había
+   navegación. Ahora los abre un botón en un panel a pantalla completa.
+
+   El panel ES el mismo <nav>, no una copia: no hay dos juegos de
+   links que mantener sincronizados y arriba de 700px vuelve a ser la
+   barra de siempre. Por eso el estado cerrado se resuelve con
+   display:none y no con el atributo [hidden]: el atributo viajaría
+   al desktop, donde el nav tiene que verse.
+   ============================================================ */
+.menu__boton{display:none}
+@media(max-width:700px){
+  .nav nav{display:none}
+  /* La barra mide 58,5px y la marca cae en y=18. El área de toque de 44px del
+     botón la haría crecer a 80px y correría la marca: se le saca al padding
+     exactamente lo que aporta el botón —(58,5 − 44) / 2— así ni la barra ni la
+     marca se mueven, y lo único que cambia a 390px es el botón. */
+  .nav{padding-top:7.25px;padding-bottom:7.25px}
+  .menu__boton{display:inline-flex;align-items:center;min-height:44px;
+    padding:0;border:0;background:none;color:inherit;cursor:pointer;
+    font-family:var(--dato);font-size:var(--etiqueta);letter-spacing:.16em;
+    text-transform:uppercase;
+    /* la marca y el botón por encima del panel, que es hermano de los dos
+       dentro de la misma barra y si no los taparía */
+    position:relative;z-index:1}
+  .nav>b{position:relative;z-index:1}
+  /* .nav va en mix-blend-mode:difference. Con el panel de tinta detrás el texto
+     de la barra se invierte contra su propio fondo y deja de ser confiable:
+     mientras el menú está abierto se apaga la mezcla y se fija el color.
+     --papel sobre --ink da 16,5:1, muy por encima del 4,5:1. */
+  body.menu-abierto .nav{mix-blend-mode:normal;color:var(--papel)}
+  body.menu-abierto .nav nav{display:flex;flex-direction:column;gap:0;
+    position:fixed;inset:0;background:var(--ink);
+    padding:clamp(88px,16vh,160px) 0 0;
+    /* los links del panel no son labels: van en la tipografía de la marca,
+       en caja mixta, como todos los títulos del sitio */
+    font-family:var(--display);font-size:clamp(32px,9vw,44px);
+    letter-spacing:0;text-transform:none;
+    animation:menu-entra 240ms var(--ease)}
+  /* el canal de la izquierda es el mismo del resto del sitio */
+  body.menu-abierto .nav nav a{display:flex;align-items:center;min-height:56px;
+    padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
+}
+@keyframes menu-entra{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){body.menu-abierto .nav nav{animation:none}}
 
 .vino{position:relative;min-height:104vh;display:grid;align-items:center;overflow:hidden;--acento:var(--et-malbec)}
 .vino__escena{position:absolute;inset:0;overflow:hidden;background:var(--ink)}
@@ -455,7 +500,11 @@ a{color:inherit;text-decoration:none}
 <header class="nav"><b>LABERINTOS</b>
   <!-- "Origen" se saco: esa seccion no existe en el sitio. Cuando se construya,
        vuelve aca como <a href="#origen">Origen</a>. -->
-  <nav><a href="#indice">Vinos</a><a href="#pie">Encontralo</a></nav></header>
+  <nav id="menu-panel"><a href="#indice">Vinos</a><a href="#pie">Encontralo</a></nav>
+  <!-- Sin ícono: el sitio no usa iconografía, es tipográfico. El botón dice lo
+       que hace, y dice CERRAR cuando está abierto. -->
+  <button type="button" class="menu__boton" id="menu-boton"
+          aria-expanded="false" aria-controls="menu-panel">Menú</button></header>
 
 <section class="umbral" id="umbral">
   <div class="camara" id="camara">
@@ -731,12 +780,37 @@ requestAnimationFrame(frame);
 })();
 
 
+/* Menu de telefono. Abajo de 700px los links de la barra no entran y el panel
+   los muestra a pantalla completa. El panel es el MISMO <nav>, asi que el
+   listener de scroll suave de aca abajo ya los toma con el selector que ya
+   tenia: solo hay que cerrarle el menu antes de navegar. */
+const botonMenu=document.getElementById('menu-boton');
+const menuAbierto=()=>document.body.classList.contains('menu-abierto');
+function cerrarMenu(devolverFoco){
+  if(!menuAbierto()) return;
+  document.body.classList.remove('menu-abierto');
+  botonMenu.setAttribute('aria-expanded','false');
+  botonMenu.textContent='Menú';
+  /* al cerrar con Escape el foco tiene que volver al boton: si no queda en un
+     link del panel, que en ese mismo instante pasa a display:none, y se pierde
+     al principio del documento. */
+  if(devolverFoco) botonMenu.focus();
+}
+botonMenu.addEventListener('click',()=>{
+  if(menuAbierto()) return cerrarMenu(false);
+  document.body.classList.add('menu-abierto');
+  botonMenu.setAttribute('aria-expanded','true');
+  botonMenu.textContent='Cerrar';
+});
+addEventListener('keydown',e=>{ if(e.key==='Escape') cerrarMenu(true); });
+
 /* navegación del índice: scroll suave, y sin animación si el sistema lo pide */
 document.querySelectorAll('.cuatro .ir, .nav nav a, .entrar').forEach(a=>{
   a.addEventListener('click', e=>{
     const destino = document.querySelector(a.getAttribute('href'));
     if(!destino) return;
     e.preventDefault();
+    cerrarMenu(false);   /* si el toque vino del panel de telefono, se cierra al navegar */
     destino.scrollIntoView({behavior: R.matches ? 'auto' : 'smooth', block:'start'});
     /* scrollIntoView mueve la pagina pero no el foco: sin esto, activar un link
        del nav con teclado deja el foco arriba y el Tab siguiente vuelve al
