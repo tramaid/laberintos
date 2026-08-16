@@ -242,15 +242,8 @@ a{color:inherit;text-decoration:none}
  border-top:1px solid var(--linea);padding-top:26px;max-width:34ch}
 .datos dt{color:var(--muted-2);font-size:12px;letter-spacing:.16em;text-transform:uppercase}
 .datos dd{margin:0}
-@media(max-width:820px){
-  /* en vertical el degradado horizontal no sirve y la botella se le mete
-     detrás a la tabla: la escena se corre abajo y el texto se queda arriba */
-  .vino__grad{background:linear-gradient(180deg,var(--ink) 0%,var(--ink) 46%,
-    color-mix(in srgb, var(--ink) 78%, transparent) 72%, transparent 96%)}
-  .vino__texto{max-width:none}
-  .vino{align-items:start;padding-top:11vh}
-  .vino__escena img{object-position:center 78%}
-}
+/* La composición vertical de los vinos NO va acá: va en el @media del final
+   del bloque, después de .vino--claro. Ver el comentario de allá. */
 
 /* Las cuatro escenas tienen el lado oscuro a la izquierda, así que el texto
    va siempre ahí. La variación no puede venir del lado: viene de la altura
@@ -288,12 +281,9 @@ a{color:inherit;text-decoration:none}
    claro y la tinta da 9,7:1 en su peor punto, medido. La capa de papel solo
    servía para velar la escena. Se saca. */
 .vino--claro .vino__grad{background:none}
-@media(max-width:820px){
-  /* en vertical sí hace falta: ahí la botella queda debajo del texto */
-  .vino--claro .vino__grad{background:linear-gradient(180deg,
-    var(--papel) 0%, var(--papel) 30%, color-mix(in srgb, var(--papel) 82%, transparent) 60%, transparent 88%)}
-  .vino--claro{align-items:start;padding-top:12vh}
-}
+/* El degradado vertical que había acá para el bloque claro se fue: en vertical
+   la botella ya no queda debajo del texto, así que .vino__grad se oculta
+   entero y no hay nada que velar. */
 .vino--claro .vino__texto p{color:var(--muted-claro)}
 .vino--claro .datos{border-top-color:var(--linea-clara)}
 .vino--claro .datos dt{color:var(--muted-claro)}
@@ -302,6 +292,53 @@ a{color:inherit;text-decoration:none}
    para leer. Para texto va la version oscurecida, --et-syrah-texto, que llega
    a 6.71:1. Los dos numeros salen de scripts/contraste.mjs.
    Antes esta nota decia 1.91:1 y 4.73:1, los dos mal. */
+
+/* ============================================================
+   VERTICAL — los vinos se componen al revés: la escena arriba a
+   sangre, el texto abajo sobre fondo pleno. La botella pasa a ser
+   el sujeto; antes quedaba de fondo, velada por un degradado, y en
+   las tres escenas oscuras directamente desaparecía.
+
+   Va al FINAL del bloque de vinos a propósito. Los media query no
+   suman especificidad: .vino--alto (min-height), .vino--arriba
+   (padding-top) y .vino--claro (padding-top) están declaradas más
+   arriba con la MISMA especificidad que .vino, así que si esto
+   estuviera donde estaba antes le devolverían el alto y el padding
+   que acá se anulan. Puesto acá gana por orden de cascada y no hace
+   falta ni una regla de más para desactivarlas.
+   ============================================================ */
+@media(max-width:820px){
+  /* El corrimiento horizontal existe para que la botella caiga del lado
+     contrario al texto. En vertical el texto no esta al costado, asi que el
+     corrimiento solo deja una banda negra al costado: se anula.
+     Va !important porque --tx llega inline en cada <article> y contra un
+     selector de clase el inline gana: sin el !important seguiria valiendo 25. */
+  .vino{display:block;min-height:0;padding:0;--tx:0 !important}
+  .vino__escena{position:relative;height:58vh}
+  /* la mascara pasa de horizontal (90deg) a vertical (180deg): la horizontal
+     disolvia el canto que dejaba el corrimiento, y ya no hay corrimiento. */
+  .vino__escena img{top:0;height:100%;object-position:center 58%;opacity:1;
+    -webkit-mask-image:linear-gradient(180deg,#000 0,#000 76%,transparent 100%);
+            mask-image:linear-gradient(180deg,#000 0,#000 76%,transparent 100%)}
+  /* El recorte de cover en vertical muestra solo la franja central de la foto:
+     a 390px, del 29% al 71% del ancho. En tres escenas el sujeto cae adentro,
+     pero en la del Reserva ocupa del 10,9% al 39,9% —medido sobre la foto, no
+     estimado— y con "center" la botella quedaba cortada contra el borde
+     izquierdo. El 8% corre la franja al 4,6%-46,6%, que la contiene entera.
+     Es encuadre de esta foto, no un valor general: por eso va por vino. */
+  #reserva .vino__escena img{object-position:8% 58%}
+  .vino__grad{display:none}
+  .vino__texto{max-width:none;padding-top:8px;padding-bottom:56px;text-align:left}
+  /* .vino--der espeja la composicion contra el costado. En vertical no hay
+     costado que espejar: el texto vuelve entero al canal de la izquierda.
+     El text-align hay que anularlo aparte porque .vino--der .vino__texto es
+     0,2,0 y le gana a .vino__texto, que es 0,1,0. */
+  .vino--der .vino__texto{text-align:left}
+  .vino--der .vino__texto h2,.vino--der .vino__texto p,.vino--der .pendiente{margin-left:0}
+  .vino--der .datos{margin-left:0;justify-items:start;text-align:left}
+  .vino--der .edicion{border-left:1px solid var(--acento);border-right:0;
+    padding-left:12px;padding-right:0}
+}
 
 /* Cierra la sección de vinos y devuelve el sitio al negro para lo que sigue. */
 
