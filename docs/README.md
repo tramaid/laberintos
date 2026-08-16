@@ -18,13 +18,31 @@ el sitio funcione igual servido desde la raíz de un dominio propio que desde
 `usuario.github.io/laberintos/`. Si se cambian por rutas absolutas (`/assets/`),
 el sitio se rompe en la URL de proyecto de GitHub. Es el error clásico.
 
-## Antes de publicar en serio
+## Estado
 
-1. En `index.html`, reemplazar la URL de `<link rel="canonical">`.
-2. Poner los enlaces reales de Instagram y de la tienda.
-3. Confirmar las cosechas (ver `../data/vinos.json` → `_conflictos`).
-4. Verificar el código postal de Escobar: está marcado en el markup.
-5. El crédito de TRAMA en el pie apunta a `tramaid.com.ar`. Si algún día
-   cambia el dominio, está en una sola línea del `index.html`.
-6. Las tipografías vienen de Google Fonts. Si se quiere sin dependencias
-   externas, se pueden autoalojar: Special Elite y Barlow Condensed son OFL.
+**El sitio está publicado** en https://matiasmercado88-debug.github.io/laberintos/
+y lleva `noindex` a propósito, porque esa URL es provisoria. Ver `../PUBLICAR.md`.
+
+Resuelto: el canonical falso, los enlaces de Instagram y de la tienda, y las
+cosechas (valen las de la ficha técnica: 2024 / 2023 / 2022).
+
+### Lo que sigue abierto
+
+1. **El dominio.** Es lo único que bloquea sacar el `noindex`. Los cuatro
+   cambios que hay que hacer están listados en `../PUBLICAR.md`.
+2. **La contraetiqueta del Syrah.** Lo que hay publicado es un **borrador
+   nuestro**, marcado como tal en el markup. La bodega tiene que aprobarlo o
+   mandar el suyo.
+3. **La crianza del Syrah.** Dice "7 meses" a secas porque el dato que llegó no
+   especifica la vasija. Si es roble, es una línea.
+4. **El código postal de Escobar**, marcado en el markup.
+5. **Estrada 411 vs 611.** El pie dice que la bodega está en Estrada 411, Belén
+   de Escobar, y Villa uva está en Estrada 611, Escobar. Misma calle, mismo
+   partido. Está marcado en el markup.
+
+### Notas que no caducan
+
+- El crédito de TRAMA en el pie apunta a `tramaid.com.ar`, en una sola línea.
+- Las tipografías vienen de Google Fonts: Special Elite, Barlow Condensed e IBM
+  Plex Mono. Si se quieren sin dependencias externas, las tres son OFL y se
+  pueden autoalojar.
