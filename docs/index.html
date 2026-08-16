@@ -115,7 +115,7 @@ a{color:inherit;text-decoration:none}
    el doble que antes. */
 /* 600vh. Se corta la MITAD de ese silencio y nada más: eran 73vh —656px en un
    monitor de 900— donde la frase ya estaba completa y todavía faltaba para el
-   apagón. Todo lo anterior queda a la MISMA distancia absoluta que antes: el
+   cierre. Todo lo anterior queda a la MISMA distancia absoluta que antes: el
    scroll útil pasa de 540vh a 500vh, así que cada punto de corte se multiplica
    por 1.08 para caer donde caía. Los coeficientes que multiplican --p (el
    fundido del título y el del panel) se dividen por 1.08, por lo mismo.
@@ -864,9 +864,9 @@ document.querySelectorAll('.cuatro .ir, .nav nav a').forEach(a=>{
    seccion: lleva AL MANIFIESTO, que vive adentro del umbral y no tiene ancla
    propia. Saltar al indice se llevaba puesta la frase, que es el final del
    recorrido y no un tramo para saltear.
-   El punto: la tercera linea termina de entrar en 0.880 y el apagon arranca en
-   0.948. Se cae en 0.90, con margen a los dos lados: la frase completa y todavia
-   sin fundido.
+   El punto: la tercera linea termina de entrar en 0.880 y la frase empieza a
+   apagarse en 0.948. Se cae en 0.90, con margen a los dos lados: la frase
+   completa y todavia entera.
    Con movimiento reducido el manifiesto esta en display:none y el umbral mide
    una pantalla, asi que ahi no se intercepta nada y vale el href al indice. */
 const entrar=document.querySelector('.entrar');
