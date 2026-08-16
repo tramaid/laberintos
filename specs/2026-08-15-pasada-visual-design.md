@@ -235,6 +235,34 @@ Los datos de 4.2 resolvieron el problema por otro lado: la tabla pasó de tres
 filas a cuatro y apareció la línea de edición, así que la sección se sostiene
 con el mismo peso que las otras tres **sin párrafo**.
 
+### 4.4 Nuevo — las contraetiquetas, y un borrador pendiente de aprobar
+
+El 2026-08-16 llegó el texto de las contraetiquetas de los tres Malbec. Cada
+una tiene dos partes: **una idea sobre laberintos** y **la nota de cata**. La
+nota de cata ya estaba en el sitio; la idea no estaba en ningún lado.
+
+Las tres forman una progresión que sube con la gama —presente, futuro, ciclo— y
+están escritas así. Van arriba de la nota de cata, en la voz de la marca.
+
+Tres correcciones sobre el texto de las etiquetas:
+
+- **Malbec:** se repone "intensos", que estaba en la contraetiqueta y se había
+  perdido.
+- **Reserva:** la etiqueta dice "vainilla aportada **a** la madera". Es una
+  errata que invierte el sentido: la vainilla la aporta la madera. Se publica
+  corregido.
+- **Gran Reserva:** la etiqueta dice "24 meses **den** barrica". Ídem.
+
+**PENDIENTE DE APROBACIÓN — el Syrah.** Es el único sin contraetiqueta. Se
+publicó un **borrador escrito por nosotros**, marcado como tal en el código:
+
+> Todo laberinto tiene un borde. Del otro lado no está la salida: está el
+> próximo.
+
+Continúa la idea del Gran Reserva —el vino anterior en el recorrido— y dice que
+este sale del mapa sin repetir las palabras del desvío. **La bodega tiene que
+validarlo antes de publicar**, o mandar la suya.
+
 **Regla dura heredada de `CLAUDE.md`, que esta pasada no relaja:** no se
 inventa ningún dato de vino. Cosecha, alcohol, crianza y origen son
 declaraciones legales. Si un dato falta, va `—` explícito.

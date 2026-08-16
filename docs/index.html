@@ -302,6 +302,13 @@ a{color:inherit;text-decoration:none}
 /* el Gran Reserva tiene el nombre más largo: si no lo dejás quebrar en dos
    líneas, empuja la caja de datos fuera de la pantalla */
 .vino__texto p{margin-top:20px;color:var(--texto-2);font-size:clamp(16px,1.3vw,19px);max-width:36ch}
+/* La primera linea de la contraetiqueta: la idea de laberinto de ese vino. Va en
+   la voz de la marca —Special Elite, como los titulos— y en el color pleno del
+   fondo. La nota de cata queda debajo, mas chica y en --texto-2: son dos
+   registros distintos y tienen que leerse como tales. */
+.laberinto{font-family:var(--display);font-size:clamp(17px,1.6vw,23px);
+ line-height:1.32;max-width:28ch;color:inherit}
+.vino__texto p.laberinto{color:inherit}
 .datos{display:grid;grid-template-columns:auto 1fr;gap:13px 30px;margin-top:38px;
  font-family:var(--dato);font-size:clamp(14px,1.1vw,16px);align-items:baseline;
  border-top:1px solid var(--linea);padding-top:26px;max-width:34ch}
@@ -602,8 +609,12 @@ a{color:inherit;text-decoration:none}
   <div class="canal vino__texto">
     <p class="linea-vino" data-reveal>Varietal</p>
     <h2 data-reveal>Malbec</h2>
-    <p data-reveal>Tinto Malbec clásico con matices morados, que captura los aromas de
-      ciruelas y frutos rojos acompañados de notas de cerezas.</p>
+    <p class="laberinto" data-reveal>Laberintos refiere a la vida misma con obstáculos y
+      dificultades, que necesitan de ingenio y perseverancia para afrontar, continuar y
+      llegar a destino.</p>
+    <!-- "intensos" estaba en la contraetiqueta y se habia perdido -->
+    <p data-reveal>Tinto Malbec clásico con matices morados intensos, que captura los
+      aromas de ciruelas y frutos rojos acompañados de notas de cerezas.</p>
     <dl class="datos" data-reveal>
       <dt>Cosecha</dt><dd>2024</dd>
       <dt>Origen</dt><dd>Ugarteche, Luján de&nbsp;Cuyo</dd>
@@ -618,6 +629,10 @@ a{color:inherit;text-decoration:none}
   <div class="canal vino__texto">
     <p class="linea-vino" data-reveal>Reserva</p>
     <h2 data-reveal>Malbec Reserva</h2>
+    <p class="laberinto" data-reveal>El futuro es un laberinto de posibilidades siempre
+      cambiantes, hasta que se convierte en presente.</p>
+    <!-- la contraetiqueta dice "aportada A la madera": es una errata, la vainilla la
+         aporta la madera y no al reves. Se publica corregido. -->
     <p data-reveal>Un Malbec con 12 meses en barrica: esa sutil vainilla aportada por la madera le da su estructura sin perder la nota frutal.</p>
     <dl class="datos" data-reveal><dt>Cosecha</dt><dd>2023</dd><dt>Origen</dt><dd>Ugarteche, Luján de&nbsp;Cuyo</dd><dt>Altitud</dt><dd>950 msnm</dd><dt>Crianza</dt><dd>12 meses en roble</dd><dt>Guarda</dt><dd>9 años</dd><dt>Alcohol</dt><dd>13,9%</dd></dl>
   </div>
@@ -627,6 +642,9 @@ a{color:inherit;text-decoration:none}
   <div class="canal vino__texto">
     <p class="linea-vino" data-reveal>Gran Reserva</p>
     <h2 data-reveal>Gran Reserva Malbec</h2><p class="edicion" data-reveal>Edición especial · partida limitada</p>
+    <p class="laberinto" data-reveal>Es el final del laberinto el que nos devuelve el punto
+      de partida, pero cada vez que encontramos la salida, el laberinto es otro.</p>
+    <!-- la contraetiqueta dice "24 meses DEN barrica": errata, se publica corregido -->
     <p data-reveal>Un Malbec con 24 meses de barrica de roble francés, obteniendo así una estructura delicada y elegante de larga persistencia en boca.</p>
     <dl class="datos" data-reveal><dt>Cosecha</dt><dd>2022</dd><dt>Origen</dt><dd>Altamira, Valle de Uco</dd><dt>Altitud</dt><dd>1200 msnm</dd><dt>Crianza</dt><dd>24 meses, roble&nbsp;francés</dd><dt>Guarda</dt><dd>14 años</dd><dt>Alcohol</dt><dd>14,2%</dd></dl>
   </div>
@@ -649,6 +667,13 @@ a{color:inherit;text-decoration:none}
     <!-- espacios duros: sin ellos quiebra como "300 / BOTELLAS" y el numero
          queda huerfano de su unidad -->
     <p class="edicion" data-reveal>Partida especial · 300&nbsp;botellas</p>
+    <!-- BORRADOR, PENDIENTE DE APROBACION DE LA BODEGA. El Syrah es el unico sin
+         contraetiqueta. Escrito en el registro de las otras tres: continua la idea
+         del Gran Reserva -que es el vino anterior en el recorrido- y dice que este
+         sale del mapa sin repetir las palabras del desvio, que esta dos pantallas
+         antes. Si la bodega manda la suya, se reemplaza por la oficial. -->
+    <p class="laberinto" data-reveal>Todo laberinto tiene un borde. Del otro lado no está
+      la salida: está el próximo.</p>
     <dl class="datos" data-reveal><dt>Cosecha</dt><dd>2023</dd><dt>Origen</dt><dd>Valle del Zonda, San&nbsp;Juan</dd><dt>Varietal</dt><dd>100% Syrah</dd><dt>Crianza</dt><dd>7 meses</dd></dl><p class="pendiente" data-reveal>Ficha técnica parcial. Faltan los datos de vinificación, altitud y análisis.</p>
   </div>
 </article>
