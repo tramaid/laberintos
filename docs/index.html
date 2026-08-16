@@ -636,7 +636,12 @@ const escenas=[...document.querySelectorAll('[data-view]')];
 function frame(){
   if(!R.matches){
     const r=umbral.getBoundingClientRect();
-    const p=clamp(-r.top/(r.height-innerHeight));
+    /* Se mide contra la altura real de la camara y no contra innerHeight:
+       en telefonos la barra del navegador se colapsa al scrollear, innerHeight
+       cambia en pleno recorrido y el umbral pegaba un tiron. La cámara mide
+       100vh, que en CSS esta fijado al viewport grande y no se mueve.
+       En desktop los dos valores son identicos, asi que alla no cambia nada. */
+    const p=clamp(-r.top/(r.height-cam.offsetHeight));
     cam.style.setProperty('--p',p.toFixed(4));
 
     for(const t of [A,B]){
