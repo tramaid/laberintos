@@ -4,11 +4,13 @@ El sitio está construido en `docs/`. No hay que compilar nada.
 
 ## Dónde está hoy
 
-- **URL:** https://tramaid.github.io/laberintos/
+- **URL:** https://laberintos-wines.com.ar/ — `tramaid.github.io/laberintos/`
+  redirige ahí sola.
 - **Repo:** `tramaid/laberintos` (público). Antes estaba en
   `matiasmercado88-debug/laberintos`: esa URL de Pages da 404 desde el traslado.
 - **Fuente:** rama `main`, carpeta `/docs` — Settings → Pages
-- **Es provisoria.** El dominio ya está comprado: ver "El dominio".
+- **El dominio lo fija `docs/CNAME`.** No borrarlo: sin ese archivo Pages
+  vuelve a la URL de github.io.
 
 ## Cómo publicar un cambio
 
@@ -32,10 +34,11 @@ npm run capturas final    # código 0 y cero AVISOS
 npm run contraste         # código 0 y "9 de 9 tokens desde el CSS"
 ```
 
-## Por qué el sitio tiene `noindex`
+## El `noindex` de la etapa provisoria
 
-Está fuera de los buscadores a propósito, para que esta versión provisoria no le
-compita a la definitiva cuando exista el dominio.
+Ya no está: con el dominio el sitio se indexa y lleva canonical. Mientras vivió
+en github.io estuvo fuera de los buscadores a propósito, para que esa versión
+provisoria no le compitiera a la definitiva. Si alguna vez hace falta de nuevo:
 
 El `noindex` va en un `<meta>` de cada página (`index.html`, `donde/` y
 `contacto/`), **no** como `Disallow` en

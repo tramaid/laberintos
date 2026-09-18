@@ -17,6 +17,7 @@ Todo lo que hay adentro se sirve tal cual.
   Jekyll, que ignora las carpetas que empiezan con guión bajo y agrega
   demoras al deploy sin ninguna ventaja para un sitio estático.
 - `robots.txt`
+- `CNAME` — el dominio para GitHub Pages. **No borrar.**
 
 ## Rutas relativas
 
@@ -27,18 +28,16 @@ el sitio se rompe en la URL de proyecto de GitHub. Es el error clásico.
 
 ## Estado
 
-**El sitio está publicado** en https://tramaid.github.io/laberintos/
-y lleva `noindex` a propósito, porque esa URL es provisoria. Ver `../PUBLICAR.md`.
+**El sitio está publicado** en https://laberintos-wines.com.ar/ y se indexa.
+`CNAME` fija el dominio en GitHub Pages: no borrarlo. Ver `../PUBLICAR.md`.
 
 Resuelto: el canonical falso, los enlaces de Instagram y de la tienda, y las
 cosechas (valen las de la ficha técnica: 2024 / 2023 / 2022).
 
 ### Lo que sigue abierto
 
-1. **El dominio.** `laberintos-wines.com.ar` está comprado pero sin delegar:
-   todavía no resuelve. Es lo único que bloquea sacar el `noindex`. Los pasos y
-   el orden están en `../PUBLICAR.md`; el cambio del repo ya está hecho en la
-   rama `dominio`.
+1. **Enforce HTTPS** en Settings → Pages, apenas GitHub emita el certificado
+   del dominio.
 2. **La contraetiqueta del Syrah.** Lo que hay publicado es un **borrador
    nuestro**, marcado como tal en el markup. La bodega tiene que aprobarlo o
    mandar el suyo.

@@ -2,8 +2,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Laberintos — camino sin salida</title>
 <meta name="robots" content="noindex">
-<link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- las mismas dos voces del sitio: Special Elite para el titulo, IBM Plex Mono
@@ -22,6 +22,9 @@
 <div>
   <h1>Este camino no lleva a ningún lado.</h1>
   <p>404 — la página que buscás no existe.</p>
-  <a href="./">Volver a la entrada &nbsp;&rarr;</a>
+  <!-- rutas absolutas SOLO aca: la 404 se sirve en cualquier ruta que no
+       existe, y con "./" desde /a/b/ volvia a /a/, que tampoco existe. En el
+       dominio la entrada es siempre "/" -->
+  <a href="/">Volver a la entrada &nbsp;&rarr;</a>
 </div>
 </body></html>
