@@ -67,6 +67,9 @@
                                  Venia de #7d766b, que daba 4.40:1 y no pasaba. */
   --linea-2:        #1c1916;  /* separadores de 1px. No es texto: exento del 4.5:1 */
   --et-syrah-texto: #7a3f37;  /* terracota legible sobre papel · 6.71:1 */
+  --mapa:           #6c4d38;  /* nombres de Mendoza y San Juan en el mapa del
+                                 desvio, sobre papel · 6.31:1. Es el marron de
+                                 los limites del SVG original */
 
   /* #8a8377 se descarto: daba 3.11:1 sobre papel. Para llegar a 4.5 habia que
      oscurecerlo hasta --muted-claro, asi que no era un token nuevo, sobraba.
@@ -352,12 +355,12 @@ a{color:inherit;text-decoration:none}
    la mitad de la serie y, de paso, hace lo que ninguna escena puede: mostrar
    las cuatro etiquetas juntas, que son el sistema gráfico de la marca. */
 
-/* Tira que separa los tres Malbec del Syrah. Es corta a propósito: no es una
-   sección, es una respiración. También rompe la racha de tres bloques oscuros. */
+/* El desvío separa los tres Malbec del Syrah y rompe la racha de tres bloques
+   oscuros. Su CSS está más abajo, en .desvio. */
 
 /* El Syrah cambia de provincia y de variedad, así que cambia de fondo.
-   La tira "Otro suelo. Otra uva." y este bloque son un solo momento claro:
-   el corte de color ES el argumento. */
+   El desvío —el mapa de Mendoza a San Juan— y este bloque son un solo momento
+   claro: el corte de color ES el argumento. */
 .vino--claro{background:var(--papel);color:var(--ink);--acento:var(--et-syrah-texto);padding-top:0}
 .vino--claro .vino__escena{background:var(--papel)}
 .vino--claro .vino__escena img{opacity:1}
@@ -521,14 +524,105 @@ a{color:inherit;text-decoration:none}
      direcciones largas quiebran feo */
   .puntos{grid-template-columns:1fr;gap:32px}
 }
-.desvio{background:var(--papel);color:var(--ink);
- padding:clamp(110px,15vh,170px) 0 clamp(30px,4vh,50px);margin-bottom:-1px}
-/* la tira y el bloque del Syrah son UN solo momento claro: el borde entre
+/* ============================================================
+   DESVÍO — de Mendoza a San Juan. Antes era una tira de texto;
+   ahora el argumento se dibuja: un recorrido pasa por los dos
+   valles del Malbec y cruza a San Juan, donde está el Syrah.
+
+   Sale de una lámina de Illustrator de 1893x607 con TODO en
+   curvas: titular, bajada y nombres de provincia. Acá el texto es
+   texto —se lee, se selecciona, lo encuentra un lector de
+   pantalla— y el SVG quedó solo con los límites: de 390 KB a
+   31 KB. Las medidas de la lámina se conservan: el mapa ocupa
+   613 de sus 1893 de ancho (32,4%) y el titular medía 3,66vw,
+   que es --h4 (3,6vw, con tope en 50px).
+   ============================================================ */
+.desvio{position:relative;background:var(--papel);color:var(--ink);margin-bottom:-1px;
+ display:grid;grid-template-columns:minmax(0,1fr) var(--mapa-w);align-items:center;
+ /* el piso de 400px es para las etiquetas del recorrido: miden 11px siempre y
+    en un mapa más chico se pisaban con los nombres de provincia. Abajo de
+    900px de pantalla no entra al costado del texto y se apila (ver @media) */
+ --mapa-w:max(32.4vw,400px)}
+/* el desvío y el bloque del Syrah son UN solo momento claro: el borde entre
    los dos no debe verse. Por eso el .vino--claro no tiene padding arriba. */
-.desvio .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
+.desvio .canal{max-width:none;margin:0;padding:clamp(56px,8vh,90px) var(--canal) clamp(56px,8vh,90px) clamp(20px,3.2vw,48px)}
 .desvio h2{font-size:var(--h4);margin-top:14px}
+/* Special Elite tiene un solo peso: el negrita es sintetizado, como en la lámina */
+.desvio h2 strong{font-weight:700}
 .desvio .bajada{margin-top:18px;color:var(--muted-claro);max-width:42ch;font-size:clamp(15px,1.2vw,18px)}
 .desvio .etiqueta{color:var(--muted-claro)}
+
+/* El mapa arranca pegado al borde de arriba —contra el Gran Reserva, que es
+   tinta— y se funde en papel abajo, donde empieza el Syrah: cortado seco ahí,
+   los límites dibujaban una costura justo donde no tiene que haberla.
+   container-type deja medir los nombres en cqw: escalan con el mapa, como en
+   la lámina, en vez de con la pantalla. */
+.mapa{position:relative;margin:0;align-self:start;width:var(--mapa-w);
+ aspect-ratio:613.4/606.6;container-type:inline-size}
+.mapa__base,.mapa__ruta{position:absolute;inset:0;width:100%;height:100%}
+.mapa__base{-webkit-mask-image:linear-gradient(180deg,#000 84%,transparent);
+ mask-image:linear-gradient(180deg,#000 84%,transparent)}
+/* --x y --y son la posición en la lámina, en % del mapa. Van a la línea de
+   base: Special Elite la tiene a .7em del tope de una caja de line-height 1. */
+.mapa__prov{position:absolute;left:calc(var(--x)*1%);top:calc(var(--y)*1%);margin:0;
+ transform:translateY(-.7em);font-family:var(--display);font-size:5.2cqw;line-height:1;
+ color:var(--mapa);white-space:nowrap;pointer-events:none}
+/* Las vecinas en la lámina iban al 50% de opacidad: daba 2,5:1 y a 11px no se
+   leía. Van en --muted-claro, que queda igual de atrás y pasa el 4,5:1. */
+.mapa__prov--vecina{font-size:max(var(--etiqueta),2.64cqw);color:var(--muted-claro);text-transform:uppercase}
+
+.ruta{fill:none;stroke:var(--et-syrah-texto);stroke-width:2.4;stroke-linecap:round;
+ stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1}
+/* el viajero se mueve con transform, lo pone el script. Sin la sombra de la
+   lámina: el sitio no lleva sombras y nada animado lleva filter. El borde de
+   papel ya lo despega del mapa. */
+.viajero{fill:var(--et-syrah-texto);stroke:var(--papel);stroke-width:3.5;opacity:0}
+.origen{fill:var(--papel);stroke:var(--et-syrah-texto);stroke-width:2.5;opacity:0}
+.punto{fill:var(--et-syrah-texto);opacity:0}
+.desvio.is-moving .viajero,.desvio.is-moving .origen{opacity:1}
+.punto.is-in{opacity:1}
+
+/* Las paradas son texto HTML y no <text> del SVG a propósito: en el SVG el
+   cuerpo escala con el mapa y a 1280px quedaban en 7px. Acá miden 11px a
+   cualquier ancho. Es una lista ordenada porque es un recorrido. */
+.paradas{list-style:none;margin:0;padding:0}
+.parada{position:absolute;left:calc(var(--x)*1%);top:calc(var(--y)*1%);
+ font-family:var(--dato);font-size:var(--etiqueta);letter-spacing:.12em;line-height:1.4;
+ text-transform:uppercase;color:var(--et-syrah-texto);white-space:nowrap;
+ opacity:0;transform:translate(var(--dx),calc(var(--dy) + 7px));
+ transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease)}
+.parada.is-in{opacity:1;transform:translate(var(--dx),var(--dy))}
+/* En la lámina iba "LUGAR · VARIEDAD" en un renglón, al costado del punto. A
+   11px mide 190px, y al costado no entra: cruzaba los límites de provincia a
+   todos los anchos. En dos renglones, arriba o abajo del punto, entra adentro
+   de la provincia desde 360px de mapa. Medido fila por fila contra el SVG. */
+.parada span{display:block}
+/* La separación del punto escala con el mapa, como los círculos: 1.7cqw es el
+   radio del viajero (8.5 + medio trazo de 3.5 = 10.25 de 613.4), que termina
+   parado en Zonda y con un espacio fijo se metía debajo de la etiqueta. */
+.parada--arriba{--dx:-50%;--dy:calc(-100% - 1.7cqw - 3px);text-align:center}
+.parada--abajo{--dx:0px;--dy:calc(1cqw + 3px)}
+
+/* Apilado: el texto arriba y el mapa abajo. Va hasta 900px y no hasta 700 como
+   en la lámina: entre 700 y 900 el mapa al costado medía 360px y las etiquetas
+   no entraban. Sin <br> en la bajada: los cortes son de la composición ancha. */
+@media(max-width:900px){
+  .desvio{display:block}
+  .desvio .canal{padding-top:clamp(90px,12vh,120px);padding-bottom:8px}
+  .desvio .corte{display:none}
+  /* en vertical el mapa va debajo del texto y a sangre a la derecha. Arriba ya
+     no toca la tinta: se funde en papel por los dos lados. */
+  .mapa{width:min(100%,520px);margin-left:auto}
+  .mapa__base{-webkit-mask-image:linear-gradient(180deg,transparent,#000 14%,#000 84%,transparent);
+    mask-image:linear-gradient(180deg,transparent,#000 14%,#000 84%,transparent)}
+  /* el mapa mide 390 y no 470: con el trazo de escritorio la línea quedaba en 1,5px */
+  .ruta{stroke-width:3.2}
+}
+@media(prefers-reduced-motion:reduce){
+  .ruta{stroke-dashoffset:0}
+  .origen,.punto{opacity:1}
+  .parada{opacity:1;transform:translate(var(--dx),var(--dy));transition:none}
+}
 .indice{background:var(--papel);color:var(--ink);padding:clamp(100px,14vh,170px) 0 clamp(70px,10vh,120px)}
 .indice .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
 .indice h2{font-size:var(--h4);max-width:16ch}
@@ -702,14 +796,61 @@ a{color:inherit;text-decoration:none}
     <dl class="datos" data-reveal><dt>Cosecha</dt><dd>2022</dd><dt>Origen</dt><dd>Altamira, Valle de Uco</dd><dt>Altitud</dt><dd>1200 msnm</dd><dt>Crianza</dt><dd>24 meses, roble&nbsp;francés</dd><dt>Guarda</dt><dd>14 años</dd><dt>Alcohol</dt><dd>14,2%</dd></dl>
   </div>
 </article>
-<section class="desvio" aria-label="San Juan">
+<!-- El desvio: el recorrido de los cuatro vinos sobre el mapa. Las paradas son
+     los origenes de las fichas —Ugarteche en Lujan de Cuyo, Altamira en el Valle
+     de Uco, Valle del Zonda en San Juan— y van en su lugar REAL: si cambia un
+     origen en una ficha, cambia aca tambien.
+     El mapa es una proyeccion equirectangular. Mendoza ocupa de 32°00' a 37°35' S
+     y de 66°30' a 70°35' O, y en la lamina eso cae exacto en su caja: de ahi
+       x = 1449 + (70.583 - longitud O) * 75.9
+       y =  268 + (latitud S - 32)      * 93.3
+     Ugarteche 33.22 S 68.88 O -> 1578,382 · Altamira 33.73 S 69.12 O -> 1557,432
+     Valle del Zonda 31.55 S 68.73 O -> 1589,226.
+     En la lamina original las paradas estaban unas 60 unidades al oeste, el Valle
+     de Uco quedaba al ESTE de Lujan, y el rulo del camino entraba en Chile: con
+     Lujan a 10 unidades de la cordillera no habia lugar para doblar adentro.
+     Los --x/--y de las etiquetas son % del mapa: (x - 1280) / 613.4 e y / 606.6. -->
+<section class="desvio" aria-label="De Mendoza a San Juan" data-recorrido>
   <div class="canal">
     <p class="etiqueta" data-reveal>Y después</p>
-    <h2 data-reveal>Otro suelo.<br>Otra uva.</h2>
-    <p class="bajada" data-reveal>Los tres Malbec vienen de Mendoza. El cuarto no: cruza a San Juan
-      y cambia de variedad. Es el único camino que sale del mapa.</p>
+    <h2 data-reveal>Otro suelo, otra uva,<br>otro <strong>LABERINTO</strong></h2>
+    <p class="bajada" data-reveal>Los tres Malbec vienen de Mendoza. El cuarto no:<br class="corte">
+      cruza a San Juan y cambia de variedad.<br class="corte">
+      Es el único camino que sale del mapa.</p>
   </div>
-  
+  <div class="mapa">
+    <img class="mapa__base" src="assets/mapa-26c4d21a.svg" alt="" loading="lazy" width="613" height="607">
+    <svg class="mapa__ruta" viewBox="1280 0 613.4 606.6" aria-hidden="true">
+      <!-- baja de Lujan al Valle de Uco, dobla al este por debajo de Lujan, sube
+           por el lado de San Luis y cruza a San Juan. Da la vuelta por afuera de
+           las etiquetas para no pisarlas a ningun ancho. -->
+      <path class="ruta" pathLength="1" d="M1578 382C1580 405 1566 420 1557 432C1592 432 1648 428 1676 398C1696 368 1690 322 1670 292C1648 262 1616 236 1589 226"/>
+      <circle class="origen" cx="1578" cy="382" r="6.5"/>
+      <circle class="punto" data-paso="0" cx="1578" cy="382" r="5.5"/>
+      <circle class="punto" data-paso="1" cx="1557" cy="432" r="5.5"/>
+      <circle class="punto" data-paso="2" cx="1589" cy="226" r="5.5"/>
+      <circle class="viajero" r="8.5" transform="translate(1578 382)"/>
+    </svg>
+    <div aria-hidden="true">
+      <!-- base 145 y no 155 como en la lamina: diez unidades mas arriba para
+           dejarle lugar a la etiqueta de Zonda en un mapa de 360px -->
+      <p class="mapa__prov" style="--x:37.43;--y:23.90">San Juan</p>
+      <!-- en la lamina iba a la altura de Lujan (base 431). Con las paradas en su
+           lugar real el Valle de Uco caia encima de la palabra: baja al sur de la
+           provincia, a la misma x -->
+      <p class="mapa__prov" style="--x:42.89;--y:87.04">Mendoza</p>
+      <p class="mapa__prov mapa__prov--vecina" style="--x:65.16;--y:8.82">La Rioja</p>
+      <p class="mapa__prov mapa__prov--vecina" style="--x:76.30;--y:63.14">San Luis</p>
+      <p class="mapa__prov mapa__prov--vecina" style="--x:13.42;--y:87.49">Chile</p>
+    </div>
+    <ol class="paradas" aria-label="El recorrido">
+      <li class="parada parada--arriba" data-paso="0" style="--x:48.58;--y:62.97">Luján de Cuyo <span>Malbec</span></li>
+      <!-- el Valle de Uco no se centra bajo su punto: centrada, a 360px de mapa
+           pisaba el limite con Chile. Arranca en x=1520 -->
+      <li class="parada parada--abajo" data-paso="1" style="--x:39.13;--y:71.22">Valle de Uco <span>Malbec</span></li>
+      <li class="parada parada--arriba" data-paso="2" style="--x:50.37;--y:37.26">Valle del Zonda <span>Syrah</span></li>
+    </ol>
+  </div>
 </section>
 <article id="syrah" class="vino vino--der vino--claro" data-view style="--tx:0">
   <div class="vino__escena"><img src="assets/escena-c10573db.webp" alt="" loading="lazy"></div>
@@ -897,8 +1038,96 @@ function medir(){
 medir(); addEventListener('resize',medir);
 const escenas=[...document.querySelectorAll('[data-view]')];
 
+/* El recorrido del desvio. No tiene loop propio: avanza adentro de frame(),
+   el mismo que mueve el umbral.
+   La linea y el viajero salen del MISMO progreso. En la lamina la linea iba
+   con una transicion CSS y el punto con otra curva en JS, y el punto se le
+   adelantaba a la linea. */
+const REC={el:document.querySelector('[data-recorrido]'),t0:0,fin:false,DEMORA:450,DURACION:4800};
+if(REC.el){
+  REC.ruta=REC.el.querySelector('.ruta');
+  REC.viajero=REC.el.querySelector('.viajero');
+  REC.largo=REC.ruta.getTotalLength();
+  /* Cada parada se prende cuando el viajero pasa por ella, asi que hay que
+     saber en que fraccion del camino cae. En la lamina se prendian por reloj y
+     la del Valle de Uco aparecia cuando el punto ya iba cruzando a San Juan. */
+  REC.pasos=[...REC.el.querySelectorAll('.punto')].map(p=>{
+    const x=+p.getAttribute('cx'), y=+p.getAttribute('cy'); let f=0, dist=Infinity;
+    for(let i=0;i<=200;i++){
+      const q=REC.ruta.getPointAtLength(REC.largo*i/200), d=Math.hypot(q.x-x,q.y-y);
+      if(d<dist){ dist=d; f=i/200; }
+    }
+    return {f, els:REC.el.querySelectorAll(`[data-paso="${p.dataset.paso}"]`), on:false};
+  });
+}
+/* e es el progreso ya con la curva, de 0 a 1. El trazo es stroke-dashoffset,
+   la unica propiedad animada del sitio que no es transform ni opacity: una
+   linea que se dibuja no tiene otra forma. Es un path de 400 unidades, no
+   dispara layout. El viajero va por transform. */
+function ubicar(e){
+  REC.ruta.style.strokeDashoffset=(1-e).toFixed(4);
+  const q=REC.ruta.getPointAtLength(REC.largo*e);
+  REC.viajero.setAttribute('transform',`translate(${q.x.toFixed(2)} ${q.y.toFixed(2)})`);
+  for(const p of REC.pasos) if(!p.on && e>=p.f-.002){ p.on=true; p.els.forEach(n=>n.classList.add('is-in')); }
+}
+function recorrer(ahora){
+  const q=clamp((ahora-REC.t0-REC.DEMORA)/REC.DURACION);
+  ubicar(1-Math.pow(1-q,3));
+  if(q>=1){ REC.fin=true; REC.el.classList.add('is-arrived'); }
+}
+
+/* ENTRADA AUTOMATICA. Scrollear hacia abajo dentro del umbral ya no arrastra
+   la camara a mano por 500vh: la entrada se reproduce sola hasta la frase del
+   manifiesto, que es adonde ya llevaba "Entrar". Dura ENTRADA ms desde arriba
+   de todo, y si arranca a mitad de camino, la parte proporcional.
+   No es un segundo motor: mueve el SCROLL, y la camara lo sigue leyendo como
+   siempre en frame(). Por eso scrollear hacia arriba sigue siendo a mano, y
+   cualquier gesto hacia arriba la corta y devuelve el control.
+   La curva es la "ease" de CSS, cubic-bezier(.25,.1,.25,1): de las que se
+   probaron es la unica que arranca a moverse enseguida —a los 100ms ya se ve—,
+   asi el scroll no se siente trabado. Con 5500ms: el titulo se va a 0.9s, el
+   corte cae a 1.4s, el blanco a 2.3s y las tres lineas entran de 2.6 a 4.5s. */
+const ENTRADA=5500, P_FRASE=0.90;
+const AUTO={activo:false,t0:0,desde:0,hasta:0,dur:0,ultimo:0};
+/* cubic-bezier como en CSS: se despeja t para la x pedida (Newton) y se
+   devuelve la y */
+const bezier=(x1,y1,x2,y2)=>{
+  const cx=3*x1, bx=3*(x2-x1)-cx, ax=1-cx-bx, cy=3*y1, by=3*(y2-y1)-cy, ay=1-cy-by;
+  const X=t=>((ax*t+bx)*t+cx)*t, Y=t=>((ay*t+by)*t+cy)*t, dX=t=>(3*ax*t+2*bx)*t+cx;
+  return x=>{ let t=x; for(let i=0;i<8;i++){ const d=dX(t); if(Math.abs(d)<1e-6) break; t-=(X(t)-x)/d; }
+    return Y(clamp(t)); };
+};
+const curvaEntrada=bezier(.25,.1,.25,1);
+const recorridoUmbral=()=>umbral.offsetHeight-cam.offsetHeight;
+const pUmbral=()=>clamp((scrollY-umbral.offsetTop)/recorridoUmbral());
+/* Devuelve true si la entrada esta corriendo, para que quien llama se trague
+   el gesto. Pasada la frase no hace nada: de ahi en adelante el scroll es normal. */
+function entrarSolo(){
+  if(R.matches) return false;
+  if(AUTO.activo) return true;
+  const p0=pUmbral();
+  if(p0>=P_FRASE-.005) return false;
+  Object.assign(AUTO,{activo:true,t0:performance.now(),desde:scrollY,ultimo:scrollY,
+    hasta:umbral.offsetTop+P_FRASE*recorridoUmbral(),
+    dur:Math.max(900,ENTRADA*(P_FRASE-p0)/P_FRASE)});
+  return true;
+}
+const soltarEntrada=()=>{ AUTO.activo=false; };
+function avanzarEntrada(ahora){
+  /* si el scroll no esta donde lo dejamos, lo movio otro —la barra, un link,
+     buscar en la pagina—: se suelta en vez de pelearle */
+  if(Math.abs(scrollY-AUTO.ultimo)>2) return soltarEntrada();
+  const q=clamp((ahora-AUTO.t0)/AUTO.dur);
+  scrollTo(0,AUTO.desde+(AUTO.hasta-AUTO.desde)*curvaEntrada(q));
+  AUTO.ultimo=scrollY;
+  if(q>=1) soltarEntrada();
+}
+
 function frame(){
   if(!R.matches){
+    /* primero el scroll y despues la lectura: asi la camara dibuja el scroll
+       de ESTE frame y no el del anterior */
+    if(AUTO.activo) avanzarEntrada(performance.now());
     const r=umbral.getBoundingClientRect();
     /* Se mide contra la altura real de la camara y no contra innerHeight:
        en telefonos la barra del navegador se colapsa al scrollear, innerHeight
@@ -945,6 +1174,8 @@ function frame(){
       const q=e.getBoundingClientRect();
       e.style.setProperty('--pv',clamp((innerHeight-q.top)/(innerHeight+q.height)).toFixed(4));
     }
+
+    if(REC.t0 && !REC.fin) recorrer(performance.now());
   }
   requestAnimationFrame(frame);
 }
@@ -992,6 +1223,7 @@ document.querySelectorAll('.cuatro .ir, .nav nav a').forEach(a=>{
     if(!destino) return;
     e.preventDefault();
     cerrarMenu(false);   /* si el toque vino del panel de telefono, se cierra al navegar */
+    soltarEntrada();     /* si la entrada estaba corriendo, manda el link */
     destino.scrollIntoView({behavior: R.matches ? 'auto' : 'smooth', block:'start'});
     /* scrollIntoView mueve la pagina pero no el foco: sin esto, activar un link
        del nav con teclado deja el foco arriba y el Tab siguiente vuelve al
@@ -1016,13 +1248,50 @@ const entrar=document.querySelector('.entrar');
 if(entrar) entrar.addEventListener('click', e=>{
   if(R.matches) return;
   e.preventDefault();
-  scrollTo({top: umbral.offsetTop + 0.90*(umbral.offsetHeight-cam.offsetHeight),
-            behavior:'smooth'});
+  /* Era un scrollTo smooth: el navegador decidia la duracion y cruzaba 450vh
+     de camara en un segundo. Ahora es la misma entrada que el primer scroll. */
+  entrarSolo();
   /* el foco acompaña, como en el otro listener: sin esto el Tab siguiente
      vuelve al principio del documento */
   umbral.setAttribute('tabindex','-1');
   umbral.focus({preventScroll:true});
 });
+
+/* Los gestos que disparan la entrada. Hacia abajo: arrancan la entrada, o se
+   los traga mientras corre. Hacia arriba: la cortan y pasan de largo, asi que
+   el control vuelve en el mismo gesto.
+   wheel y touchmove van con passive:false porque hay que poder cancelarlos. */
+addEventListener('wheel',e=>{
+  if(R.matches || e.ctrlKey || !e.deltaY || Math.abs(e.deltaY)<Math.abs(e.deltaX) || menuAbierto()) return;
+  if(e.deltaY<0) return soltarEntrada();
+  if(entrarSolo()) e.preventDefault();
+},{passive:false});
+
+addEventListener('keydown',e=>{
+  if(R.matches || e.altKey || e.ctrlKey || e.metaKey || menuAbierto()) return;
+  const k=e.key;
+  if(k==='ArrowUp'||k==='PageUp'||k==='Home'||k==='Escape'||(k===' '&&e.shiftKey)) return soltarEntrada();
+  if(k!=='ArrowDown'&&k!=='PageDown'&&k!==' ') return;
+  /* la barra espaciadora sobre un link o un boton es un clic, no un scroll */
+  if(k===' ' && e.target.closest && e.target.closest('a,button')) return;
+  if(entrarSolo()) e.preventDefault();
+});
+
+/* En touch la direccion se decide con el PRIMER movimiento del gesto: si ese
+   no se cancela, el navegador empieza a scrollear y los siguientes ya no se
+   pueden cancelar. De ahi toque.abajo, que queda fijo hasta soltar el dedo. */
+const toque={y:null,abajo:null};
+addEventListener('touchstart',e=>{ toque.y=e.touches[0].clientY; toque.abajo=null; },{passive:true});
+addEventListener('touchmove',e=>{
+  if(R.matches || toque.y===null || e.touches.length>1 || menuAbierto()) return;
+  if(toque.abajo===null){
+    const dy=toque.y-e.touches[0].clientY;      // > 0: el dedo sube, la pagina baja
+    if(Math.abs(dy)<2) return;
+    toque.abajo=dy>0;
+    if(!toque.abajo) soltarEntrada();
+  }
+  if(toque.abajo && entrarSolo() && e.cancelable) e.preventDefault();
+},{passive:false});
 
 const io=new IntersectionObserver(es=>es.forEach(e=>{
   if(!e.isIntersecting) return;
@@ -1031,4 +1300,19 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{
   e.target.classList.add('is-in'); io.unobserve(e.target);
 }),{threshold:.15,rootMargin:'0px 0px -8% 0px'});
 document.querySelectorAll('[data-reveal]').forEach(e=>io.observe(e));
+
+/* El recorrido arranca cuando la parada de mas abajo, la del Valle de Uco, entra
+   entera en pantalla: recien ahi se ve el camino completo. En la lamina
+   arrancaba al cargar la pagina, que aca es seis pantallas antes.
+   Con movimiento reducido no se espera a nada: queda dibujado desde el principio. */
+if(REC.el){
+  const llegar=()=>{ ubicar(1); REC.fin=true; REC.el.classList.add('is-moving','is-arrived'); };
+  if(R.matches) llegar();
+  else new IntersectionObserver((es,o)=>{
+    if(!es[0].isIntersecting) return;
+    o.disconnect();
+    REC.el.classList.add('is-moving');
+    REC.t0=performance.now();
+  },{threshold:1,rootMargin:'0px 0px -8% 0px'}).observe(REC.el.querySelector('.parada[data-paso="1"]'));
+}
 </script></body></html>

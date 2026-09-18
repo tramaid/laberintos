@@ -49,7 +49,11 @@ const SECCIONES = ['.indice', '#malbec', '#reserva', '#gran-reserva',
    con más riesgo de desbordar. */
 const COMPLETAS = ['.indice', '.donde'];
 
-const TIEMPO_MAX = 5000;   /* techo de cada espera por condición */
+/* techo de cada espera por condición. Era 5000 y no alcanzaba para el recorrido
+   del desvío, que dura 450 + 4800ms: la espera se agotaba justo antes de que
+   llegara. Es un techo, no una demora: las esperas terminan cuando se cumple la
+   condición. */
+const TIEMPO_MAX = 8000;
 const RESPALDO = 400;      /* si la condición no se cumple, respaldo corto y se sigue */
 
 const errores = [];   /* errores del sitio: mandan el código 1 */
@@ -79,8 +83,13 @@ const PANEL_ENTRADO = () => {
 };
 
 /* en Chromium getAnimations() incluye las transiciones CSS, que es lo que usan los
-   [data-reveal]: cubre los 900ms de duración más el stagger, sea cual sea la cantidad */
-const NADA_ANIMANDO = () => document.getAnimations().every(a => a.playState !== 'running');
+   [data-reveal]: cubre los 900ms de duración más el stagger, sea cual sea la cantidad.
+   El recorrido del desvío NO es una transición —lo mueve frame() en JS— y
+   getAnimations() no lo ve: sin la segunda condición la captura de .desvio salía
+   con el viajero a mitad de camino, distinta en cada corrida. Si el recorrido
+   todavía no arrancó (la sección no está en pantalla) no hay nada que esperar. */
+const NADA_ANIMANDO = () => document.getAnimations().every(a => a.playState !== 'running') &&
+  !document.querySelector('[data-recorrido].is-moving:not(.is-arrived)');
 
 /* importa por el loading="lazy": una img sin cargar sale como hueco en la captura */
 const IMAGENES_VISIBLES_LISTAS = () => [...document.querySelectorAll('img')].every(img => {

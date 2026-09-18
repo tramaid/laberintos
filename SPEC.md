@@ -31,7 +31,7 @@ Seis secciones. El fondo alterna, y la alternancia tiene una regla:
 | 1 | Umbral | `--ink` | El travelling. Entrar. Termina en luz |
 | 2 | Cuatro laberintos | `--papel` | Índice con las cuatro etiquetas |
 | 2b | Los tres Malbec | `--ink` | Malbec → Reserva → Gran Reserva |
-| 2c | Otro suelo, otra uva | `--papel` | Tira corta, sin foto |
+| 2c | Otro suelo, otra uva | `--papel` | El mapa: el recorrido de Mendoza a San Juan, animado |
 | 2d | Syrah | `--papel` | **En claro.** Cambia de suelo, cambia de fondo |
 | 2e | Cuatro caminos | `--ink` | Foto de familia. Devuelve el sitio al negro |
 | 3 | Fichas técnicas | `--papel` | El dato duro. Tabla, no poesía |
@@ -63,6 +63,25 @@ El reparto interno importa más que el total:
 Se llegó a estos números iterando con el cliente sobre el prototipo. El
 error recurrente fue alargar el efecto de entrada en vez del silencio de
 después: lo que hace falta es tiempo **con la frase ya puesta**.
+
+### La entrada va sola
+El umbral no se recorre a mano. El primer gesto hacia abajo —rueda, flecha,
+barra espaciadora, deslizar el dedo o "Entrar"— reproduce la entrada sola
+hasta la frase del manifiesto (p = 0.90) en **5,5 s**, con la curva `ease` de
+CSS. Si arranca a mitad de camino, tarda la parte proporcional.
+
+- Mueve el **scroll**, no la cámara: la cámara lo sigue leyendo en `frame()`
+  como siempre. No hay un segundo motor.
+- Mientras corre, los gestos hacia abajo se tragan. **Cualquier gesto hacia
+  arriba la corta** y devuelve el control en el mismo gesto; también un link
+  del nav, la barra de scroll o Escape.
+- Pasada la frase, el scroll es normal: un gesto más apaga la frase y suelta
+  el sticky.
+- Con movimiento reducido no existe: el umbral mide una pantalla.
+
+La duración es `ENTRADA` en `docs/index.html`. Los cortes de la tabla de abajo
+siguen valiendo: están en p, y la entrada solo cambia a qué velocidad se pasa
+por ellos.
 
 ### El destello del corte: NO va
 Se probó un fogonazo para esconder el corte entre tomas y molestaba más de lo
@@ -137,11 +156,27 @@ mismo viñedo, más crianza en cada paso, hasta Altamira— y el Syrah al final
 porque es el que cambia de provincia y de variedad. El orden está en
 `vinos.json` como `orden`, no en el markup.
 
-La tira **"Otro suelo. Otra uva."** presenta al Syrah como desvío en vez de
-como cuarto de la lista. Y el Syrah **va sobre `--papel`**, con su render de
+El desvío **"Otro suelo, otra uva, otro LABERINTO"** presenta al Syrah como
+desvío en vez de como cuarto de la lista. Y el Syrah **va sobre `--papel`**, con su render de
 fondo claro: si el vino cambia de provincia y de variedad, que cambie de
-mundo. La tira y el bloque son **un solo momento claro** —sin costura entre
+mundo. El desvío y el bloque son **un solo momento claro** —sin costura entre
 los dos— y el corte de color es el argumento, no una decoración.
+
+El desvío es un mapa de Mendoza y San Juan con el recorrido dibujado:
+Luján de Cuyo (Malbec, Reserva) → Valle de Uco (Gran Reserva) → Valle del
+Zonda (Syrah). Arranca cuando la sección entra en pantalla, dura 4,8 s y cada
+parada se nombra cuando el viajero pasa por ella. Con movimiento reducido
+queda dibujado y quieto.
+
+- **Las paradas van en su lugar real.** El mapa es una proyección
+  equirectangular y las coordenadas salen de latitud y longitud; la fórmula
+  está en el comentario del markup. Son los orígenes de las fichas: si cambia
+  uno, cambia el mapa.
+- **El texto es texto.** La lámina original traía titular, bajada y nombres
+  de provincia en curvas. Pasaron a HTML y el SVG quedó en 31 KB.
+- **Las etiquetas miden 11px a todos los anchos** y no pisan límites ni
+  trazo. Por eso el mapa tiene un piso de 400px y se apila debajo del texto
+  abajo de 900px.
 
 Sobre ese muro el terracota de la etiqueta (`#c07d74`) da **1,91:1** y no
 sirve para texto. El acento del bloque claro es `#7a3f37`, que da 4,73:1.
