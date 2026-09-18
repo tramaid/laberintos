@@ -4,7 +4,9 @@ Esta carpeta **es** el sitio. HTML plano, sin build, sin dependencias.
 Todo lo que hay adentro se sirve tal cual.
 
 - `index.html` — la página entera, 40 KB
-- `assets/` — 17 imágenes WebP, el laberinto SVG y la imagen para compartir
+- `assets/` — 17 imágenes WebP, el mapa del desvío, el laberinto SVG, los
+  favicons (`favicon.svg`, `favicon-32.png`, `apple-touch-icon.png`) y la
+  imagen para compartir
 - `404.html` — "Este camino no lleva a ningún lado"
 - `.nojekyll` — **no borrar.** Sin este archivo GitHub Pages pasa todo por
   Jekyll, que ignora las carpetas que empiezan con guión bajo y agrega

@@ -3,7 +3,13 @@
 <title>Laberintos — Vinos de Mendoza y San Juan</title>
 <meta name="description" content="No todos los caminos buscan una salida. Malbec de Luján de Cuyo y Valle de Uco, y Syrah de San Juan. Bodega Laberintos, Argentina.">
 <meta name="theme-color" content="#0b0a09">
-<link rel="icon" href="assets/laberinto.svg" type="image/svg+xml">
+<!-- Era assets/laberinto.svg: el laberinto con trazo 2 sobre 1254, que a 16px no
+     se veia en una pestaña clara y desaparecia en una oscura. favicon.svg es la
+     misma marca con trazo 48, papel sobre tinta. El PNG va para Safari, que
+     ignora el SVG; Chrome y Firefox toman el SVG, que va ultimo. -->
+<link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Laberintos">
@@ -713,6 +719,15 @@ a{color:inherit;text-decoration:none}
     </div></div>
     <div class="panel"></div>
     <div class="blanco"></div>
+    <!-- el titulo va ANTES que el manifiesto: es el h1 y tiene que ser el primer
+         encabezado del documento. El orden en pantalla no cambia, lo fijan los
+         z-index (titulo 7, manifiesto 8) -->
+    <div class="titulo"><div class="canal">
+      <h1>La vida tiene<br>LABERINTOS…</h1>
+      <p>No todos los caminos buscan una salida.</p>
+      <a class="etiqueta entrar" href="#indice">Entrar &nbsp;→</a>
+    </div></div>
+
     <div class="manifiesto"><div class="canal">
       <h2>
         <span class="linea">Hay caminos que se recorren.</span>
@@ -720,12 +735,6 @@ a{color:inherit;text-decoration:none}
         <span class="linea">Los mejores no tienen apuro.</span>
       </h2>
       <p class="etiqueta marca">Laberintos · Mendoza, Argentina</p>
-    </div></div>
-
-    <div class="titulo"><div class="canal">
-      <h1>La vida tiene<br>LABERINTOS…</h1>
-      <p>No todos los caminos buscan una salida.</p>
-      <a class="etiqueta entrar" href="#indice">Entrar &nbsp;→</a>
     </div></div>
   </div>
 </section>
