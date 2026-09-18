@@ -20,7 +20,7 @@ el sitio se rompe en la URL de proyecto de GitHub. Es el error clásico.
 
 ## Estado
 
-**El sitio está publicado** en https://matiasmercado88-debug.github.io/laberintos/
+**El sitio está publicado** en https://tramaid.github.io/laberintos/
 y lleva `noindex` a propósito, porque esa URL es provisoria. Ver `../PUBLICAR.md`.
 
 Resuelto: el canonical falso, los enlaces de Instagram y de la tienda, y las
@@ -28,8 +28,10 @@ cosechas (valen las de la ficha técnica: 2024 / 2023 / 2022).
 
 ### Lo que sigue abierto
 
-1. **El dominio.** Es lo único que bloquea sacar el `noindex`. Los cuatro
-   cambios que hay que hacer están listados en `../PUBLICAR.md`.
+1. **El dominio.** `laberintos-wines.com.ar` está comprado pero sin delegar:
+   todavía no resuelve. Es lo único que bloquea sacar el `noindex`. Los pasos y
+   el orden están en `../PUBLICAR.md`; el cambio del repo ya está hecho en la
+   rama `dominio`.
 2. **La contraetiqueta del Syrah.** Lo que hay publicado es un **borrador
    nuestro**, marcado como tal en el markup. La bodega tiene que aprobarlo o
    mandar el suyo.
