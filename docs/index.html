@@ -118,7 +118,11 @@
  opacity:calc(1 - var(--p,0) * 5.56);transform:translate3d(0,calc(var(--p,0) * -1.85vh),0)}
 .titulo h1{font-size:var(--h2);letter-spacing:-.01em;max-width:13ch}
 /* el titular no usa el canal centrado: se va al margen, que es donde la
-   escenografía es más oscura y el texto no pelea con la piedra */
+   escenografía es más oscura y el texto no pelea con la piedra.
+   Por eso tampoco toma --canal, que desde el 19/09 llega a 120px: corrido
+   así, el borde derecho del titular sale del tramo oscuro del panel y cae
+   sobre la piedra clara. El manifiesto conserva el mismo margen que el
+   título: son la misma escena. */
 .titulo .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
 .titulo p{margin-top:18px;color:var(--muted);max-width:34ch}
 /* .titulo lleva pointer-events:none para no capturar el toque sobre la escena.
@@ -177,7 +181,7 @@
    Ponerle display:flex acomodaba los párrafos en fila. Se empuja con
    margin-left:auto, que es lo que corresponde a un bloque con ancho máximo. */
 .vino--der .vino__texto{margin-left:auto;margin-right:0;text-align:right;
- padding-left:var(--canal);padding-right:clamp(20px,3.2vw,48px)}
+ padding-left:var(--canal);padding-right:var(--canal)}
 /* NO reordenar con `order`: en una grilla reordena todos los items sueltos y
    se desarman los pares etiqueta/valor. Alcanza con alinear a la derecha. */
 .vino--der .datos{margin-left:auto;justify-items:end;text-align:right}
@@ -185,7 +189,7 @@
  padding-left:0;padding-right:12px}
 .vino--der .vino__texto h2{margin-left:auto}
 .vino--der .vino__texto p, .vino--der .pendiente{margin-left:auto}
-.vino .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
+.vino .canal{max-width:none;margin:0;padding-left:var(--canal);padding-right:var(--canal)}
 .vino__texto{position:relative;z-index:2;max-width:min(42ch,44vw)}
 .vino__texto h2{font-size:var(--h3);margin-top:12px;max-width:11ch}
 /* el Gran Reserva tiene el nombre más largo: si no lo dejás quebrar en dos
@@ -309,7 +313,7 @@
 .familia::after{content:"";position:absolute;inset:0;
  background:linear-gradient(180deg, var(--ink) 0%, transparent 22%, transparent 55%, var(--ink) 100%)}
 .familia .canal{position:relative;z-index:2;max-width:none;margin:0;
- padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
+ padding-left:var(--canal);padding-right:var(--canal)}
 .familia h2{font-size:var(--h4)}
 /* el camino a la compra, ahora que los puntos de venta tienen su pagina: el
    mismo recurso que "Entrar" en el umbral, mono en mayusculas y subrayado */
@@ -351,7 +355,7 @@
  --mapa-w:max(32.4vw,400px)}
 /* el desvío y el bloque del Syrah son UN solo momento claro: el borde entre
    los dos no debe verse. Por eso el .vino--claro no tiene padding arriba. */
-.desvio .canal{max-width:none;margin:0;padding:clamp(56px,8vh,90px) var(--canal) clamp(56px,8vh,90px) clamp(20px,3.2vw,48px)}
+.desvio .canal{max-width:none;margin:0;padding:clamp(56px,8vh,90px) var(--canal) clamp(56px,8vh,90px) var(--canal)}
 .desvio h2{font-size:var(--h4);margin-top:14px}
 /* Special Elite tiene un solo peso: el negrita es sintetizado, como en la lámina */
 .desvio h2 strong{font-weight:700}
@@ -430,7 +434,7 @@
   .parada{opacity:1;transform:translate(var(--dx),var(--dy));transition:none}
 }
 .indice{background:var(--papel);color:var(--ink);padding:clamp(100px,14vh,170px) 0 clamp(70px,10vh,120px)}
-.indice .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
+.indice .canal{max-width:none;margin:0;padding-left:var(--canal);padding-right:var(--canal)}
 /* 14px entre el rotulo y el titulo, como en el desvio y en las paginas
    interiores: sin margen la etiqueta tocaba las mayusculas */
 .indice h2{font-size:var(--h4);max-width:16ch;margin-top:14px}

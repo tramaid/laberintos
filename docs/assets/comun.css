@@ -75,7 +75,15 @@
   /* --- ritmo --- */
   --seccion: clamp(90px, 12vh, 160px);
   --ancho: 1180px;
-  --canal: clamp(20px, 4vw, 40px);
+  /* El margen lateral de todo el sitio, a los dos lados, salvo el titulo del
+     umbral (ver .titulo en index.html). Hasta el 19/09 eran dos valores
+     distintos -48px a la izquierda y 40 a la derecha como mucho- y en una
+     pantalla de 1900 el texto quedaba a 2,5% del borde.
+     Crece rapido en las pantallas grandes y poco en las medianas: 24px hasta
+     710 de ancho, 41 a 900, 90 a 1440 y 120 desde 1780. Con 6vw parejo, a 900
+     el texto del Syrah se corria 18px y la primera linea caia sobre el aro
+     oscuro de la escena. */
+  --canal: clamp(24px, 9vw - 40px, 120px);
 }
 
 /* Sin border-radius y sin sombras en todo el sitio.
@@ -174,13 +182,13 @@ a{color:inherit;text-decoration:none}
     padding:clamp(110px,26vh,240px) 0 clamp(26px,5vh,48px);
     font-size:clamp(32px,9vw,44px);animation:menu-entra 240ms var(--ease)}
   body.menu-abierto .nav nav a{min-height:60px;
-    padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
+    padding-left:var(--canal);padding-right:var(--canal)}
   /* en el panel la tienda es un renglón más: la caja es de la barra */
   body.menu-abierto .nav nav .nav__tienda{min-height:60px;border:0;
-    padding-left:clamp(20px,3.2vw,48px)}
+    padding-left:var(--canal)}
   /* margin-top:auto la empuja al piso del panel. --muted sobre --ink da 5.33:1 */
   body.menu-abierto .nav nav .menu__marca{display:block;margin:auto 0 0;
-    padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal);color:var(--muted);
+    padding-left:var(--canal);padding-right:var(--canal);color:var(--muted);
     font-size:var(--etiqueta)}
 }
 @keyframes menu-entra{from{opacity:0}to{opacity:1}}
@@ -203,7 +211,7 @@ a{color:inherit;text-decoration:none}
    papel cae justo en el cambio de fondo y no se ve, que es lo que corresponde */
 .pie{position:relative;background:var(--ink);color:var(--papel);overflow:hidden;
  padding:clamp(56px,8vh,90px) 0 clamp(34px,5vh,54px);border-top:1px solid var(--linea-2)}
-.pie .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
+.pie .canal{max-width:none;margin:0;padding-left:var(--canal);padding-right:var(--canal)}
 .pie__cols a{display:inline-flex;align-items:center;min-height:44px;
  text-decoration:underline 1px;text-decoration-color:transparent;text-underline-offset:6px;
  transition:text-decoration-color var(--hover) var(--ease)}
@@ -265,7 +273,7 @@ a{color:inherit;text-decoration:none}
    ============================================================ */
 .donde{background:var(--papel);color:var(--ink);
  padding:clamp(100px,14vh,170px) 0 clamp(80px,11vh,130px)}
-.donde .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
+.donde .canal{max-width:none;margin:0;padding-left:var(--canal);padding-right:var(--canal)}
 .donde .etiqueta{color:var(--muted-claro)}
 .donde h2{font-size:var(--h4)}
 .donde .bajada{margin-top:18px;color:var(--muted-claro);max-width:44ch;font-size:clamp(15px,1.2vw,18px)}
@@ -311,7 +319,7 @@ html.edad .puerta{position:fixed;inset:0;z-index:40;display:grid;align-items:cen
  overflow-y:auto;background:var(--ink);color:var(--papel);
  transition:opacity var(--hover) var(--ease)}
 html.edad.edad-sale .puerta{opacity:0}
-.puerta__caja{padding:clamp(28px,6vh,64px) var(--canal) clamp(28px,6vh,64px) clamp(20px,3.2vw,48px)}
+.puerta__caja{padding:clamp(28px,6vh,64px) var(--canal) clamp(28px,6vh,64px) var(--canal)}
 /* la marca en el mismo lugar y cuerpo que en la barra del sitio: si cambia
    .logo, cambia esto */
 .puerta__marca{position:absolute;top:12px;left:var(--canal);display:flex;align-items:center;

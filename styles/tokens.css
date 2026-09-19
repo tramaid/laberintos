@@ -77,7 +77,9 @@
 
   --seccion: clamp(90px, 12vh, 160px);
   --ancho: 1180px;
-  --canal: clamp(20px, 4vw, 40px);
+  /* 2026-09-19, igual que docs/assets/comun.css: el margen lateral, a los dos
+     lados. Era clamp(20px, 4vw, 40px) y en 1900 dejaba el texto contra el borde */
+  --canal: clamp(24px, 9vw - 40px, 120px);
 }
 
 /* Sin border-radius y sin sombras en todo el sitio.
