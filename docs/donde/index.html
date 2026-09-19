@@ -148,41 +148,44 @@ body{background:var(--papel)}
 </main>
 
 <!-- PIE. Mismo markup en las tres paginas, salvo los href: si se cambia uno, se
-     cambian los tres. Cierra con el sello de la etiqueta -el laberinto, la
-     palabra y "Mendoza | Argentina", apilados y centrados como en la botella-:
-     es el unico lugar del sitio que rompe el canal de la izquierda, a proposito.
-     El contacto tiene su pagina: aca va el link, no el bloque. -->
+     cambian los tres. Abre con el sello de la etiqueta -el laberinto, la
+     palabra y "Mendoza | Argentina", apilados y centrados como en la botella-
+     y los links al lado. El contacto tiene su pagina: aca va el link, no el
+     bloque. -->
 <footer class="pie">
   <div class="canal">
-    <div class="pie__cols">
-      <div data-reveal>
-        <h3>La bodega</h3>
-        <ul>
-          <li><a href="../contacto/">Contacto</a></li>
-          <li><a href="https://wa.me/541148632188">WhatsApp</a></li>
-          <li><a href="https://www.instagram.com/laberintosvinos" target="_blank" rel="noopener">Instagram<span aria-hidden="true">&nbsp;↗</span></a></li>
-        </ul>
+    <!-- el sello a la izquierda y los links a la derecha, en una sola banda.
+         Abajo de 900px el sello sube arriba de los links -->
+    <div class="pie__arriba">
+      <div class="pie__sello" data-reveal>
+        <svg class="pie__laberinto" aria-hidden="true" focusable="false"><use href="#laberinto"/></svg>
+        <p class="pie__palabra">LABERINTOS</p>
+        <p class="pie__origen">Mendoza <span aria-hidden="true">|</span> Argentina</p>
       </div>
-      <div data-reveal>
-        <h3>Comprá</h3>
-        <ul>
-          <!-- Tienda actual en TiendaNube. Se va a rehacer como theme de PepperLabs,
-               igual que Inyesoft y Materiales Matheu; cuando eso pase, cambia la URL
-               de aca, la del nav y la de donde/ y contacto/, y nada mas. -->
-          <li><a href="https://laberintosvinos.mitiendanube.com/" target="_blank" rel="noopener">Tienda online<span aria-hidden="true">&nbsp;↗</span></a></li>
-          <li><a href="./">Dónde comprar</a></li>
-        </ul>
+      <div class="pie__cols">
+        <div data-reveal>
+          <h3>La bodega</h3>
+          <ul>
+            <li><a href="../contacto/">Contacto</a></li>
+            <li><a href="https://wa.me/541148632188">WhatsApp</a></li>
+            <li><a href="https://www.instagram.com/laberintosvinos" target="_blank" rel="noopener">Instagram<span aria-hidden="true">&nbsp;↗</span></a></li>
+          </ul>
+        </div>
+        <div data-reveal>
+          <h3>Comprá</h3>
+          <ul>
+            <!-- Tienda actual en TiendaNube. Se va a rehacer como theme de PepperLabs,
+                 igual que Inyesoft y Materiales Matheu; cuando eso pase, cambia la URL
+                 de aca, la del nav y la de donde/ y contacto/, y nada mas. -->
+            <li><a href="https://laberintosvinos.mitiendanube.com/" target="_blank" rel="noopener">Tienda online<span aria-hidden="true">&nbsp;↗</span></a></li>
+            <li><a href="./">Dónde comprar</a></li>
+          </ul>
+        </div>
+        <div data-reveal>
+          <h3>Exportamos</h3>
+          <ul><li>Argentina</li><li>México</li><li>Estados Unidos</li></ul>
+        </div>
       </div>
-      <div data-reveal>
-        <h3>Exportamos</h3>
-        <ul><li>Argentina</li><li>México</li><li>Estados Unidos</li></ul>
-      </div>
-    </div>
-
-    <div class="pie__sello" data-reveal>
-      <svg class="pie__laberinto" aria-hidden="true" focusable="false"><use href="#laberinto"/></svg>
-      <p class="pie__palabra">LABERINTOS</p>
-      <p class="pie__origen">Mendoza <span aria-hidden="true">|</span> Argentina</p>
     </div>
 
     <div class="pie__legal">

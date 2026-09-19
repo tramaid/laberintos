@@ -281,14 +281,16 @@ escenas los links quedaban pelados encima de la foto, y el laberinto a 34px se
 leía como un círculo manchado. El laberinto quedó solo en el sello del pie,
 donde tiene el tamaño de la etiqueta.
 
-**Pie.** En este orden:
+**Pie.** Una sola banda y los legales:
 
-1. Tres columnas: la bodega (contacto, WhatsApp, Instagram) · comprá (tienda y
-   dónde comprar) · exportamos.
-2. **El sello**: el laberinto, LABERINTOS y "Mendoza | Argentina", apilados
-   y centrados como en la etiqueta. Es el único lugar que rompe el canal de la
-   izquierda. Reemplaza a la marca de agua al 5%.
-3. Los legales, y con ellos el crédito de estudio: **Diseño TRAMA**, en la
+1. A la izquierda, **el sello**: el laberinto, LABERINTOS y "Mendoza |
+   Argentina", apilados y centrados como en la etiqueta. Reemplaza a la marca
+   de agua al 5%. A la derecha, tres columnas: la bodega (contacto, WhatsApp,
+   Instagram) · comprá (tienda y dónde comprar) · exportamos. Abajo de 900px
+   el sello sube arriba de los links, centrado.
+   Primero el sello fue centrado debajo de las columnas, a 180px: el pie medía
+   una pantalla entera. Al costado mide 410-440px en escritorio.
+2. Los legales, y con ellos el crédito de estudio: **Diseño TRAMA**, en la
    misma línea y el mismo peso. Firmar más fuerte que el cliente en su propio
    sitio es de mal gusto.
 
