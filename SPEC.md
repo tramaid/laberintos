@@ -36,7 +36,7 @@ Seis secciones. El fondo alterna, y la alternancia tiene una regla:
 | 2e | Cuatro caminos | `--ink` | Foto de familia. Devuelve el sitio al negro |
 | 3 | Fichas técnicas | `--papel` | El dato duro. Tabla, no poesía |
 | 4 | Origen | `--ink` | Viñedos, altitud, quién lo hace |
-| 5 | Dónde conseguirlo | `--papel` | WhatsApp, puntos de venta, exportación |
+| 5 | Dónde comprar | `--papel` | **Página propia, `donde/`**: los siete puntos de venta y la tienda online |
 | 6 | Pie | `--ink` | Conversión + contacto + legales |
 
 El corte a claro se usa **tres veces**: el blanco de la frase, el índice de
@@ -255,29 +255,38 @@ Altamira es un nombre que quien compra vino reconoce. Los mockups decían
 
 ---
 
-## 7. El pie (sección 6) — fondo oscuro
+## 7. Nav y pie — la marca firma como en la etiqueta
 
-El pie **es** la conversión: no hay una sección "dónde conseguirlo" separada.
-Después del cierre en oscuro de "Cuatro caminos", el pie sigue en `--ink` y el
-recorrido termina donde empezó.
+Rediseñados el 18/09/2026. La idea: nav y pie son los dos lugares donde
+Laberintos firma, y firma como en la botella, con el laberinto y la palabra.
 
-Contiene, en este orden:
-1. **Escribinos** con WhatsApp como acción principal, en cuerpo grande.
-2. La firma de marca: *La vida tiene LABERINTOS…*
-3. Cuatro columnas: contacto · dónde estamos · seguinos · exportamos.
-4. Los legales, y con ellos el crédito de estudio: **Diseño TRAMA**,
-   enlazado a `tramaid.com.ar` con `target="_blank"` y `rel="noopener"`.
-   Va en la misma línea y el mismo peso que los legales: firmar más fuerte
-   que el cliente en su propio sitio es de mal gusto.
+**Nav.** El logo es el laberinto (el `<symbol>` de cada página) más
+LABERINTOS en Special Elite. Los links son cuatro: Vinos, Dónde comprar,
+Contacto y **Tienda**, que va en caja porque es la única acción que saca del
+sitio. Van en Special Elite, la misma voz del panel del teléfono. Abajo de
+900px pasan al menú. La barra se esconde al bajar y vuelve al subir: con el
+logo grande, el texto que pasaba por debajo se pisaba con él.
 
-El laberinto en SVG va de marca de agua al 5,5% de opacidad, saliendo por el
-borde derecho. Son 4,5 KB y es la única vez que el símbolo aparece solo, sin
-botella: cierra el sitio con el mismo dibujo con el que abre.
+**Pie.** Es la conversión. En este orden:
+1. **Escribinos** con WhatsApp, y el teléfono y el mail en grande.
+2. Tres columnas: seguinos · comprá (tienda y dónde comprar) · exportamos.
+3. **El sello**: el laberinto, LABERINTOS y "Mendoza | Argentina", apilados
+   y centrados como en la etiqueta. Es el único lugar que rompe el canal de la
+   izquierda. Reemplaza a la marca de agua al 5%.
+4. Los legales, y con ellos el crédito de estudio: **Diseño TRAMA**, en la
+   misma línea y el mismo peso. Firmar más fuerte que el cliente en su propio
+   sitio es de mal gusto.
 
-**Pendiente:** verificar el código postal. "01423" no tiene formato argentino
-válido para Belén de Escobar. Está marcado con un comentario en el markup.
+No se publica dirección de la bodega.
 
-La acción tiene que ser alcanzable desde la nav, no solo desde el final.
+**Dónde comprar** tiene página propia desde la misma fecha. La portada es un
+relato; esto es una consulta, de alguien que llega con una pregunta concreta, y
+así tiene una dirección que se puede mandar. Desde la portada se llega por el
+nav, por el pie y por "Dónde conseguirlos", debajo de la foto de familia.
+
+Nav, pie, puerta de edad y tokens viven en `docs/assets/comun.css` y
+`comun.js`. El markup del nav, del pie y de la puerta está repetido en las dos
+páginas: si se cambia en una, se cambia en la otra.
 
 ---
 

@@ -1,0 +1,338 @@
+/* ============================================================
+   comun.css — lo que comparten todas las paginas del sitio:
+   tokens, base, barra y menu, pie, puntos de venta, puerta de
+   edad y reveals. Va en el mismo orden relativo que tenia dentro
+   de index.html, asi la cascada no cambia.
+   Lo de cada pagina sigue en su <style>, que carga DESPUES.
+   ============================================================ */
+/* ============================================================
+   LABERINTOS — tokens
+   Los colores de sustrato salen MEDIDOS de los renders de las
+   botellas, no elegidos: se muestreó la mediana del 30% más
+   claro de cada etiqueta. Al lado va el contraste real contra
+   la tinta, para que nadie tenga que adivinar si un texto se lee.
+   ============================================================ */
+:root{
+  /* --- sustratos --- */
+  --ink:        #0b0a09;   /* el negro del sitio */
+  --ink-2:      #16130f;   /* un escalón arriba, para separar bloques oscuros */
+  --papel:      #efe9df;   /* el claro. Contraste con ink: 16.5:1 */
+  --papel-2:    #e3dbcd;
+
+  /* --- etiquetas, medidas de las botellas --- */
+  --et-malbec:  #dcdbd8;   /* mármol blanco   · 14.29:1 con ink */
+  --et-reserva: #bfae9c;   /* piedra beige    ·  9.18:1 con ink */
+  --et-gran:    #d7d5d2;   /* plata sobre negro · 13.51:1 con ink */
+  --et-syrah:   #c07d74;   /* terracota       ·  6.05:1 con ink */
+
+  /* Regla dura: sobre --et-syrah SIEMPRE tinta, nunca blanco.
+     Blanco sobre terracota da 2.7:1 y no pasa ningún estándar. */
+
+  --linea:      #2a2622;
+  --linea-clara:#cfc6b6;
+  --muted:      #8a8479;   /* sobre ink · 5.33:1 */
+  --muted-claro:#6b6459;   /* sobre papel · 4.84:1 */
+
+  /* --- tokens de esta pasada. Contrastes calculados con
+         scripts/contraste.mjs, no estimados. --- */
+  --texto-2:        #a9a297;  /* parrafo de vino sobre ink · 7.82:1 */
+  --muted-2:        #837c70;  /* labels dt y .edicion sobre ink · 4.79:1
+                                 Venia de #7d766b, que daba 4.40:1 y no pasaba. */
+  --linea-2:        #1c1916;  /* separadores de 1px. No es texto: exento del 4.5:1 */
+  --et-syrah-texto: #7a3f37;  /* terracota legible sobre papel · 6.71:1 */
+  --mapa:           #6c4d38;  /* nombres de Mendoza y San Juan en el mapa del
+                                 desvio, sobre papel · 6.31:1. Es el marron de
+                                 los limites del SVG original */
+
+  /* #8a8377 se descarto: daba 3.11:1 sobre papel. Para llegar a 4.5 habia que
+     oscurecerlo hasta --muted-claro, asi que no era un token nuevo, sobraba.
+     #6f685e tambien se descarto: 3.60:1 sobre ink. Va --muted-2. */
+
+  /* --- tipografía --- */
+  --display: "Special Elite", "Courier New", monospace;  /* la de la etiqueta: máquina de escribir */
+  --texto:   "Barlow Condensed", system-ui, sans-serif;
+  /* IBM Plex Mono: la mono del sistema se veia distinta en cada equipo y no
+     compartia nada con la marca. Ademas alinea en columna los numeros de las
+     fichas. El fallback queda por si la fuente no carga. */
+  --dato:    "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --paso: clamp(14px, 1.1vw, 17px);
+  /* Cuatro escalones, uno por voz. Los valores son los que ya estaban en
+     pantalla: esto no cambia tamanios, deja de repetirlos siete veces. */
+  --h1: clamp(38px, 6vw, 84px);    /* el cierre del pie */
+  --h2: clamp(34px, 5.4vw, 72px);  /* el titulo del umbral */
+  --h3: clamp(34px, 4.2vw, 58px);  /* los cuatro vinos */
+  --h4: clamp(30px, 3.6vw, 50px);  /* indice, desvio, familia, manifiesto */
+  --etiqueta: 11px;          /* eyebrows y labels, siempre con tracking .16em */
+
+  /* --- movimiento --- */
+  --dur: 900ms;
+  --dist: 40px;
+  --stagger: 90ms;
+  --hover: 450ms;
+  --ease: cubic-bezier(.16,1,.3,1);
+
+  /* --- ritmo --- */
+  --seccion: clamp(90px, 12vh, 160px);
+  --ancho: 1180px;
+  --canal: clamp(20px, 4vw, 40px);
+}
+
+/* Sin border-radius y sin sombras en todo el sitio.
+   La marca es piedra tallada: los bordes son rectos. */
+*{ border-radius: 0 }
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--ink);color:var(--papel);font-family:var(--texto);
+ font-size:var(--paso);line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2{margin:0;font-family:var(--display);font-weight:400;line-height:.98}
+p{margin:0} img{display:block;max-width:100%}
+/* faltaba en el prototipo: sin esto los enlaces salen azules del navegador */
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+.canal{max-width:var(--ancho);margin:0 auto;padding:0 var(--canal)}
+.etiqueta{font-family:var(--dato);font-size:var(--etiqueta);letter-spacing:.16em;text-transform:uppercase}
+
+/* ============================================================
+   NAV — la marca firma como en la etiqueta: el laberinto y la
+   palabra. Antes era "LABERINTOS" suelto a 15px y dos links en
+   mono de 11px contra el borde: no se leía como marca ni como
+   navegación. Los links van en la voz de la marca, Special Elite,
+   la misma que ya usaba el panel del teléfono.
+   Sigue en mix-blend-mode difference sobre las escenas: blanco
+   sobre tinta, tinta sobre papel, sin fondo propio.
+   ============================================================ */
+/* el <symbol> del laberinto: presente en el documento, fuera de la vista */
+.simbolos{position:absolute;width:0;height:0;overflow:hidden}
+.solo-lectores{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;
+ overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.nav{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;
+ align-items:center;padding:12px var(--canal);mix-blend-mode:difference;color:#fff}
+/* Se esconde al bajar y vuelve al subir. Con la barra nueva, mas grande, el
+   texto que pasaba por debajo se pisaba con el logo al leer. Es un cambio de
+   estado, no algo atado al scroll: va con transition. transform SOLO en el
+   estado oculto, porque un transform en .nav vuelve al panel del telefono
+   (position:fixed adentro) relativo a la barra en vez de a la pantalla. */
+.nav{transition:transform var(--hover) var(--ease)}
+.nav.is-oculta{transform:translate3d(0,-100%,0)}
+.nav.is-oculta:focus-within,body.menu-abierto .nav.is-oculta{transform:none}
+@media(prefers-reduced-motion:reduce){.nav{transition:none}}
+.logo{display:inline-flex;align-items:center;gap:12px;min-height:44px}
+/* Trazo 44 sobre 1254: a 34px las dos líneas de cada muro se juntan y el
+   laberinto se lee macizo, como impreso en la etiqueta. Con el trazo del
+   SVG original (2) a este tamaño no se veía nada. */
+.logo__marca{width:34px;height:34px;flex:none;fill:none;stroke:currentColor;stroke-width:44;
+ stroke-linecap:round;stroke-linejoin:round}
+.logo__palabra{font-family:var(--display);font-size:22px;line-height:1;letter-spacing:.08em}
+.nav nav{display:flex;align-items:center;gap:clamp(22px,2.6vw,40px);
+ font-family:var(--display);font-size:17px;line-height:1}
+.nav nav a{display:inline-flex;align-items:center;min-height:44px;
+ text-decoration:underline 1px;text-decoration-color:transparent;text-underline-offset:7px;
+ transition:text-decoration-color var(--hover) var(--ease)}
+@media(hover:hover){.nav nav a:hover{text-decoration-color:currentColor}}
+/* la pagina en la que se está queda subrayada */
+.nav nav a[aria-current="page"]{text-decoration-color:currentColor}
+/* la tienda es la única acción que saca del sitio: va en caja, con esquinas rectas */
+.nav nav .nav__tienda{min-height:40px;padding:0 14px;border:1px solid currentColor}
+@media(prefers-reduced-motion:reduce){.nav nav a{transition:none}}
+
+/* ============================================================
+   MENÚ DE TELÉFONO — abajo de 900px los cuatro links no entran en
+   la barra. Antes el corte era 700 con dos links; con cuatro y el
+   logo nuevo, a 820 ya se pisaban.
+   El panel ES el mismo <nav>, no una copia: no hay dos juegos de
+   links que mantener sincronizados y arriba de 900px vuelve a ser la
+   barra de siempre. Por eso el estado cerrado se resuelve con
+   display:none y no con el atributo [hidden]: el atributo viajaría
+   al desktop, donde el nav tiene que verse.
+   ============================================================ */
+.menu__boton{display:none}
+/* solo existe dentro del panel abierto: en la barra de desktop no va */
+.menu__marca{display:none}
+@media(max-width:900px){
+  .nav nav{display:none}
+  .nav{padding-top:10px;padding-bottom:10px}
+  .logo__marca{width:30px;height:30px}
+  .logo__palabra{font-size:19px}
+  .menu__boton{display:inline-flex;align-items:center;min-height:44px;
+    padding:0;border:0;background:none;color:inherit;cursor:pointer;
+    font-family:var(--display);font-size:18px;line-height:1;
+    /* el logo y el botón por encima del panel, que es hermano de los dos
+       dentro de la misma barra y si no los taparía */
+    position:relative;z-index:1}
+  .nav>.logo{position:relative;z-index:1}
+  /* .nav va en mix-blend-mode:difference. Con el panel de tinta detrás el texto
+     de la barra se invierte contra su propio fondo y deja de ser confiable:
+     mientras el menú está abierto se apaga la mezcla y se fija el color.
+     --papel sobre --ink da 16,5:1. */
+  body.menu-abierto .nav{mix-blend-mode:normal;color:var(--papel)}
+  body.menu-abierto .nav nav{display:flex;flex-direction:column;align-items:stretch;gap:0;
+    position:fixed;inset:0;background:var(--ink);
+    /* los links bajan a un tercio de la pantalla y la marca cierra al pie: el
+       panel está compuesto, no son renglones flotando sobre un vacío */
+    padding:clamp(110px,26vh,240px) 0 clamp(26px,5vh,48px);
+    font-size:clamp(32px,9vw,44px);animation:menu-entra 240ms var(--ease)}
+  body.menu-abierto .nav nav a{min-height:60px;
+    padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
+  /* en el panel la tienda es un renglón más: la caja es de la barra */
+  body.menu-abierto .nav nav .nav__tienda{min-height:60px;border:0;
+    padding-left:clamp(20px,3.2vw,48px)}
+  /* margin-top:auto la empuja al piso del panel. --muted sobre --ink da 5.33:1 */
+  body.menu-abierto .nav nav .menu__marca{display:block;margin:auto 0 0;
+    padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal);color:var(--muted);
+    font-size:var(--etiqueta)}
+}
+@keyframes menu-entra{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){body.menu-abierto .nav nav{animation:none}}
+
+/* ============================================================
+   PIE — cierra el sitio. Oscuro, como el umbral: el recorrido
+   termina donde empezó. Y termina con la firma de la etiqueta:
+   el laberinto, la palabra y el origen, apilados y centrados como
+   en la botella. Es el único lugar que rompe el canal de la
+   izquierda, a propósito: es el sello.
+   Antes el contacto iba en columnas de 14px y la marca era una
+   marca de agua al 5%: lo que se viene a buscar a un pie no se leía.
+   ============================================================ */
+.pie{position:relative;background:var(--ink);color:var(--papel);overflow:hidden;
+ padding:clamp(110px,15vh,160px) 0 clamp(34px,5vh,54px)}
+.pie .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
+.pie__arriba{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);
+ gap:44px clamp(24px,4vw,64px);align-items:end}
+.pie h2{font-size:var(--h1);letter-spacing:-.03em;margin-top:10px}
+/* 44px de area de toque, crecida hacia ARRIBA: el margen baja lo mismo (30 - 15)
+   y el texto y la linea quedan donde estaban. Medía 29px */
+.pie__cta{display:inline-flex;align-items:flex-end;gap:14px;margin-top:15px;min-height:44px;
+ font-family:var(--dato);font-size:13px;letter-spacing:.16em;text-transform:uppercase;
+ border-bottom:1px solid currentColor;padding-bottom:8px;
+ transition:gap var(--hover) var(--ease)}
+@media(hover:hover){.pie__cta:hover{gap:26px}}
+.pie__frase{margin-top:26px;color:var(--muted);max-width:36ch;font-size:clamp(15px,1.2vw,18px)}
+/* teléfono y mail: en la voz de la marca y grandes */
+.pie__contacto{list-style:none;margin:0;padding:0;display:grid;justify-items:start;gap:4px;
+ font-family:var(--display);font-size:clamp(20px,2.1vw,30px);line-height:1.15}
+.pie__contacto a,.pie__cols a{display:inline-flex;align-items:center;min-height:44px;
+ text-decoration:underline 1px;text-decoration-color:transparent;text-underline-offset:6px;
+ transition:text-decoration-color var(--hover) var(--ease)}
+@media(hover:hover){.pie__contacto a:hover,.pie__cols a:hover{text-decoration-color:currentColor}}
+.pie__cols{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,48px);
+ margin-top:clamp(64px,10vh,120px);padding-top:clamp(30px,4vh,44px);border-top:1px solid var(--linea-2)}
+.pie__cols h3{margin:0;font-family:var(--dato);font-size:var(--etiqueta);font-weight:400;
+ letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+/* 14px pasa a 17-20: son links que se tocan con el dedo, no una nota al pie */
+.pie__cols ul{list-style:none;margin:10px 0 0;padding:0;font-size:clamp(17px,1.4vw,20px)}
+.pie__cols li:not(:has(a)){min-height:44px;display:flex;align-items:center}
+
+.pie__sello{display:grid;justify-items:center;text-align:center;
+ margin-top:clamp(90px,13vh,150px)}
+/* la proporción de la etiqueta: el laberinto casi del ancho de la palabra */
+.pie__laberinto{width:clamp(110px,12vw,180px);aspect-ratio:1;fill:none;stroke:currentColor;
+ stroke-width:40;stroke-linecap:round;stroke-linejoin:round}
+.pie__palabra{margin-top:clamp(18px,2.4vw,30px);font-family:var(--display);
+ font-size:clamp(36px,4.6vw,66px);line-height:1;letter-spacing:.08em}
+.pie__origen{margin-top:14px;font-family:var(--dato);font-size:var(--etiqueta);
+ letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+/* crédito de estudio: va con los legales, en el mismo peso.
+   Firmar más fuerte que el cliente en su propio sitio es de mal gusto. */
+.pie__firma{display:inline-flex;align-items:baseline;gap:7px}
+.pie__firma a{border-bottom:1px solid transparent;color:var(--papel);
+ transition:border-color var(--hover) var(--ease)}
+@media(hover:hover){.pie__firma a:hover{border-bottom-color:currentColor}}
+.pie__legal{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+ margin-top:clamp(60px,9vh,100px);padding-top:22px;border-top:1px solid var(--linea-2);
+ font-family:var(--dato);font-size:11px;letter-spacing:.1em;color:var(--muted)}
+.pie__legal b{color:var(--papel);font-weight:400}
+@media(prefers-reduced-motion:reduce){.pie__contacto a,.pie__cols a{transition:none}}
+@media(max-width:820px){
+  .pie__arriba{grid-template-columns:1fr;align-items:start}
+  /* dos columnas; exportamos, que no tiene links, ocupa el renglón entero */
+  .pie__cols{grid-template-columns:1fr 1fr;gap:34px 20px}
+  .pie__cols>:last-child{grid-column:1/-1}
+}
+
+/* ============================================================
+   DONDE ENCONTRARNOS — los puntos de venta, agrupados por
+   localidad. Sobre papel: corta los dos bloques oscuros que
+   quedaban pegados al final (la foto de familia y el pie).
+   ============================================================ */
+.donde{background:var(--papel);color:var(--ink);
+ padding:clamp(100px,14vh,170px) 0 clamp(80px,11vh,130px)}
+.donde .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
+.donde .etiqueta{color:var(--muted-claro)}
+.donde h2{font-size:var(--h4)}
+.donde .bajada{margin-top:18px;color:var(--muted-claro);max-width:44ch;font-size:clamp(15px,1.2vw,18px)}
+.puntos{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(30px,4vw,56px) clamp(20px,3vw,44px);
+ margin-top:clamp(44px,6vh,76px)}
+/* la localidad es un label, no un titulo: va en la tipografia de dato, como los
+   dt de las fichas, y el filete la separa igual que a las tablas */
+.localidad h2{margin:0;font-family:var(--dato);font-size:var(--etiqueta);font-weight:400;
+ letter-spacing:.16em;text-transform:uppercase;color:var(--muted-claro);
+ border-top:1px solid var(--linea-clara);padding-top:14px}
+.localidad ul{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:24px}
+.localidad b{display:block;font-family:var(--display);font-weight:400;
+ font-size:clamp(16px,1.4vw,20px);line-height:1.15}
+.localidad span{display:block;margin-top:7px;color:var(--muted-claro);font-size:clamp(14px,1.1vw,16px)}
+/* el @ es el dato mas util de todos: si la vinoteca se muda, su Instagram lo
+   dice y esta direccion no. Por eso es link y no texto. */
+.localidad a{display:inline-block;margin-top:9px;font-family:var(--dato);font-size:12px;
+ letter-spacing:.08em;border-bottom:1px solid var(--linea-clara);padding-bottom:2px;
+ transition:border-color var(--hover) var(--ease)}
+@media(hover:hover){.localidad a:hover{border-bottom-color:currentColor}}
+@media(prefers-reduced-motion:reduce){.localidad a{transition:none}}
+@media(max-width:820px){
+  /* en vertical una sola columna: dos localidades al lado se aprietan y las
+     direcciones largas quiebran feo */
+  .puntos{grid-template-columns:1fr;gap:32px}
+}
+
+/* ============================================================
+   PUERTA DE EDAD — la pide el Código Conjunto de la Industria de
+   Bebidas Alcohólicas para la Autorregulación Publicitaria
+   (Bodegas de Argentina, Cerveceros Argentinos y la Federación de
+   la Industria Licorista), punto 4.6.2.2: al comienzo, un aviso de
+   que hay publicidad de bebidas alcohólicas y la fecha de
+   nacimiento ESCRITA por el usuario, con bloqueo automático. El
+   4.6.4 pide además las leyendas al comienzo: van al pie de la
+   puerta. La ley 24.788 y su decreto 149/2009 no piden puerta; sí
+   las leyendas, que también están en el pie del sitio.
+   Se muestra una vez por equipo: el dato queda en localStorage.
+   ============================================================ */
+.puerta{display:none}
+html.edad{overflow:hidden}
+html.edad .puerta{position:fixed;inset:0;z-index:40;display:grid;align-items:center;
+ overflow-y:auto;background:var(--ink);color:var(--papel);
+ transition:opacity var(--hover) var(--ease)}
+html.edad.edad-sale .puerta{opacity:0}
+.puerta__caja{padding:clamp(28px,6vh,64px) var(--canal) clamp(28px,6vh,64px) clamp(20px,3.2vw,48px)}
+/* la marca en el mismo lugar y cuerpo que en la barra del sitio */
+.puerta__marca{position:absolute;top:18px;left:var(--canal);font-family:var(--display);
+ font-size:15px;letter-spacing:.06em}
+.puerta h2{font-size:var(--h4);max-width:16ch}
+.puerta__aviso{margin-top:18px;color:var(--muted);max-width:40ch;font-size:clamp(15px,1.2vw,18px)}
+.puerta fieldset{border:0;padding:0;margin:clamp(30px,5vh,48px) 0 0;min-width:0}
+.puerta legend,.puerta label{font-family:var(--dato);font-size:var(--etiqueta);letter-spacing:.16em;
+ text-transform:uppercase;color:var(--muted);padding:0}
+.puerta__fecha{display:flex;gap:clamp(16px,3vw,28px);margin-top:18px}
+.puerta label{display:grid;gap:10px}
+/* 26px: arriba de 16px para que iOS no haga zoom al tocar el campo */
+.puerta input{width:2.6ch;padding:0 0 6px;border:0;border-bottom:1px solid var(--muted-2);
+ background:none;color:var(--papel);font-family:var(--dato);font-size:26px;letter-spacing:.04em}
+.puerta input[name=anio]{width:4.6ch}
+.puerta input::placeholder{color:var(--muted-2);opacity:1}
+.puerta input:focus{outline:none;border-bottom-color:var(--papel)}
+.puerta__entrar{display:inline-flex;align-items:center;min-height:44px;margin-top:34px;padding:0 0 5px;
+ border:0;border-bottom:1px solid currentColor;background:none;color:inherit;cursor:pointer;
+ font-family:var(--dato);font-size:var(--etiqueta);letter-spacing:.16em;text-transform:uppercase}
+/* el terracota de la etiqueta del Syrah sobre tinta da 6.05:1 */
+.puerta__error{margin-top:16px;min-height:1.5em;color:var(--et-syrah);font-size:clamp(15px,1.2vw,18px)}
+.puerta__legal{margin-top:clamp(40px,8vh,80px);font-family:var(--dato);font-size:11px;
+ letter-spacing:.1em;color:var(--muted)}
+.puerta__legal b{color:var(--papel);font-weight:400}
+/* menor de 18: el formulario se va y queda el aviso. Por la sesión, no para siempre */
+.puerta.is-menor fieldset,.puerta.is-menor .puerta__entrar{display:none}
+@media(prefers-reduced-motion:reduce){html.edad .puerta{transition:none}}
+
+[data-reveal]{opacity:0;transform:translate3d(0,var(--dist),0);
+ transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease);transition-delay:var(--d,0ms)}
+[data-reveal].is-in{opacity:1;transform:none}

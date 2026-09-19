@@ -1,7 +1,7 @@
 /* Contraste WCAG 2.1 de los pares token/fondo del sitio.
    Uso: node scripts/contraste.mjs
 
-   Los hexadecimales NO se copian a mano: se leen del bloque :root de docs/index.html.
+   Los hexadecimales NO se copian a mano: se leen del bloque :root de docs/assets/comun.css.
    Si el token ya existe en el CSS manda el CSS ("css"); si todavía no existe se usa el
    hex propuesto por el plan ("propuesto"). Así el script no puede dar verde sobre un
    color que el sitio ya no usa, que es el falso positivo que más caro sale acá.
@@ -12,7 +12,8 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const HTML = path.join(raiz, 'docs', 'index.html');
+/* los tokens viven en comun.css desde que el sitio tiene mas de una pagina */
+const HTML = path.join(raiz, 'docs', 'assets', 'comun.css');
 
 /* Falla ruidosa con código 2: un contraste calculado sobre valores que no son los
    del sitio es peor que no calcular nada. */
@@ -27,7 +28,7 @@ const normalizarHex = valor => {
   return '#' + (c.length === 3 ? [...c].map(d => d + d).join('') : c);
 };
 
-/* Lee las declaraciones del bloque :root de docs/index.html. */
+/* Lee las declaraciones del bloque :root de docs/assets/comun.css. */
 function tokensDeCss(archivo) {
   let texto;
   try {

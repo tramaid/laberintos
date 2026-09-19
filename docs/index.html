@@ -45,94 +45,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Barlow+Condensed:wght@300;400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
-<style>/* ============================================================
-   LABERINTOS — tokens
-   Los colores de sustrato salen MEDIDOS de los renders de las
-   botellas, no elegidos: se muestreó la mediana del 30% más
-   claro de cada etiqueta. Al lado va el contraste real contra
-   la tinta, para que nadie tenga que adivinar si un texto se lee.
-   ============================================================ */
-:root{
-  /* --- sustratos --- */
-  --ink:        #0b0a09;   /* el negro del sitio */
-  --ink-2:      #16130f;   /* un escalón arriba, para separar bloques oscuros */
-  --papel:      #efe9df;   /* el claro. Contraste con ink: 16.5:1 */
-  --papel-2:    #e3dbcd;
-
-  /* --- etiquetas, medidas de las botellas --- */
-  --et-malbec:  #dcdbd8;   /* mármol blanco   · 14.29:1 con ink */
-  --et-reserva: #bfae9c;   /* piedra beige    ·  9.18:1 con ink */
-  --et-gran:    #d7d5d2;   /* plata sobre negro · 13.51:1 con ink */
-  --et-syrah:   #c07d74;   /* terracota       ·  6.05:1 con ink */
-
-  /* Regla dura: sobre --et-syrah SIEMPRE tinta, nunca blanco.
-     Blanco sobre terracota da 2.7:1 y no pasa ningún estándar. */
-
-  --linea:      #2a2622;
-  --linea-clara:#cfc6b6;
-  --muted:      #8a8479;   /* sobre ink · 5.33:1 */
-  --muted-claro:#6b6459;   /* sobre papel · 4.84:1 */
-
-  /* --- tokens de esta pasada. Contrastes calculados con
-         scripts/contraste.mjs, no estimados. --- */
-  --texto-2:        #a9a297;  /* parrafo de vino sobre ink · 7.82:1 */
-  --muted-2:        #837c70;  /* labels dt y .edicion sobre ink · 4.79:1
-                                 Venia de #7d766b, que daba 4.40:1 y no pasaba. */
-  --linea-2:        #1c1916;  /* separadores de 1px. No es texto: exento del 4.5:1 */
-  --et-syrah-texto: #7a3f37;  /* terracota legible sobre papel · 6.71:1 */
-  --mapa:           #6c4d38;  /* nombres de Mendoza y San Juan en el mapa del
-                                 desvio, sobre papel · 6.31:1. Es el marron de
-                                 los limites del SVG original */
-
-  /* #8a8377 se descarto: daba 3.11:1 sobre papel. Para llegar a 4.5 habia que
-     oscurecerlo hasta --muted-claro, asi que no era un token nuevo, sobraba.
-     #6f685e tambien se descarto: 3.60:1 sobre ink. Va --muted-2. */
-
-  /* --- tipografía --- */
-  --display: "Special Elite", "Courier New", monospace;  /* la de la etiqueta: máquina de escribir */
-  --texto:   "Barlow Condensed", system-ui, sans-serif;
-  /* IBM Plex Mono: la mono del sistema se veia distinta en cada equipo y no
-     compartia nada con la marca. Ademas alinea en columna los numeros de las
-     fichas. El fallback queda por si la fuente no carga. */
-  --dato:    "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-
-  --paso: clamp(14px, 1.1vw, 17px);
-  /* Cuatro escalones, uno por voz. Los valores son los que ya estaban en
-     pantalla: esto no cambia tamanios, deja de repetirlos siete veces. */
-  --h1: clamp(38px, 6vw, 84px);    /* el cierre del pie */
-  --h2: clamp(34px, 5.4vw, 72px);  /* el titulo del umbral */
-  --h3: clamp(34px, 4.2vw, 58px);  /* los cuatro vinos */
-  --h4: clamp(30px, 3.6vw, 50px);  /* indice, desvio, familia, manifiesto */
-  --etiqueta: 11px;          /* eyebrows y labels, siempre con tracking .16em */
-
-  /* --- movimiento --- */
-  --dur: 900ms;
-  --dist: 40px;
-  --stagger: 90ms;
-  --hover: 450ms;
-  --ease: cubic-bezier(.16,1,.3,1);
-
-  /* --- ritmo --- */
-  --seccion: clamp(90px, 12vh, 160px);
-  --ancho: 1180px;
-  --canal: clamp(20px, 4vw, 40px);
-}
-
-/* Sin border-radius y sin sombras en todo el sitio.
-   La marca es piedra tallada: los bordes son rectos. */
-*{ border-radius: 0 }
-
-*{box-sizing:border-box}
-body{margin:0;background:var(--ink);color:var(--papel);font-family:var(--texto);
- font-size:var(--paso);line-height:1.5;-webkit-font-smoothing:antialiased}
-h1,h2{margin:0;font-family:var(--display);font-weight:400;line-height:.98}
-p{margin:0} img{display:block;max-width:100%}
-/* faltaba en el prototipo: sin esto los enlaces salen azules del navegador */
-a{color:inherit;text-decoration:none}
-:focus-visible{outline:2px solid currentColor;outline-offset:3px}
-.canal{max-width:var(--ancho);margin:0 auto;padding:0 var(--canal)}
-.etiqueta{font-family:var(--dato);font-size:var(--etiqueta);letter-spacing:.16em;text-transform:uppercase}
-
+<link rel="stylesheet" href="assets/comun.css">
+<style>
 /* 340vh. El recorrido de cámara ocupa hasta el 72%; el 28% final es el blanco. */
 /* 440vh. El recorrido de cámara llega al 82%: el tramo oscuro es más largo
    que antes en términos absolutos Y en proporción. */
@@ -225,66 +139,6 @@ a{color:inherit;text-decoration:none}
 .manifiesto .linea:nth-child(3){opacity:var(--l3,0);transform:translate3d(0,calc((1 - var(--l3,0)) * 22px),0)}
 .manifiesto .marca{margin-top:34px;color:var(--muted-claro);opacity:var(--l3,0)}
 
-.nav{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;
- align-items:center;padding:18px var(--canal);font-family:var(--display);font-size:15px;
- letter-spacing:.06em;mix-blend-mode:difference;color:#fff}
-.nav nav{display:flex;gap:22px;font-family:var(--dato);font-size:var(--etiqueta);
- letter-spacing:.16em;text-transform:uppercase}
-/* ============================================================
-   MENÚ DE TELÉFONO — abajo de 700px los links inline no entran en
-   la barra. Antes se escondían y no los reemplazaba nada: no había
-   navegación. Ahora los abre un botón en un panel a pantalla completa.
-
-   El panel ES el mismo <nav>, no una copia: no hay dos juegos de
-   links que mantener sincronizados y arriba de 700px vuelve a ser la
-   barra de siempre. Por eso el estado cerrado se resuelve con
-   display:none y no con el atributo [hidden]: el atributo viajaría
-   al desktop, donde el nav tiene que verse.
-   ============================================================ */
-.menu__boton{display:none}
-/* solo existe dentro del panel abierto: en la barra de desktop no va */
-.menu__marca{display:none}
-@media(max-width:700px){
-  .nav nav{display:none}
-  /* La barra mide 58,5px y la marca cae en y=18. El área de toque de 44px del
-     botón la haría crecer a 80px y correría la marca: se le saca al padding
-     exactamente lo que aporta el botón —(58,5 − 44) / 2— así ni la barra ni la
-     marca se mueven, y lo único que cambia a 390px es el botón. */
-  .nav{padding-top:7.25px;padding-bottom:7.25px}
-  .menu__boton{display:inline-flex;align-items:center;min-height:44px;
-    padding:0;border:0;background:none;color:inherit;cursor:pointer;
-    font-family:var(--dato);font-size:var(--etiqueta);letter-spacing:.16em;
-    text-transform:uppercase;
-    /* la marca y el botón por encima del panel, que es hermano de los dos
-       dentro de la misma barra y si no los taparía */
-    position:relative;z-index:1}
-  .nav>b{position:relative;z-index:1}
-  /* .nav va en mix-blend-mode:difference. Con el panel de tinta detrás el texto
-     de la barra se invierte contra su propio fondo y deja de ser confiable:
-     mientras el menú está abierto se apaga la mezcla y se fija el color.
-     --papel sobre --ink da 16,5:1, muy por encima del 4,5:1. */
-  body.menu-abierto .nav{mix-blend-mode:normal;color:var(--papel)}
-  body.menu-abierto .nav nav{display:flex;flex-direction:column;gap:0;
-    position:fixed;inset:0;background:var(--ink);
-    /* Con los links pegados arriba quedaban dos renglones flotando sobre un
-       panel vacio: leia como inacabado, no como aire. Bajan a un tercio de la
-       pantalla y la marca cierra al pie, asi el panel esta compuesto. */
-    padding:clamp(120px,30vh,260px) 0 clamp(26px,5vh,48px);
-    /* los links del panel no son labels: van en la tipografía de la marca,
-       en caja mixta, como todos los títulos del sitio */
-    font-family:var(--display);font-size:clamp(32px,9vw,44px);
-    letter-spacing:0;text-transform:none;
-    animation:menu-entra 240ms var(--ease)}
-  /* el canal de la izquierda es el mismo del resto del sitio */
-  body.menu-abierto .nav nav a{display:flex;align-items:center;min-height:56px;
-    padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
-  /* margin-top:auto la empuja al piso del panel, sea cual sea la cantidad de
-     links. --muted sobre --ink da 5.33:1 */
-  body.menu-abierto .nav nav .menu__marca{display:block;margin:auto 0 0;
-    padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal);color:var(--muted)}
-}
-@keyframes menu-entra{from{opacity:0}to{opacity:1}}
-@media(prefers-reduced-motion:reduce){body.menu-abierto .nav nav{animation:none}}
 
 .vino{position:relative;min-height:104vh;display:grid;align-items:center;overflow:hidden;--acento:var(--et-malbec)}
 .vino__escena{position:absolute;inset:0;overflow:hidden;background:var(--ink)}
@@ -442,48 +296,6 @@ a{color:inherit;text-decoration:none}
 
 /* Cierra la sección de vinos y devuelve el sitio al negro para lo que sigue. */
 
-/* ============================================================
-   PIE — cierra el sitio. Oscuro, como el umbral: el recorrido
-   termina donde empezó.
-   ============================================================ */
-.pie{position:relative;background:var(--ink);color:var(--papel);overflow:hidden;
- padding:clamp(110px,15vh,160px) 0 clamp(34px,5vh,54px)}
-.pie .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal);
- position:relative;z-index:2}
-/* el laberinto como marca de agua, saliendo por el borde: 4,5 KB */
-.pie__marca{position:absolute;right:-20%;top:52%;width:min(52vw,640px);
- transform:translateY(-50%);color:#ffffff;opacity:.055;z-index:1;pointer-events:none}
-.pie__marca svg{width:100%;height:auto;display:block}
-.pie h2{font-size:var(--h1);letter-spacing:-.03em}
-.pie__cta{display:inline-flex;align-items:center;gap:14px;margin-top:30px;
- font-family:var(--dato);font-size:13px;letter-spacing:.16em;text-transform:uppercase;
- border-bottom:1px solid currentColor;padding-bottom:8px;
- transition:gap var(--hover) var(--ease)}
-@media(hover:hover){.pie__cta:hover{gap:26px}}
-.pie__frase{margin-top:26px;color:var(--muted);max-width:36ch;font-size:clamp(15px,1.2vw,18px)}
-/* tres columnas: "Donde estamos" se saco, no se publica direccion */
-.pie__cols{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,48px);
- margin-top:clamp(56px,9vh,110px);padding-top:clamp(30px,4vh,44px);border-top:1px solid var(--linea-2)}
-.pie__cols h3{font-family:var(--dato);font-size:11px;font-weight:400;letter-spacing:.16em;
- text-transform:uppercase;color:var(--muted)}
-.pie__cols ul{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:9px;font-size:14px}
-.pie__cols a{border-bottom:1px solid transparent;transition:border-color var(--hover) var(--ease)}
-@media(hover:hover){.pie__cols a:hover{border-bottom-color:currentColor}}
-
-/* crédito de estudio: va con los legales, en el mismo peso.
-   Firmar más fuerte que el cliente en su propio sitio es de mal gusto. */
-.pie__firma{display:inline-flex;align-items:baseline;gap:7px}
-.pie__firma a{border-bottom:1px solid transparent;color:var(--papel);
- transition:border-color var(--hover) var(--ease)}
-@media(hover:hover){.pie__firma a:hover{border-bottom-color:currentColor}}
-.pie__legal{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
- margin-top:clamp(44px,7vh,80px);padding-top:22px;border-top:1px solid var(--linea-2);
- font-family:var(--dato);font-size:11px;letter-spacing:.1em;color:var(--muted)}
-.pie__legal b{color:var(--papel);font-weight:400}
-@media(max-width:820px){
-  .pie__cols{grid-template-columns:1fr 1fr;gap:34px 20px}
-  .pie__marca{right:-38%;width:110vw;opacity:.05}
-}
 .familia{position:relative;background:var(--ink);min-height:100vh;display:grid;align-items:end;
  padding-bottom:clamp(90px,14vh,150px);overflow:hidden}
 .familia img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.95}
@@ -492,6 +304,13 @@ a{color:inherit;text-decoration:none}
 .familia .canal{position:relative;z-index:2;max-width:none;margin:0;
  padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
 .familia h2{font-size:var(--h4)}
+/* el camino a la compra, ahora que los puntos de venta tienen su pagina: el
+   mismo recurso que el WhatsApp del pie */
+/* el area de toque crece hacia ARRIBA, como en Entrar: con align-items:center
+   la linea quedaba 20px por debajo del texto, despegada */
+.familia__cta{display:inline-flex;align-items:flex-end;gap:14px;margin-top:12px;min-height:44px;padding-bottom:8px;
+ font-family:var(--dato);font-size:13px;letter-spacing:.16em;text-transform:uppercase;
+ border-bottom:1px solid currentColor}
 @media(max-width:820px){
   /* La foto es 16:9 y el grupo de botellas NO esta en el centro del cuadro:
      esta a la izquierda, centrado en el 37% del ancho. En vertical, cover
@@ -504,40 +323,6 @@ a{color:inherit;text-decoration:none}
   .familia img{object-position:37% 58%}
 }
 
-/* ============================================================
-   DONDE ENCONTRARNOS — los puntos de venta, agrupados por
-   localidad. Sobre papel: corta los dos bloques oscuros que
-   quedaban pegados al final (la foto de familia y el pie).
-   ============================================================ */
-.donde{background:var(--papel);color:var(--ink);
- padding:clamp(100px,14vh,170px) 0 clamp(80px,11vh,130px)}
-.donde .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
-.donde .etiqueta{color:var(--muted-claro)}
-.donde h2{font-size:var(--h4)}
-.donde .bajada{margin-top:18px;color:var(--muted-claro);max-width:44ch;font-size:clamp(15px,1.2vw,18px)}
-.puntos{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(30px,4vw,56px) clamp(20px,3vw,44px);
- margin-top:clamp(44px,6vh,76px)}
-/* la localidad es un label, no un titulo: va en la tipografia de dato, como los
-   dt de las fichas, y el filete la separa igual que a las tablas */
-.localidad h3{margin:0;font-family:var(--dato);font-size:var(--etiqueta);font-weight:400;
- letter-spacing:.16em;text-transform:uppercase;color:var(--muted-claro);
- border-top:1px solid var(--linea-clara);padding-top:14px}
-.localidad ul{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:24px}
-.localidad b{display:block;font-family:var(--display);font-weight:400;
- font-size:clamp(16px,1.4vw,20px);line-height:1.15}
-.localidad span{display:block;margin-top:7px;color:var(--muted-claro);font-size:clamp(14px,1.1vw,16px)}
-/* el @ es el dato mas util de todos: si la vinoteca se muda, su Instagram lo
-   dice y esta direccion no. Por eso es link y no texto. */
-.localidad a{display:inline-block;margin-top:9px;font-family:var(--dato);font-size:12px;
- letter-spacing:.08em;border-bottom:1px solid var(--linea-clara);padding-bottom:2px;
- transition:border-color var(--hover) var(--ease)}
-@media(hover:hover){.localidad a:hover{border-bottom-color:currentColor}}
-@media(prefers-reduced-motion:reduce){.localidad a{transition:none}}
-@media(max-width:820px){
-  /* en vertical una sola columna: dos localidades al lado se aprietan y las
-     direcciones largas quiebran feo */
-  .puntos{grid-template-columns:1fr;gap:32px}
-}
 /* ============================================================
    DESVÍO — de Mendoza a San Juan. Antes era una tira de texto;
    ahora el argumento se dibuja: un recorrido pasa por los dos
@@ -676,56 +461,7 @@ a{color:inherit;text-decoration:none}
 .cuatro span{display:block;font-family:var(--dato);font-size:11px;letter-spacing:.16em;
  text-transform:uppercase;color:var(--muted-claro);margin-top:8px}
 @media(max-width:820px){.cuatro{grid-template-columns:repeat(2,1fr);gap:34px 20px}}
-/* ============================================================
-   PUERTA DE EDAD — la pide el Código Conjunto de la Industria de
-   Bebidas Alcohólicas para la Autorregulación Publicitaria
-   (Bodegas de Argentina, Cerveceros Argentinos y la Federación de
-   la Industria Licorista), punto 4.6.2.2: al comienzo, un aviso de
-   que hay publicidad de bebidas alcohólicas y la fecha de
-   nacimiento ESCRITA por el usuario, con bloqueo automático. El
-   4.6.4 pide además las leyendas al comienzo: van al pie de la
-   puerta. La ley 24.788 y su decreto 149/2009 no piden puerta; sí
-   las leyendas, que también están en el pie del sitio.
-   Se muestra una vez por equipo: el dato queda en localStorage.
-   ============================================================ */
-.puerta{display:none}
-html.edad{overflow:hidden}
-html.edad .puerta{position:fixed;inset:0;z-index:40;display:grid;align-items:center;
- overflow-y:auto;background:var(--ink);color:var(--papel);
- transition:opacity var(--hover) var(--ease)}
-html.edad.edad-sale .puerta{opacity:0}
-.puerta__caja{padding:clamp(28px,6vh,64px) var(--canal) clamp(28px,6vh,64px) clamp(20px,3.2vw,48px)}
-/* la marca en el mismo lugar y cuerpo que en la barra del sitio */
-.puerta__marca{position:absolute;top:18px;left:var(--canal);font-family:var(--display);
- font-size:15px;letter-spacing:.06em}
-.puerta h2{font-size:var(--h4);max-width:16ch}
-.puerta__aviso{margin-top:18px;color:var(--muted);max-width:40ch;font-size:clamp(15px,1.2vw,18px)}
-.puerta fieldset{border:0;padding:0;margin:clamp(30px,5vh,48px) 0 0;min-width:0}
-.puerta legend,.puerta label{font-family:var(--dato);font-size:var(--etiqueta);letter-spacing:.16em;
- text-transform:uppercase;color:var(--muted);padding:0}
-.puerta__fecha{display:flex;gap:clamp(16px,3vw,28px);margin-top:18px}
-.puerta label{display:grid;gap:10px}
-/* 26px: arriba de 16px para que iOS no haga zoom al tocar el campo */
-.puerta input{width:2.6ch;padding:0 0 6px;border:0;border-bottom:1px solid var(--muted-2);
- background:none;color:var(--papel);font-family:var(--dato);font-size:26px;letter-spacing:.04em}
-.puerta input[name=anio]{width:4.6ch}
-.puerta input::placeholder{color:var(--muted-2);opacity:1}
-.puerta input:focus{outline:none;border-bottom-color:var(--papel)}
-.puerta__entrar{display:inline-flex;align-items:center;min-height:44px;margin-top:34px;padding:0 0 5px;
- border:0;border-bottom:1px solid currentColor;background:none;color:inherit;cursor:pointer;
- font-family:var(--dato);font-size:var(--etiqueta);letter-spacing:.16em;text-transform:uppercase}
-/* el terracota de la etiqueta del Syrah sobre tinta da 6.05:1 */
-.puerta__error{margin-top:16px;min-height:1.5em;color:var(--et-syrah);font-size:clamp(15px,1.2vw,18px)}
-.puerta__legal{margin-top:clamp(40px,8vh,80px);font-family:var(--dato);font-size:11px;
- letter-spacing:.1em;color:var(--muted)}
-.puerta__legal b{color:var(--papel);font-weight:400}
-/* menor de 18: el formulario se va y queda el aviso. Por la sesión, no para siempre */
-.puerta.is-menor fieldset,.puerta.is-menor .puerta__entrar{display:none}
-@media(prefers-reduced-motion:reduce){html.edad .puerta{transition:none}}
 
-[data-reveal]{opacity:0;transform:translate3d(0,var(--dist),0);
- transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease);transition-delay:var(--d,0ms)}
-[data-reveal].is-in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){
  .umbral{height:100vh}.capa{transform:none!important}.blanco,.manifiesto{display:none}
  #tomaB{display:none}#tomaA{opacity:1!important}.titulo{opacity:1!important;transform:none!important}}
@@ -765,17 +501,28 @@ html.edad.edad-sale .puerta{opacity:0}
   </form>
 </div>
 
-<header class="nav"><b>LABERINTOS</b>
-  <!-- "Origen" se saco: esa seccion no existe en el sitio. Cuando se construya,
-       vuelve aca como <a href="#origen">Origen</a>. -->
-  <!-- la marca al pie del panel: el mismo recurso que cierra el manifiesto del
-       umbral. Es un <p>, no un <a>, para no entrar en los selectores del nav -->
-  <nav id="menu-panel"><a href="#indice">Vinos</a><a href="#donde">Encontralo</a><p
-    class="etiqueta menu__marca">Laberintos · Mendoza, Argentina</p></nav>
-  <!-- Sin ícono: el sitio no usa iconografía, es tipográfico. El botón dice lo
-       que hace, y dice CERRAR cuando está abierto. -->
-  <button type="button" class="menu__boton" id="menu-boton"
-          aria-expanded="false" aria-controls="menu-panel">Menú</button></header>
+<!-- El laberinto de la etiqueta, una sola vez por pagina: el logo del nav y la
+     firma del pie lo usan con <use>. Los paths no llevan stroke-width: lo pone el
+     CSS de cada uso. -->
+<svg class="simbolos" aria-hidden="true" focusable="false"><symbol id="laberinto" viewBox="0 0 1254 1254"><path d="M519.17,1132.67c16.66-.4,32.09-13.72,31.48-30.97.02-46.37,0-92.74,0-139.11,0-14.36-7.1-24.41-20.47-30.04-16.59-6.99-33.31-13.79-49.44-21.72-74.8-37.37-132.71-107.6-154.99-188.14-50.82-170.99,58.53-356.28,232.39-395.24,8.72-2.07,17.83-3.48,25.88-7.09,25.93-10.41,25.85-49.82.11-60.7-6.54-3.32-13.53-3.22-20.48-1.94-153.46,25.91-280.93,154.61-309.84,306.71-7.83,32.98-60.46,35.9-65.22-3,10.77-78.84,50.09-152.94,100.06-214.36,71.51-86.97,175.65-143.93,287.49-157.73,24.05-4.15,37.55-35.61,19.55-56.07-8.29-9.42-18.96-11.73-30.53-10.17-80.29,10.28-157.82,39.11-224.06,85.76C-29.67,472.18,75.68,1028.92,518.67,1132.67"/><path d="M682.12,1201.98c222.04-16,420.12-179.63,489.73-389.36,99.63-276.96-57.38-607.17-328.34-716.03-259.61-116.44-577.06,4.99-713.29,250.04-204.21,344.71,12.86,783.68,402.47,851.27,26.15,3.38,65.31,13.39,69.01-24.92-.1-158.45-.06-316.89-.08-475.34.4-20.87-24.18-22.19-29.03-51.11-14.91-71.97,91.34-95.89,107.82-23.56,9.46,48.68-29.31,46.8-29.94,78.61.47,111.09-.36,222.19.63,333.28.07,41.13,0,82.25.05,123.38-2.46,22.46,6.4,44.47,30.47,43.75"/><path d="M682.62,122.51c224.74,19.06,411.62,207.84,448.72,427.2,35.59,194.75-57.83,401.38-222.36,509.61-48.53,32.65-103.05,57.11-159.9,71.3-20.25,7.57-47.06-5.12-46.46-28.92,0-46.37.43-92.75-.25-139.11-.22-15.06,11.17-27.52,22.72-31.03,272.73-89.14,285.44-470.1,26.54-586.44-22.4-10.14-45.77-16.93-70-21.09-15.43-2.65-26.63-10.96-30.29-26.08-11.92-96.27,181.74,5.49,210.18,36.97,59.52,49.5,105.17,115.61,127.92,189.72,8.35,24.84,7.48,65.99,42.58,65.24,24.07,1.19,39.24-25.06,30.02-47.08-17.82-78.19-56.75-150.74-109.03-211.34-66.32-76.26-160.48-127.01-260.89-139.64-48.95,1-58.41-64.34-10.5-69.3"/><path d="M1034.52,652.42c-16.81.44-30.88,12.15-32.93,29.01-2.33,19.21-6.59,38.03-12.18,56.49-16.52,54.99-44.91,106.14-83.28,149.05-21.85,24.74-46.99,45.66-74.6,63.77-18.47,12.12-38.09,22.28-58.45,31.01-12.44,5.33-18.82,15.68-19.67,29.02-1.54,20.75,23.04,40.28,43.68,31.48,35.68-13.57,67.88-33,98-56.01,49.82-37.6,90.35-86.3,121.46-140.12,24.77-42.55,39.82-89.34,47.87-137.67,6.48-24.23,3.7-54.13-29.4-56.02"/><path d="M573.16,392.38c-67.26,10.08-126.2,59.11-159.31,117.07-7.98,18.29-23.62,38.11-18.23,58.94,9.31,30.33,55.36,26.5,63.68-2.93,21.39-58.41,68.55-93.12,127.29-111.24,30.49-13.87,18.51-64.68-12.94-61.83"/><path d="M701.57,723.14c86.41-70.96,28.63-216.02-83.43-206.01-101.58,4.9-147.76,141.67-67.52,205.64"/><path d="M218.76,652.42c-19.35-.71-35.59,19.1-32.42,37.92,8.25,65.99,30.31,129.24,67.47,184.72,43.68,66.71,105.77,120.2,176.91,156.3,7.77,3.88,15.89,7.13,23.97,10.35,24.56,9.77,47.43-12.42,44.12-33.9-2.01-13-8.57-21.56-20.59-27.1-46.19-21.56-89.63-50.08-124.98-86.94-41.18-43.06-71.69-95.98-88.87-152.89-5.99-19.56-10.49-39.52-12.66-59.93-1.62-15.31-15.1-28.52-32.46-28.51"/><path d="M833.08,652.4c63.38,4.57,18.85,87.75.54,118.51-20.01,32.78-104.37,123.08-133.17,60.01-15.01-49.25,65.35-45.67,93.05-125.45,8.3-21.33,10.43-52.38,39.58-53.07"/><path d="M675.63,392.38c-32.04,5.7-34.6,50.54-6.44,62.81,51.39,14.99,94.84,42.7,118.32,91.59,3.14,6.07,5.54,12.6,7.51,19.15,6.32,21.01,31.55,30.17,49.12,19.72,41.54-25.03-15.45-96.97-36.46-122.06-34.37-36.11-80.44-68.26-131.54-71.21"/><path d="M427.39,652.4c-63.38,4.57-18.85,87.75-.54,118.51,20.01,32.78,104.37,123.08,133.17,60.01,15.01-49.25-65.35-45.67-93.05-125.45-8.3-21.33-10.43-52.38-39.58-53.07"/></symbol></svg>
+
+<!-- NAV. Mismo markup en index.html y en donde/index.html, salvo los href.
+     "Origen" no esta: esa seccion no existe. Cuando se construya, entra aca. -->
+<header class="nav">
+  <a class="logo" href="./" aria-label="Laberintos, inicio"><svg class="logo__marca" aria-hidden="true" focusable="false"><use href="#laberinto"/></svg><span class="logo__palabra" aria-hidden="true">LABERINTOS</span></a>
+  <nav id="menu-panel" aria-label="Principal">
+    <a href="#indice">Vinos</a>
+    <a href="donde/">Dónde comprar</a>
+    <a href="#contacto">Contacto</a>
+    <a class="nav__tienda" href="https://laberintosvinos.mitiendanube.com/" target="_blank" rel="noopener">Tienda<span aria-hidden="true">&nbsp;↗</span><span class="solo-lectores"> (se abre en otra pestaña)</span></a>
+    <!-- la marca al pie del panel de telefono. Es un <p>, no un <a>, para no
+         entrar en los selectores de los links -->
+    <p class="etiqueta menu__marca">Laberintos · Mendoza, Argentina</p>
+  </nav>
+  <!-- Sin icono: el sitio es tipografico. El boton dice lo que hace, y dice
+       Cerrar cuando esta abierto. -->
+  <button type="button" class="menu__boton" id="menu-boton" aria-expanded="false" aria-controls="menu-panel">Menú</button>
+</header>
 
 <section class="umbral" id="umbral">
   <div class="camara" id="camara">
@@ -799,7 +546,7 @@ html.edad.edad-sale .puerta{opacity:0}
     <div class="titulo"><div class="canal">
       <h1>La vida tiene<br>LABERINTOS…</h1>
       <p>No todos los caminos buscan una salida.</p>
-      <a class="etiqueta entrar" href="#indice">Entrar &nbsp;→</a>
+      <a class="etiqueta entrar" href="#indice" data-foco-inicial>Entrar &nbsp;→</a>
     </div></div>
 
     <div class="manifiesto"><div class="canal">
@@ -963,103 +710,60 @@ html.edad.edad-sale .puerta{opacity:0}
   <img src="assets/familia-baa49356.webp" alt="Las cuatro botellas Laberintos" loading="lazy">
   <div class="canal">
     <h2 data-reveal>Cuatro caminos.<br>Un solo laberinto.</h2>
+    <!-- "Donde" se fue a su pagina: el camino a la compra sale de aca, despues de
+         ver las cuatro botellas juntas -->
+    <a class="familia__cta" href="donde/" data-reveal>Dónde conseguirlos &nbsp;→</a>
   </div>
 </section>
 
-<!-- Los puntos de venta. Van sobre papel y no sobre tinta a proposito: la foto
-     de familia y el pie son los dos oscuros, y sin este corte quedaban dos
-     bloques negros pegados al final del recorrido. -->
-<section class="donde" id="donde" aria-label="Dónde encontrarnos">
+
+
+<!-- PIE. Mismo markup en index.html y en donde/index.html: si se cambia uno, se
+     cambia el otro. Cierra con el sello de la etiqueta -el laberinto, la palabra
+     y "Mendoza | Argentina", apilados y centrados como en la botella-: es el
+     unico lugar del sitio que rompe el canal de la izquierda, a proposito. -->
+<footer class="pie" id="contacto" aria-label="Contacto">
   <div class="canal">
-    <p class="etiqueta" data-reveal>Dónde encontrarnos</p>
-    <h2 data-reveal>Siete puertas.</h2>
-    <p class="bajada" data-reveal>El vino viene de Mendoza y de San Juan.
-      Hoy se consigue en estos siete lugares de Buenos Aires.</p>
-    <div class="puntos">
-      <div class="localidad" data-reveal>
-        <h3>Matheu</h3>
-        <ul>
-          <li><b>Lacoste - Vinería &amp; Cía.</b><span>Juan León 68</span>
-            <a href="https://www.instagram.com/lacostevineria" target="_blank" rel="noopener">@lacostevineria</a></li>
-          <li><b>Bodegón Tras Cartón</b><span>San Martín 172</span>
-            <a href="https://www.instagram.com/bodegon_trascarton" target="_blank" rel="noopener">@bodegon_trascarton</a></li>
-        </ul>
+    <div class="pie__arriba">
+      <div>
+        <p class="etiqueta pie__rotulo" data-reveal>La bodega</p>
+        <h2 data-reveal>Escribinos.</h2>
+        <a class="pie__cta" href="https://wa.me/541148632188" data-reveal>WhatsApp &nbsp;&rarr;</a>
+        <p class="pie__frase" data-reveal>La vida tiene LABERINTOS…</p>
       </div>
-      <div class="localidad" data-reveal>
-        <h3>Belén de Escobar</h3>
-        <ul>
-          <li><b>Villa uva - Tienda de vinos</b><span>Estrada 611</span>
-            <a href="https://www.instagram.com/villa.uva" target="_blank" rel="noopener">@villa.uva</a></li>
-        </ul>
-      </div>
-      <div class="localidad" data-reveal>
-        <h3>Ingeniero Maschwitz</h3>
-        <ul>
-          <li><b>Le petit vinos</b><span>Colectora Este Ramal Escobar 2147, Local&nbsp;12</span>
-            <a href="https://www.instagram.com/lepetitvins" target="_blank" rel="noopener">@lepetitvins</a></li>
-        </ul>
-      </div>
-      <div class="localidad" data-reveal>
-        <h3>Zárate</h3>
-        <ul>
-          <li><b>Vinoteca Estilo vinos</b><span>Independencia 1001</span>
-            <a href="https://www.instagram.com/estilovinos" target="_blank" rel="noopener">@estilovinos</a></li>
-        </ul>
-      </div>
-      <div class="localidad" data-reveal>
-        <h3>El Palomar</h3>
-        <ul>
-          <li><b>Vinoteca Deltawine</b><span>De los Robles 3021</span>
-            <a href="https://www.instagram.com/deltawine02" target="_blank" rel="noopener">@deltawine02</a></li>
-        </ul>
-      </div>
-      <div class="localidad" data-reveal>
-        <h3>Santos Lugares</h3>
-        <ul>
-          <li><b>Nativo Vinoteca</b><span>Av. La Plata 3741</span>
-            <a href="https://www.instagram.com/nativovinoteca" target="_blank" rel="noopener">@nativovinoteca</a></li>
-        </ul>
-      </div>
+      <!-- el telefono y el mail son lo que se busca en un pie: van en la voz de la
+           marca y grandes, no en una columna de 14px -->
+      <ul class="pie__contacto" data-reveal>
+        <li><a href="tel:+541148632188">+54 11 4863-2188</a></li>
+        <li><a href="mailto:laberintosvinos@gmail.com">laberintosvinos@gmail.com</a></li>
+      </ul>
     </div>
-  </div>
-</section>
-
-
-<footer class="pie" id="pie" aria-label="Contacto">
-  <div class="pie__marca" aria-hidden="true"><svg id="Capa_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1254 1254"> <path d="M519.17,1132.67c16.66-.4,32.09-13.72,31.48-30.97.02-46.37,0-92.74,0-139.11,0-14.36-7.1-24.41-20.47-30.04-16.59-6.99-33.31-13.79-49.44-21.72-74.8-37.37-132.71-107.6-154.99-188.14-50.82-170.99,58.53-356.28,232.39-395.24,8.72-2.07,17.83-3.48,25.88-7.09,25.93-10.41,25.85-49.82.11-60.7-6.54-3.32-13.53-3.22-20.48-1.94-153.46,25.91-280.93,154.61-309.84,306.71-7.83,32.98-60.46,35.9-65.22-3,10.77-78.84,50.09-152.94,100.06-214.36,71.51-86.97,175.65-143.93,287.49-157.73,24.05-4.15,37.55-35.61,19.55-56.07-8.29-9.42-18.96-11.73-30.53-10.17-80.29,10.28-157.82,39.11-224.06,85.76C-29.67,472.18,75.68,1028.92,518.67,1132.67" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M682.12,1201.98c222.04-16,420.12-179.63,489.73-389.36,99.63-276.96-57.38-607.17-328.34-716.03-259.61-116.44-577.06,4.99-713.29,250.04-204.21,344.71,12.86,783.68,402.47,851.27,26.15,3.38,65.31,13.39,69.01-24.92-.1-158.45-.06-316.89-.08-475.34.4-20.87-24.18-22.19-29.03-51.11-14.91-71.97,91.34-95.89,107.82-23.56,9.46,48.68-29.31,46.8-29.94,78.61.47,111.09-.36,222.19.63,333.28.07,41.13,0,82.25.05,123.38-2.46,22.46,6.4,44.47,30.47,43.75" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M682.62,122.51c224.74,19.06,411.62,207.84,448.72,427.2,35.59,194.75-57.83,401.38-222.36,509.61-48.53,32.65-103.05,57.11-159.9,71.3-20.25,7.57-47.06-5.12-46.46-28.92,0-46.37.43-92.75-.25-139.11-.22-15.06,11.17-27.52,22.72-31.03,272.73-89.14,285.44-470.1,26.54-586.44-22.4-10.14-45.77-16.93-70-21.09-15.43-2.65-26.63-10.96-30.29-26.08-11.92-96.27,181.74,5.49,210.18,36.97,59.52,49.5,105.17,115.61,127.92,189.72,8.35,24.84,7.48,65.99,42.58,65.24,24.07,1.19,39.24-25.06,30.02-47.08-17.82-78.19-56.75-150.74-109.03-211.34-66.32-76.26-160.48-127.01-260.89-139.64-48.95,1-58.41-64.34-10.5-69.3" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M1034.52,652.42c-16.81.44-30.88,12.15-32.93,29.01-2.33,19.21-6.59,38.03-12.18,56.49-16.52,54.99-44.91,106.14-83.28,149.05-21.85,24.74-46.99,45.66-74.6,63.77-18.47,12.12-38.09,22.28-58.45,31.01-12.44,5.33-18.82,15.68-19.67,29.02-1.54,20.75,23.04,40.28,43.68,31.48,35.68-13.57,67.88-33,98-56.01,49.82-37.6,90.35-86.3,121.46-140.12,24.77-42.55,39.82-89.34,47.87-137.67,6.48-24.23,3.7-54.13-29.4-56.02" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M573.16,392.38c-67.26,10.08-126.2,59.11-159.31,117.07-7.98,18.29-23.62,38.11-18.23,58.94,9.31,30.33,55.36,26.5,63.68-2.93,21.39-58.41,68.55-93.12,127.29-111.24,30.49-13.87,18.51-64.68-12.94-61.83" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M701.57,723.14c86.41-70.96,28.63-216.02-83.43-206.01-101.58,4.9-147.76,141.67-67.52,205.64" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M218.76,652.42c-19.35-.71-35.59,19.1-32.42,37.92,8.25,65.99,30.31,129.24,67.47,184.72,43.68,66.71,105.77,120.2,176.91,156.3,7.77,3.88,15.89,7.13,23.97,10.35,24.56,9.77,47.43-12.42,44.12-33.9-2.01-13-8.57-21.56-20.59-27.1-46.19-21.56-89.63-50.08-124.98-86.94-41.18-43.06-71.69-95.98-88.87-152.89-5.99-19.56-10.49-39.52-12.66-59.93-1.62-15.31-15.1-28.52-32.46-28.51" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M833.08,652.4c63.38,4.57,18.85,87.75.54,118.51-20.01,32.78-104.37,123.08-133.17,60.01-15.01-49.25,65.35-45.67,93.05-125.45,8.3-21.33,10.43-52.38,39.58-53.07" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M675.63,392.38c-32.04,5.7-34.6,50.54-6.44,62.81,51.39,14.99,94.84,42.7,118.32,91.59,3.14,6.07,5.54,12.6,7.51,19.15,6.32,21.01,31.55,30.17,49.12,19.72,41.54-25.03-15.45-96.97-36.46-122.06-34.37-36.11-80.44-68.26-131.54-71.21" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> <path d="M427.39,652.4c-63.38,4.57-18.85,87.75-.54,118.51,20.01,32.78,104.37,123.08,133.17,60.01,15.01-49.25-65.35-45.67-93.05-125.45-8.3-21.33-10.43-52.38-39.58-53.07" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/> </svg></div>
-  <div class="canal">
-    <!-- decia "Encontralo", igual que el link del nav. Ahora "Encontralo" lleva a
-         los puntos de venta, que es lo que esa palabra promete; el pie es la
-         bodega: contacto, exportacion y legales. -->
-    <p class="etiqueta muted" data-reveal>La bodega</p>
-    <h2 data-reveal>Escribinos.</h2>
-    <a class="pie__cta" href="https://wa.me/541148632188" data-reveal>WhatsApp &nbsp;&rarr;</a>
-    <p class="pie__frase" data-reveal>La vida tiene LABERINTOS…</p>
 
     <div class="pie__cols">
       <div data-reveal>
-        <h3>Contacto</h3>
-        <ul>
-          <li><a href="tel:+541148632188">+54 11 4863-2188</a></li>
-          <li><a href="mailto:laberintosvinos@gmail.com">laberintosvinos@gmail.com</a></li>
-        </ul>
-      </div>
-<!-- Aca iba "Donde estamos" con la direccion de la bodega. Ya no esta ahi
-     y se decidio no publicar direccion: se saco la columna entera. -->
-      <div data-reveal>
         <h3>Seguinos</h3>
+        <ul><li><a href="https://www.instagram.com/laberintosvinos" target="_blank" rel="noopener">Instagram</a></li></ul>
+      </div>
+      <div data-reveal>
+        <h3>Comprá</h3>
         <ul>
-          <li><a href="https://www.instagram.com/laberintosvinos" target="_blank" rel="noopener">Instagram</a></li>
           <!-- Tienda actual en TiendaNube. Se va a rehacer como theme de PepperLabs,
                igual que Inyesoft y Materiales Matheu; cuando eso pase, cambia la URL
-               de aca y nada mas. -->
-          <li><a href="https://laberintosvinos.mitiendanube.com/" target="_blank" rel="noopener">Tienda online</a></li>
+               de aca, la del nav y la de donde/, y nada mas. -->
+          <li><a href="https://laberintosvinos.mitiendanube.com/" target="_blank" rel="noopener">Tienda online<span aria-hidden="true">&nbsp;↗</span></a></li>
+          <li><a href="donde/">Dónde comprar</a></li>
         </ul>
       </div>
       <div data-reveal>
         <h3>Exportamos</h3>
-        <ul><li>Argentina<br>México<br>Estados Unidos</li></ul>
+        <ul><li>Argentina</li><li>México</li><li>Estados Unidos</li></ul>
       </div>
+    </div>
+
+    <div class="pie__sello" data-reveal>
+      <svg class="pie__laberinto" aria-hidden="true" focusable="false"><use href="#laberinto"/></svg>
+      <p class="pie__palabra">LABERINTOS</p>
+      <p class="pie__origen">Mendoza <span aria-hidden="true">|</span> Argentina</p>
     </div>
 
     <div class="pie__legal">
@@ -1073,6 +777,7 @@ html.edad.edad-sale .puerta{opacity:0}
   </div>
 </footer>
 
+<script src="assets/comun.js"></script>
 <script>
 const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
 const suave=q=>q*q*(3-2*q);
@@ -1273,32 +978,9 @@ requestAnimationFrame(frame);
 })();
 
 
-/* Menu de telefono. Abajo de 700px los links de la barra no entran y el panel
-   los muestra a pantalla completa. El panel es el MISMO <nav>, asi que el
-   listener de scroll suave de aca abajo ya los toma con el selector que ya
-   tenia: solo hay que cerrarle el menu antes de navegar. */
-const botonMenu=document.getElementById('menu-boton');
-const menuAbierto=()=>document.body.classList.contains('menu-abierto');
-function cerrarMenu(devolverFoco){
-  if(!menuAbierto()) return;
-  document.body.classList.remove('menu-abierto');
-  botonMenu.setAttribute('aria-expanded','false');
-  botonMenu.textContent='Menú';
-  /* al cerrar con Escape el foco tiene que volver al boton: si no queda en un
-     link del panel, que en ese mismo instante pasa a display:none, y se pierde
-     al principio del documento. */
-  if(devolverFoco) botonMenu.focus();
-}
-botonMenu.addEventListener('click',()=>{
-  if(menuAbierto()) return cerrarMenu(false);
-  document.body.classList.add('menu-abierto');
-  botonMenu.setAttribute('aria-expanded','true');
-  botonMenu.textContent='Cerrar';
-});
-addEventListener('keydown',e=>{ if(e.key==='Escape') cerrarMenu(true); });
 
 /* navegación del índice: scroll suave, y sin animación si el sistema lo pide */
-document.querySelectorAll('.cuatro .ir, .nav nav a').forEach(a=>{
+document.querySelectorAll('.cuatro .ir, .nav nav a[href^="#"], .pie a[href^="#"]').forEach(a=>{
   a.addEventListener('click', e=>{
     const destino = document.querySelector(a.getAttribute('href'));
     if(!destino) return;
@@ -1343,7 +1025,6 @@ if(entrar) entrar.addEventListener('click', e=>{
    el control vuelve en el mismo gesto.
    wheel y touchmove van con passive:false porque hay que poder cancelarlos.
    Con la puerta de edad abierta no hacen nada: la entrada arranca despues. */
-const puertaAbierta=()=>document.documentElement.classList.contains('edad');
 addEventListener('wheel',e=>{
   if(R.matches || e.ctrlKey || !e.deltaY || Math.abs(e.deltaY)<Math.abs(e.deltaX) || menuAbierto() || puertaAbierta()) return;
   if(e.deltaY<0) return soltarEntrada();
@@ -1378,64 +1059,7 @@ addEventListener('touchmove',e=>{
   if(toque.abajo && entrarSolo() && e.cancelable) e.preventDefault();
 },{passive:false});
 
-/* PUERTA DE EDAD. La clase .edad la pone el script del <head>; aca se maneja el
-   formulario. Mientras esta abierta, el resto de la pagina va inert: ni el Tab
-   ni un lector de pantalla pueden llegar detras. */
-const puerta=document.getElementById('puerta');
-if(puerta && puertaAbierta()){
-  const form=document.getElementById('puerta-form'), error=document.getElementById('puerta-error');
-  const campos=[...form.querySelectorAll('input')];
-  const resto=[...document.body.children].filter(e=>e!==puerta);
-  resto.forEach(e=>{ e.inert=true; });
-  /* "el sistema generara un bloqueo automatico" (4.6.2.2): un menor queda
-     bloqueado por la sesion, sin volver a ver el formulario */
-  const bloquear=()=>{ puerta.classList.add('is-menor'); error.textContent='Este sitio es solo para mayores de 18 años.'; };
-  let menor=false;
-  try{ menor=sessionStorage.getItem('laberintos-edad')==='menor'; }catch(e){}
-  if(menor) bloquear(); else campos[0].focus();
 
-  /* solo digitos, y al completar un campo pasa al siguiente */
-  campos.forEach((c,i)=>c.addEventListener('input',()=>{
-    c.value=c.value.replace(/\D/g,'');
-    if(c.value.length===c.maxLength && campos[i+1]) campos[i+1].focus();
-  }));
-
-  form.addEventListener('submit',e=>{
-    e.preventDefault();
-    const [d,m,a]=campos.map(c=>+c.value), hoy=new Date(), f=new Date(a,m-1,d);
-    /* new Date corre las fechas imposibles (31/02 da 3/03): si no vuelve igual, no existe */
-    if(a<1900 || f.getFullYear()!==a || f.getMonth()!==m-1 || f.getDate()!==d || f>hoy){
-      error.textContent='Revisá la fecha: día, mes y año.';
-      return;
-    }
-    const cumplio=hoy.getMonth()>m-1 || (hoy.getMonth()===m-1 && hoy.getDate()>=d);
-    if(hoy.getFullYear()-a-(cumplio?0:1)<18){
-      try{ sessionStorage.setItem('laberintos-edad','menor'); }catch(e){}
-      return bloquear();
-    }
-    try{ localStorage.setItem('laberintos-edad','18'); }catch(e){}
-    resto.forEach(e=>{ e.inert=false; });
-    const html=document.documentElement;
-    const abrir=()=>{
-      html.classList.remove('edad','edad-sale');
-      /* el foco va a "Entrar": si no, se pierde con el boton que desaparece */
-      const entrarLink=document.querySelector('.entrar');
-      if(entrarLink) entrarLink.focus({preventScroll:true});
-    };
-    if(R.matches) return abrir();
-    html.classList.add('edad-sale');
-    puerta.addEventListener('transitionend',abrir,{once:true});
-    setTimeout(abrir,700);   // por si transitionend no llega
-  });
-}
-
-const io=new IntersectionObserver(es=>es.forEach(e=>{
-  if(!e.isIntersecting) return;
-  const g=[...e.target.parentElement.querySelectorAll('[data-reveal]')];
-  const i=g.indexOf(e.target); if(i>0) e.target.style.setProperty('--d',i*90+'ms');
-  e.target.classList.add('is-in'); io.unobserve(e.target);
-}),{threshold:.15,rootMargin:'0px 0px -8% 0px'});
-document.querySelectorAll('[data-reveal]').forEach(e=>io.observe(e));
 
 /* El recorrido arranca cuando la parada de mas abajo, la del Valle de Uco, entra
    entera en pantalla: recien ahi se ve el camino completo. En la lamina

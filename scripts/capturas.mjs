@@ -17,6 +17,8 @@ import fs from 'node:fs/promises';
 const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /* pathToFileURL escapa espacios y # de la ruta, que la concatenación a mano rompía */
 const sitio = pathToFileURL(path.join(raiz, 'docs', 'index.html')).href;
+/* los puntos de venta tienen pagina propia desde el 18/09/2026 */
+const paginaDonde = pathToFileURL(path.join(raiz, 'docs', 'donde', 'index.html')).href;
 const etiqueta = process.argv[2] ?? 'actual';
 const salida = path.join(raiz, 'capturas', etiqueta);
 
@@ -24,6 +26,10 @@ const ANCHOS = [390, 768, 1280, 1440];
 const ALTO = 900;
 /* El umbral es sticky y mide varias pantallas: no sirve una captura de página
    completa. Se fotografía en cuatro momentos del recorrido de cámara.
+
+   Tampoco es determinista desvio.png en movimiento normal: el antialiasing del
+   trazo del recorrido varia unos pocos pixeles entre dos corridas del MISMO
+   codigo (medido: hasta 25 px, 19/255). Se compara mirandola.
 
    OJO con umbral-0_36.png: cae dentro del fundido entre las dos tomas, o sea
    dos imágenes superpuestas a media opacidad. La composición de capas escaladas
@@ -40,14 +46,14 @@ const MOMENTOS = [0, 0.36, 0.68, 0.92, 0.99];
 /* .indice va por clase, como .desvio/.familia/.pie: la sección es
    <section class="indice">, nunca tuvo id. */
 const SECCIONES = ['.indice', '#malbec', '#reserva', '#gran-reserva',
-                   '.desvio', '#syrah', '.familia', '.donde', '.pie'];
+                   '.desvio', '#syrah', '.familia', '.pie'];
 
 /* Secciones más altas que el viewport, que además se fotografían enteras.
    .indice a 390px pasa a dos columnas y las dos últimas botellas caen debajo del
    fold: una de ellas lleva "EDICIÓN LIMITADA · 2022", el sublabel más largo del
    sitio. Sin esto, el ancho más apretado se verificaría sin ver justo la etiqueta
    con más riesgo de desbordar. */
-const COMPLETAS = ['.indice', '.donde'];
+const COMPLETAS = ['.indice', '.pie'];
 
 /* techo de cada espera por condición. Era 5000 y no alcanzaba para el recorrido
    del desvío, que dura 450 + 4800ms: la espera se agotaba justo antes de que
@@ -219,6 +225,22 @@ try {
           });
         }
       }
+
+      /* La pagina de puntos de venta. El dato de la puerta de edad ya esta en el
+         localStorage de este contexto, pero en file:// cada archivo puede ser su
+         propio origen: si la puerta aparece igual, se pasa de nuevo. */
+      await pag.goto(paginaDonde, { waitUntil: 'load' });
+      if (await pag.$('html.edad')) {
+        await pag.evaluate(() => localStorage.setItem('laberintos-edad', '18'));
+        await pag.reload({ waitUntil: 'load' });
+      }
+      await asentar(pag);
+      await esperar(pag, IMAGENES_VISIBLES_LISTAS, 'imagenes visibles cargadas', `${donde} · donde/`);
+      await esperar(pag, NADA_ANIMANDO, 'ninguna animacion corriendo', `${donde} · donde/`);
+      await pag.screenshot({ path: path.join(dir, 'donde-pagina.png') });
+      await pag.evaluate(() => { for (const el of document.querySelectorAll('[data-reveal]')) el.classList.add('is-in'); });
+      await esperar(pag, NADA_ANIMANDO, 'ninguna animacion corriendo', `${donde} · donde/ completa`);
+      await pag.screenshot({ path: path.join(dir, 'donde-pagina-completa.png'), fullPage: true });
 
       await ctx.close();
     }
