@@ -5,9 +5,10 @@ Todo lo que hay adentro se sirve tal cual.
 
 - `index.html` — la portada
 - `donde/index.html` — dónde comprar: los siete puntos de venta
-- `assets/comun.css` y `assets/comun.js` — lo que comparten las dos páginas:
+- `contacto/index.html` — WhatsApp, teléfono, mail e Instagram
+- `assets/comun.css` y `assets/comun.js` — lo que comparten las tres páginas:
   tokens, nav, pie, puerta de edad y reveals. El markup del nav, del pie y de
-  la puerta está repetido en las dos: si se cambia en una, se cambia en la otra
+  la puerta está repetido en las tres: si se cambia en una, se cambia en todas
 - `assets/` — 17 imágenes WebP, el mapa del desvío, el laberinto SVG, los
   favicons (`favicon.svg`, `favicon-32.png`, `apple-touch-icon.png`) y la
   imagen para compartir

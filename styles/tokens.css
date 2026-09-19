@@ -54,7 +54,11 @@
      punto de corte se multiplicó por 1.08.
      Si se construye el umbral en Next, estos son los valores buenos: los
      de antes dejaban el tramo muerto. */
-  --umbral-alto: 600vh;      /* era 640vh */
+  /* 2026-09-18: 300vh. Desde que la entrada se reproduce sola (3,5 s hasta
+     p 0.90) la altura solo mide cuánto hay que scrollear para volver arriba.
+     Se acortó todo en la misma proporción: los cortes, que están en p, no
+     cambian. Solo la salida pasa a 0.915, ver abajo. */
+  --umbral-alto: 300vh;      /* era 600vh, y antes 640vh */
   --umbral-corte: 0.389;     /* era 0.36 · donde la fachada entrega al corredor */
   --umbral-blanco-in: 0.648; /* era 0.60 · el papel empieza a subir */
   --umbral-blanco-sat: 0.767;/* era 0.71 · papel pleno */
@@ -67,7 +71,9 @@
      empalma con el papel del índice sin unión visible.
      Es el único valor que no se reescaló al pasar de 640vh a 600vh: es
      justamente el tramo que se acortó. */
-  --umbral-salida: 0.948;    /* era --umbral-apagon: 0.95 */
+  /* 0.915 desde que el umbral mide 300vh: con 0.948 el apagado duraba 10vh,
+     un solo golpe de rueda */
+  --umbral-salida: 0.915;    /* era 0.948, y antes --umbral-apagon: 0.95 */
 
   --seccion: clamp(90px, 12vh, 160px);
   --ancho: 1180px;

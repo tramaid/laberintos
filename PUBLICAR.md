@@ -37,7 +37,8 @@ npm run contraste         # código 0 y "9 de 9 tokens desde el CSS"
 Está fuera de los buscadores a propósito, para que esta versión provisoria no le
 compita a la definitiva cuando exista el dominio.
 
-El `noindex` va en un `<meta>` del `index.html`, **no** como `Disallow` en
+El `noindex` va en un `<meta>` de cada página (`index.html`, `donde/` y
+`contacto/`), **no** como `Disallow` en
 `robots.txt`, y eso es deliberado: un `Disallow` impide *rastrear* pero no impide
 *indexar* —la URL puede aparecer igual en los resultados, sin contenido— y
 además frena a los robots que arman la vista previa cuando alguien comparte el
@@ -83,8 +84,9 @@ las cuatro IP.
 Está preparado en la rama **`dominio`**, un solo commit. Está subida a GitHub
 pero no se publica: Pages sale solo de `main`.
 
-1. Saca el `<meta name="robots" content="noindex">`.
-2. Agrega `<link rel="canonical" href="https://laberintos-wines.com.ar/">`.
+1. Saca el `<meta name="robots" content="noindex">` de las tres páginas.
+2. Agrega el `<link rel="canonical">` de cada una: `https://laberintos-wines.com.ar/`,
+   `/donde/` y `/contacto/`.
 3. Pasa `og:url` y `og:image` al dominio.
 4. Crea `docs/CNAME` con `laberintos-wines.com.ar`.
 
@@ -102,6 +104,7 @@ certificado esté listo (puede tardar hasta una hora).
 escenas de los vinos, en WebP.
 
 Las **cinco capas de la primera toma** del umbral van con `preload`, porque son
-lo primero que se ve. Las de la segunda toma no: hay 600vh de scroll hasta que
-aparecen. Cambiar esto trae de vuelta el destello al entrar — está explicado en
-el `<head>`.
+lo primero que se ve. Las de la segunda toma no: se piden igual al leer el HTML,
+y con prioridad alta le sacarían ancho de banda a la primera. Precargar la
+segunda en vez de la primera trae de vuelta el destello al entrar — está
+explicado en el `<head>`.

@@ -37,7 +37,8 @@ Seis secciones. El fondo alterna, y la alternancia tiene una regla:
 | 3 | Fichas técnicas | `--papel` | El dato duro. Tabla, no poesía |
 | 4 | Origen | `--ink` | Viñedos, altitud, quién lo hace |
 | 5 | Dónde comprar | `--papel` | **Página propia, `donde/`**: los siete puntos de venta y la tienda online |
-| 6 | Pie | `--ink` | Conversión + contacto + legales |
+| 5b | Contacto | `--papel` | **Página propia, `contacto/`**: WhatsApp, teléfono, mail e Instagram |
+| 6 | Pie | `--ink` | Links (la bodega · comprá · exportamos), el sello y los legales |
 
 El corte a claro se usa **tres veces**: el blanco de la frase, el índice de
 las cuatro etiquetas, y las fichas técnicas. Regla operativa: **nunca más de
@@ -48,27 +49,33 @@ dos bloques oscuros seguidos**.
 ## 3. El umbral (sección 1)
 
 ### Estructura
-Contenedor de **640vh** con hijo `position: sticky; top: 0; height: 100vh`.
+Contenedor de **300vh** con hijo `position: sticky; top: 0; height: 100vh`.
+Fue de 340 a 640vh mientras se recorría a mano, y bajó a 600 cortando el
+silencio. Desde que la entrada va sola (ver abajo) la altura ya no marca el
+ritmo de la bajada, solo cuánto hay que scrollear para volver arriba: el
+18/09/2026 bajó a 300vh, todo en la misma proporción.
 El reparto interno importa más que el total:
 
 | tramo | p | qué pasa |
 |---|---|---|
-| viaje de cámara | 0 → 0.72 | fachada, corte, corredor |
-| corte entre tomas | 0.36 | ±0.05, sin destello |
-| el papel sube | 0.60 → 0.71 | satura en `--papel` |
-| la frase | 0.64 → 0.815 | tres líneas escalonadas |
-| **el silencio** | 0.815 → 0.95 | **86vh con la frase quieta** |
-| apagón a negro | 0.95 → 0.998 | entrega al primer vino |
+| viaje de cámara | 0 → 0.778 | fachada, corte, corredor |
+| corte entre tomas | 0.389 | ±0.054, sin destello |
+| el papel sube | 0.648 → 0.767 | satura en `--papel` |
+| la frase | 0.670 → 0.880 | tres líneas escalonadas |
+| **el silencio** | 0.880 → 0.915 | la entrada se detiene en 0.90 y la frase queda quieta hasta el próximo gesto |
+| se apaga la frase | 0.915 → 0.998 | el papel se sostiene y empalma con el índice |
 
 Se llegó a estos números iterando con el cliente sobre el prototipo. El
 error recurrente fue alargar el efecto de entrada en vez del silencio de
-después: lo que hace falta es tiempo **con la frase ya puesta**.
+después: lo que hace falta es tiempo **con la frase ya puesta**. Con la
+entrada automática ese tiempo ya no es scroll: la frase espera al visitante.
 
 ### La entrada va sola
 El umbral no se recorre a mano. El primer gesto hacia abajo —rueda, flecha,
 barra espaciadora, deslizar el dedo o "Entrar"— reproduce la entrada sola
-hasta la frase del manifiesto (p = 0.90) en **5,5 s**, con la curva `ease` de
-CSS. Si arranca a mitad de camino, tarda la parte proporcional.
+hasta la frase del manifiesto (p = 0.90) en **3,5 s**, con la curva `ease` de
+CSS. Si arranca a mitad de camino, tarda la parte proporcional. Era 5,5 s y
+se sentía largo: eran cinco segundos y medio con la rueda tragada.
 
 - Mueve el **scroll**, no la cámara: la cámara lo sigue leyendo en `frame()`
   como siempre. No hay un segundo motor.
@@ -79,7 +86,7 @@ CSS. Si arranca a mitad de camino, tarda la parte proporcional.
   el sticky.
 - Con movimiento reducido no existe: el umbral mide una pantalla.
 
-La duración es `ENTRADA` en `docs/index.html`. Los cortes de la tabla de abajo
+La duración es `ENTRADA` en `docs/index.html`. Los cortes de la tabla de arriba
 siguen valiendo: están en p, y la entrada solo cambia a qué velocidad se pasa
 por ellos.
 
@@ -258,35 +265,46 @@ Altamira es un nombre que quien compra vino reconoce. Los mockups decían
 ## 7. Nav y pie — la marca firma como en la etiqueta
 
 Rediseñados el 18/09/2026. La idea: nav y pie son los dos lugares donde
-Laberintos firma, y firma como en la botella, con el laberinto y la palabra.
+Laberintos firma, y firma como en la botella.
 
-**Nav.** El logo es el laberinto (el `<symbol>` de cada página) más
-LABERINTOS en Special Elite. Los links son cuatro: Vinos, Dónde comprar,
-Contacto y **Tienda**, que va en caja porque es la única acción que saca del
-sitio. Van en Special Elite, la misma voz del panel del teléfono. Abajo de
-900px pasan al menú. La barra se esconde al bajar y vuelve al subir: con el
-logo grande, el texto que pasaba por debajo se pisaba con él.
+**Nav.** Una faja de tinta al 90%, como la banda negra de la etiqueta, con
+LABERINTOS encima en Special Elite a 26px. El mismo fondo en todas las
+secciones, claras u oscuras, y el texto siempre en papel (13,4:1 en el peor
+caso). Los links son cuatro: Vinos, Dónde comprar, Contacto y **Tienda**, que
+va en caja porque es la única acción que saca del sitio. Van en Special Elite,
+la misma voz del panel del teléfono. Abajo de 900px pasan al menú. La barra se
+esconde al bajar y vuelve al subir.
 
-**Pie.** Es la conversión. En este orden:
-1. **Escribinos** con WhatsApp, y el teléfono y el mail en grande.
-2. Tres columnas: seguinos · comprá (tienda y dónde comprar) · exportamos.
-3. **El sello**: el laberinto, LABERINTOS y "Mendoza | Argentina", apilados
+Lo que se probó y se sacó: una barra sin fondo, en `mix-blend-mode:
+difference`, con el laberinto circular al lado de la palabra. Sobre las
+escenas los links quedaban pelados encima de la foto, y el laberinto a 34px se
+leía como un círculo manchado. El laberinto quedó solo en el sello del pie,
+donde tiene el tamaño de la etiqueta.
+
+**Pie.** En este orden:
+
+1. Tres columnas: la bodega (contacto, WhatsApp, Instagram) · comprá (tienda y
+   dónde comprar) · exportamos.
+2. **El sello**: el laberinto, LABERINTOS y "Mendoza | Argentina", apilados
    y centrados como en la etiqueta. Es el único lugar que rompe el canal de la
    izquierda. Reemplaza a la marca de agua al 5%.
-4. Los legales, y con ellos el crédito de estudio: **Diseño TRAMA**, en la
+3. Los legales, y con ellos el crédito de estudio: **Diseño TRAMA**, en la
    misma línea y el mismo peso. Firmar más fuerte que el cliente en su propio
    sitio es de mal gusto.
 
 No se publica dirección de la bodega.
 
-**Dónde comprar** tiene página propia desde la misma fecha. La portada es un
-relato; esto es una consulta, de alguien que llega con una pregunta concreta, y
-así tiene una dirección que se puede mandar. Desde la portada se llega por el
-nav, por el pie y por "Dónde conseguirlos", debajo de la foto de familia.
+**Dónde comprar** y **Contacto** tienen página propia desde la misma fecha. La
+portada es un relato; esto son consultas, de alguien que llega con una pregunta
+concreta, y así cada una tiene una dirección que se puede mandar. A Dónde
+comprar se llega por el nav, por el pie y por "Dónde conseguirlos", debajo de
+la foto de familia; a Contacto, por el nav y por el pie. Contacto era la mitad
+de arriba del pie, con "Escribinos." en grande: en la portada se leía como una
+sección más.
 
 Nav, pie, puerta de edad y tokens viven en `docs/assets/comun.css` y
-`comun.js`. El markup del nav, del pie y de la puerta está repetido en las dos
-páginas: si se cambia en una, se cambia en la otra.
+`comun.js`. El markup del nav, del pie y de la puerta está repetido en las tres
+páginas: si se cambia en una, se cambia en todas.
 
 ---
 

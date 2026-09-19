@@ -2,8 +2,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <!-- La puerta de edad se decide antes del primer pintado. Igual que en ../index.html -->
 <script>try{if(localStorage.getItem('laberintos-edad')!=='18')document.documentElement.classList.add('edad')}catch(e){document.documentElement.classList.add('edad')}</script>
-<title>Dónde comprar Laberintos — siete vinotecas en Buenos Aires</title>
-<meta name="description" content="Los vinos Laberintos se consiguen en siete vinotecas de Buenos Aires: Matheu, Belén de Escobar, Ingeniero Maschwitz, Zárate, El Palomar y Santos Lugares. Y en la tienda online.">
+<title>Contacto — Laberintos</title>
+<meta name="description" content="Escribile a la bodega Laberintos por WhatsApp, por teléfono, por mail o por Instagram.">
 <meta name="theme-color" content="#0b0a09">
 <link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
@@ -11,12 +11,12 @@
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Laberintos">
-<meta property="og:title" content="Dónde comprar Laberintos">
-<meta property="og:description" content="Siete vinotecas en Buenos Aires, y la tienda online.">
+<meta property="og:title" content="Contacto — Laberintos">
+<meta property="og:description" content="WhatsApp, teléfono, mail e Instagram de la bodega.">
 <!-- provisoria, como la portada: noindex y sin canonical hasta que haya dominio.
      Ver PUBLICAR.md -->
 <meta name="robots" content="noindex">
-<meta property="og:url" content="https://tramaid.github.io/laberintos/donde/">
+<meta property="og:url" content="https://tramaid.github.io/laberintos/contacto/">
 <meta property="og:image" content="https://tramaid.github.io/laberintos/assets/og.jpg">
 <meta property="og:locale" content="es_AR">
 <meta name="twitter:card" content="summary_large_image">
@@ -26,21 +26,47 @@
 <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Barlow+Condensed:wght@300;400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/comun.css">
 <style>
-/* Dónde comprar tiene página propia desde el 18/09/2026. Antes era una sección
-   al final de la portada: la portada es un relato —entrar, los vinos, el desvío,
-   la familia— y esto es una consulta, de alguien que llega con una pregunta
-   concreta. Así tiene una dirección que se puede mandar por WhatsApp.
-   El CSS de .donde, .puntos y .localidad está en comun.css; acá solo lo que
-   cambia por ser la página y no una sección. */
+/* Contacto tiene pagina propia desde el 18/09/2026, igual que Donde comprar: la
+   portada es un relato y esto es una consulta. Antes era la mitad de arriba del
+   pie -"Escribinos." en grande, con el telefono y el mail- y en la portada se
+   leia como una seccion mas. El pie de las tres paginas lleva el link. */
 body{background:var(--papel)}
-.donde{min-height:100vh}
-/* es el título de la página: sube de --h4 a --h2. El margen lo separa del
-   rótulo, como en el desvío: sin él la etiqueta tocaba las mayúsculas */
-.donde h1{font-size:var(--h2);max-width:12ch;margin-top:14px}
-.donde__tienda{margin-top:clamp(56px,8vh,96px);padding-top:clamp(24px,3vh,34px);
- border-top:1px solid var(--linea-clara);font-size:clamp(16px,1.3vw,19px);color:var(--muted-claro)}
-.donde__tienda a{color:var(--ink);font-family:var(--display);border-bottom:1px solid currentColor;
- padding-bottom:2px;margin-left:6px}
+/* sin min-height, a diferencia de donde/: son cuatro renglones y estirarlos a
+   una pantalla dejaba medio telefono de papel vacio antes del pie */
+.contacto{background:var(--papel);color:var(--ink);
+ padding:clamp(100px,14vh,170px) 0 clamp(80px,11vh,130px)}
+.contacto .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
+.contacto .etiqueta{color:var(--muted-claro)}
+.contacto h1{font-size:var(--h2);max-width:12ch;margin-top:14px}
+/* Los canales se leen como los datos de una ficha: el nombre en la tipografia
+   de dato y el contacto en la voz de la marca, grande, porque es lo que se
+   viene a buscar. Es una lista de definiciones: cada canal y su direccion. */
+.canales{margin:clamp(44px,6vh,76px) 0 0;border-top:1px solid var(--linea-clara)}
+.canales>div{display:grid;grid-template-columns:minmax(130px,22%) minmax(0,1fr);align-items:baseline;
+ gap:4px 24px;padding:clamp(12px,1.8vh,20px) 0;border-bottom:1px solid var(--linea-clara)}
+.canales dt{font-family:var(--dato);font-size:var(--etiqueta);letter-spacing:.16em;
+ text-transform:uppercase;color:var(--muted-claro)}
+.canales dd{margin:0;min-width:0}
+/* overflow-wrap: el mail es una sola palabra de 25 letras y en el telefono mas
+   angosto tiene que poder quebrar antes que salirse */
+.canales a{display:inline-flex;align-items:center;min-height:44px;font-family:var(--display);
+ font-size:clamp(22px,2.8vw,40px);line-height:1.15;overflow-wrap:anywhere;
+ text-decoration:underline 1px;text-decoration-color:transparent;text-underline-offset:8px;
+ transition:text-decoration-color var(--hover) var(--ease)}
+@media(hover:hover){.canales a:hover{text-decoration-color:currentColor}}
+@media(prefers-reduced-motion:reduce){.canales a{transition:none}}
+/* la misma salida a la compra que cierra donde/ */
+.contacto__compra{display:flex;flex-wrap:wrap;align-items:center;gap:0 22px;
+ margin-top:clamp(56px,8vh,96px);font-size:clamp(16px,1.3vw,19px);color:var(--muted-claro)}
+.contacto__compra a{display:inline-flex;align-items:center;min-height:44px;color:var(--ink);
+ font-family:var(--display);text-decoration:underline 1px;text-underline-offset:6px}
+@media(max-width:640px){
+  /* en vertical el nombre del canal va arriba de la direccion, como un rotulo */
+  .canales>div{grid-template-columns:1fr;gap:2px}
+  /* la pregunta en su renglon y los dos links abajo, juntos: si no, el segundo
+     link quebraba solo */
+  .contacto__compra span{flex-basis:100%}
+}
 </style>
 </head><body>
 
@@ -77,8 +103,8 @@ body{background:var(--papel)}
   <a class="logo" href="../" aria-label="Laberintos, inicio"><span class="logo__palabra" aria-hidden="true">LABERINTOS</span></a>
   <nav id="menu-panel" aria-label="Principal">
     <a href="../#indice">Vinos</a>
-    <a href="./" aria-current="page">Dónde comprar</a>
-    <a href="../contacto/">Contacto</a>
+    <a href="../donde/">Dónde comprar</a>
+    <a href="./" aria-current="page">Contacto</a>
     <a class="nav__tienda" href="https://laberintosvinos.mitiendanube.com/" target="_blank" rel="noopener">Tienda<span aria-hidden="true">&nbsp;↗</span><span class="solo-lectores"> (se abre en otra pestaña)</span></a>
     <!-- la marca al pie del panel de telefono. Es un <p>, no un <a>, para no
          entrar en los selectores de los links -->
@@ -90,59 +116,18 @@ body{background:var(--papel)}
 </header>
 
 <main>
-<section class="donde" aria-labelledby="donde-titulo">
+<section class="contacto" aria-labelledby="contacto-titulo">
   <div class="canal">
-    <p class="etiqueta" data-reveal>Dónde encontrarnos</p>
-    <h1 id="donde-titulo" tabindex="-1" data-foco-inicial data-reveal>Siete puertas.</h1>
-    <p class="bajada" data-reveal>El vino viene de Mendoza y de San Juan.
-      Hoy se consigue en estos siete lugares de Buenos Aires.</p>
-    <div class="puntos">
-      <div class="localidad" data-reveal>
-        <h2>Matheu</h2>
-        <ul>
-          <li><b>Lacoste - Vinería &amp; Cía.</b><span>Juan León 68</span>
-            <a href="https://www.instagram.com/lacostevineria" target="_blank" rel="noopener">@lacostevineria</a></li>
-          <li><b>Bodegón Tras Cartón</b><span>San Martín 172</span>
-            <a href="https://www.instagram.com/bodegon_trascarton" target="_blank" rel="noopener">@bodegon_trascarton</a></li>
-        </ul>
-      </div>
-      <div class="localidad" data-reveal>
-        <h2>Belén de Escobar</h2>
-        <ul>
-          <li><b>Villa uva - Tienda de vinos</b><span>Estrada 611</span>
-            <a href="https://www.instagram.com/villa.uva" target="_blank" rel="noopener">@villa.uva</a></li>
-        </ul>
-      </div>
-      <div class="localidad" data-reveal>
-        <h2>Ingeniero Maschwitz</h2>
-        <ul>
-          <li><b>Le petit vinos</b><span>Colectora Este Ramal Escobar 2147, Local&nbsp;12</span>
-            <a href="https://www.instagram.com/lepetitvins" target="_blank" rel="noopener">@lepetitvins</a></li>
-        </ul>
-      </div>
-      <div class="localidad" data-reveal>
-        <h2>Zárate</h2>
-        <ul>
-          <li><b>Vinoteca Estilo vinos</b><span>Independencia 1001</span>
-            <a href="https://www.instagram.com/estilovinos" target="_blank" rel="noopener">@estilovinos</a></li>
-        </ul>
-      </div>
-      <div class="localidad" data-reveal>
-        <h2>El Palomar</h2>
-        <ul>
-          <li><b>Vinoteca Deltawine</b><span>De los Robles 3021</span>
-            <a href="https://www.instagram.com/deltawine02" target="_blank" rel="noopener">@deltawine02</a></li>
-        </ul>
-      </div>
-      <div class="localidad" data-reveal>
-        <h2>Santos Lugares</h2>
-        <ul>
-          <li><b>Nativo Vinoteca</b><span>Av. La Plata 3741</span>
-            <a href="https://www.instagram.com/nativovinoteca" target="_blank" rel="noopener">@nativovinoteca</a></li>
-        </ul>
-      </div>
-    </div>
-    <p class="donde__tienda" data-reveal>¿Ninguna te queda cerca?<a href="https://laberintosvinos.mitiendanube.com/" target="_blank" rel="noopener">Pedilo en la tienda online&nbsp;↗</a></p>
+    <p class="etiqueta" data-reveal>La bodega</p>
+    <h1 id="contacto-titulo" tabindex="-1" data-foco-inicial data-reveal>Escribinos.</h1>
+    <!-- sin direccion de la bodega: la de antes ya no vale y no se publica otra -->
+    <dl class="canales">
+      <div data-reveal><dt>WhatsApp</dt><dd><a href="https://wa.me/541148632188">Mandanos un mensaje&nbsp;&nbsp;→</a></dd></div>
+      <div data-reveal><dt>Teléfono</dt><dd><a href="tel:+541148632188">+54 11 4863-2188</a></dd></div>
+      <div data-reveal><dt>Mail</dt><dd><a href="mailto:laberintosvinos@gmail.com">laberintosvinos@gmail.com</a></dd></div>
+      <div data-reveal><dt>Instagram</dt><dd><a href="https://www.instagram.com/laberintosvinos" target="_blank" rel="noopener">@laberintosvinos<span aria-hidden="true">&nbsp;↗</span><span class="solo-lectores"> (se abre en otra pestaña)</span></a></dd></div>
+    </dl>
+    <p class="contacto__compra" data-reveal><span>¿Buscás un vino?</span><a href="../donde/">Dónde comprar</a><a href="https://laberintosvinos.mitiendanube.com/" target="_blank" rel="noopener">Tienda online&nbsp;↗</a></p>
   </div>
 </section>
 </main>
@@ -158,7 +143,7 @@ body{background:var(--papel)}
       <div data-reveal>
         <h3>La bodega</h3>
         <ul>
-          <li><a href="../contacto/">Contacto</a></li>
+          <li><a href="./">Contacto</a></li>
           <li><a href="https://wa.me/541148632188">WhatsApp</a></li>
           <li><a href="https://www.instagram.com/laberintosvinos" target="_blank" rel="noopener">Instagram<span aria-hidden="true">&nbsp;↗</span></a></li>
         </ul>
@@ -170,7 +155,7 @@ body{background:var(--papel)}
                igual que Inyesoft y Materiales Matheu; cuando eso pase, cambia la URL
                de aca, la del nav y la de donde/ y contacto/, y nada mas. -->
           <li><a href="https://laberintosvinos.mitiendanube.com/" target="_blank" rel="noopener">Tienda online<span aria-hidden="true">&nbsp;↗</span></a></li>
-          <li><a href="./">Dónde comprar</a></li>
+          <li><a href="../donde/">Dónde comprar</a></li>
         </ul>
       </div>
       <div data-reveal>

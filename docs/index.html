@@ -62,7 +62,14 @@
    por 1.08 para caer donde caía. Los coeficientes que multiplican --p (el
    fundido del título y el del panel) se dividen por 1.08, por lo mismo.
    Si algún día se cambia la altura, hay que rehacer las dos cuentas. */
-.umbral{height:600vh;position:relative}
+/* 300vh (18/09/2026). Desde que la entrada va sola, la altura ya no marca el
+   ritmo de la bajada: solo cuánto hay que scrollear para volver ARRIBA, y con
+   600vh volver a la fachada eran cinco pantallas de rueda. Esta vez se acorta
+   TODO en la misma proporción, así que los cortes, que están en p, no se
+   tocan, y los coeficientes de --p del panel y del título tampoco. Lo único
+   que cambia es el apagado de la frase, que ahora arranca en 0.915: con el
+   0.948 de antes duraba 10vh, un solo golpe de rueda. */
+.umbral{height:300vh;position:relative}
 .camara{position:sticky;top:0;height:100vh;overflow:hidden;background:#000}
 .toma{position:absolute;inset:0;opacity:var(--o,0)}
 .marco{position:absolute;left:49.63%;top:49.63%;width:var(--mw);height:var(--mh);
@@ -120,8 +127,8 @@
 /* El area de toque se estira hacia ARRIBA hasta 44px y el margen se achica en
    la misma cantidad (26 - 21 = 5): el texto y el subrayado quedan en el pixel
    exacto donde estaban, y el blanco de arriba —que era margen muerto— pasa a
-   ser tocable. Importa: en telefono este es el unico atajo para saltear las
-   seis pantallas del umbral, y con 23px de alto era dificil de acertar. */
+   ser tocable. Importa: en telefono este es el atajo a la entrada, y con 23px
+   de alto era dificil de acertar. */
 .entrar{display:inline-flex;gap:12px;align-items:center;margin-top:5px;
  padding-top:21px;min-height:44px;box-sizing:border-box;
  border-bottom:1px solid currentColor;padding-bottom:5px;pointer-events:auto}
@@ -305,7 +312,7 @@
  padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
 .familia h2{font-size:var(--h4)}
 /* el camino a la compra, ahora que los puntos de venta tienen su pagina: el
-   mismo recurso que el WhatsApp del pie */
+   mismo recurso que "Entrar" en el umbral, mono en mayusculas y subrayado */
 /* el area de toque crece hacia ARRIBA, como en Entrar: con align-items:center
    la linea quedaba 20px por debajo del texto, despegada */
 .familia__cta{display:inline-flex;align-items:flex-end;gap:14px;margin-top:12px;min-height:44px;padding-bottom:8px;
@@ -424,7 +431,9 @@
 }
 .indice{background:var(--papel);color:var(--ink);padding:clamp(100px,14vh,170px) 0 clamp(70px,10vh,120px)}
 .indice .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
-.indice h2{font-size:var(--h4);max-width:16ch}
+/* 14px entre el rotulo y el titulo, como en el desvio y en las paginas
+   interiores: sin margen la etiqueta tocaba las mayusculas */
+.indice h2{font-size:var(--h4);max-width:16ch;margin-top:14px}
 .indice .bajada{margin-top:18px;color:var(--muted-claro);max-width:44ch;font-size:clamp(15px,1.2vw,18px)}
 .cuatro{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,2.4vw,40px);
  margin-top:clamp(40px,6vh,72px);align-items:end}
@@ -471,7 +480,10 @@
      la primera llegaban tarde y desordenadas.
      Van de la mas pesada a la mas liviana porque la toma no se muestra hasta
      que estan las cinco, asi que manda la ultima en llegar.
-     tomaB no se precarga a proposito: hay 640vh de scroll hasta el corte. -->
+     tomaB no se precarga a proposito: sus tres <img> se piden igual al leer el
+     HTML, y con prioridad alta le robarian ancho de banda a la toma que esta en
+     pantalla. Si al corte todavia no llego, la toma A se funde a negro y la B
+     entra cuando esta completa: no se ve armandose. -->
 <link rel="preload" as="image" href="assets/hero-z260-ccb01e3d.webp" fetchpriority="high">
 <link rel="preload" as="image" href="assets/hero-z700-2ea3e047.webp" fetchpriority="high">
 <link rel="preload" as="image" href="assets/hero-z0-07f77410.webp" fetchpriority="high">
@@ -501,19 +513,19 @@
   </form>
 </div>
 
-<!-- El laberinto de la etiqueta, una sola vez por pagina: el logo del nav y la
-     firma del pie lo usan con <use>. Los paths no llevan stroke-width: lo pone el
-     CSS de cada uso. -->
+<!-- El laberinto de la etiqueta, una sola vez por pagina: el sello del pie lo
+     usa con <use>. Los paths no llevan stroke-width: lo pone el CSS. -->
 <svg class="simbolos" aria-hidden="true" focusable="false"><symbol id="laberinto" viewBox="0 0 1254 1254"><path d="M519.17,1132.67c16.66-.4,32.09-13.72,31.48-30.97.02-46.37,0-92.74,0-139.11,0-14.36-7.1-24.41-20.47-30.04-16.59-6.99-33.31-13.79-49.44-21.72-74.8-37.37-132.71-107.6-154.99-188.14-50.82-170.99,58.53-356.28,232.39-395.24,8.72-2.07,17.83-3.48,25.88-7.09,25.93-10.41,25.85-49.82.11-60.7-6.54-3.32-13.53-3.22-20.48-1.94-153.46,25.91-280.93,154.61-309.84,306.71-7.83,32.98-60.46,35.9-65.22-3,10.77-78.84,50.09-152.94,100.06-214.36,71.51-86.97,175.65-143.93,287.49-157.73,24.05-4.15,37.55-35.61,19.55-56.07-8.29-9.42-18.96-11.73-30.53-10.17-80.29,10.28-157.82,39.11-224.06,85.76C-29.67,472.18,75.68,1028.92,518.67,1132.67"/><path d="M682.12,1201.98c222.04-16,420.12-179.63,489.73-389.36,99.63-276.96-57.38-607.17-328.34-716.03-259.61-116.44-577.06,4.99-713.29,250.04-204.21,344.71,12.86,783.68,402.47,851.27,26.15,3.38,65.31,13.39,69.01-24.92-.1-158.45-.06-316.89-.08-475.34.4-20.87-24.18-22.19-29.03-51.11-14.91-71.97,91.34-95.89,107.82-23.56,9.46,48.68-29.31,46.8-29.94,78.61.47,111.09-.36,222.19.63,333.28.07,41.13,0,82.25.05,123.38-2.46,22.46,6.4,44.47,30.47,43.75"/><path d="M682.62,122.51c224.74,19.06,411.62,207.84,448.72,427.2,35.59,194.75-57.83,401.38-222.36,509.61-48.53,32.65-103.05,57.11-159.9,71.3-20.25,7.57-47.06-5.12-46.46-28.92,0-46.37.43-92.75-.25-139.11-.22-15.06,11.17-27.52,22.72-31.03,272.73-89.14,285.44-470.1,26.54-586.44-22.4-10.14-45.77-16.93-70-21.09-15.43-2.65-26.63-10.96-30.29-26.08-11.92-96.27,181.74,5.49,210.18,36.97,59.52,49.5,105.17,115.61,127.92,189.72,8.35,24.84,7.48,65.99,42.58,65.24,24.07,1.19,39.24-25.06,30.02-47.08-17.82-78.19-56.75-150.74-109.03-211.34-66.32-76.26-160.48-127.01-260.89-139.64-48.95,1-58.41-64.34-10.5-69.3"/><path d="M1034.52,652.42c-16.81.44-30.88,12.15-32.93,29.01-2.33,19.21-6.59,38.03-12.18,56.49-16.52,54.99-44.91,106.14-83.28,149.05-21.85,24.74-46.99,45.66-74.6,63.77-18.47,12.12-38.09,22.28-58.45,31.01-12.44,5.33-18.82,15.68-19.67,29.02-1.54,20.75,23.04,40.28,43.68,31.48,35.68-13.57,67.88-33,98-56.01,49.82-37.6,90.35-86.3,121.46-140.12,24.77-42.55,39.82-89.34,47.87-137.67,6.48-24.23,3.7-54.13-29.4-56.02"/><path d="M573.16,392.38c-67.26,10.08-126.2,59.11-159.31,117.07-7.98,18.29-23.62,38.11-18.23,58.94,9.31,30.33,55.36,26.5,63.68-2.93,21.39-58.41,68.55-93.12,127.29-111.24,30.49-13.87,18.51-64.68-12.94-61.83"/><path d="M701.57,723.14c86.41-70.96,28.63-216.02-83.43-206.01-101.58,4.9-147.76,141.67-67.52,205.64"/><path d="M218.76,652.42c-19.35-.71-35.59,19.1-32.42,37.92,8.25,65.99,30.31,129.24,67.47,184.72,43.68,66.71,105.77,120.2,176.91,156.3,7.77,3.88,15.89,7.13,23.97,10.35,24.56,9.77,47.43-12.42,44.12-33.9-2.01-13-8.57-21.56-20.59-27.1-46.19-21.56-89.63-50.08-124.98-86.94-41.18-43.06-71.69-95.98-88.87-152.89-5.99-19.56-10.49-39.52-12.66-59.93-1.62-15.31-15.1-28.52-32.46-28.51"/><path d="M833.08,652.4c63.38,4.57,18.85,87.75.54,118.51-20.01,32.78-104.37,123.08-133.17,60.01-15.01-49.25,65.35-45.67,93.05-125.45,8.3-21.33,10.43-52.38,39.58-53.07"/><path d="M675.63,392.38c-32.04,5.7-34.6,50.54-6.44,62.81,51.39,14.99,94.84,42.7,118.32,91.59,3.14,6.07,5.54,12.6,7.51,19.15,6.32,21.01,31.55,30.17,49.12,19.72,41.54-25.03-15.45-96.97-36.46-122.06-34.37-36.11-80.44-68.26-131.54-71.21"/><path d="M427.39,652.4c-63.38,4.57-18.85,87.75-.54,118.51,20.01,32.78,104.37,123.08,133.17,60.01,15.01-49.25-65.35-45.67-93.05-125.45-8.3-21.33-10.43-52.38-39.58-53.07"/></symbol></svg>
 
-<!-- NAV. Mismo markup en index.html y en donde/index.html, salvo los href.
-     "Origen" no esta: esa seccion no existe. Cuando se construya, entra aca. -->
+<!-- NAV. Mismo markup en las tres paginas -index.html, donde/ y contacto/-,
+     salvo los href. "Origen" no esta: esa seccion no existe. Cuando se
+     construya, entra aca. -->
 <header class="nav">
-  <a class="logo" href="./" aria-label="Laberintos, inicio"><svg class="logo__marca" aria-hidden="true" focusable="false"><use href="#laberinto"/></svg><span class="logo__palabra" aria-hidden="true">LABERINTOS</span></a>
+  <a class="logo" href="./" aria-label="Laberintos, inicio"><span class="logo__palabra" aria-hidden="true">LABERINTOS</span></a>
   <nav id="menu-panel" aria-label="Principal">
     <a href="#indice">Vinos</a>
     <a href="donde/">Dónde comprar</a>
-    <a href="#contacto">Contacto</a>
+    <a href="contacto/">Contacto</a>
     <a class="nav__tienda" href="https://laberintosvinos.mitiendanube.com/" target="_blank" rel="noopener">Tienda<span aria-hidden="true">&nbsp;↗</span><span class="solo-lectores"> (se abre en otra pestaña)</span></a>
     <!-- la marca al pie del panel de telefono. Es un <p>, no un <a>, para no
          entrar en los selectores de los links -->
@@ -718,38 +730,28 @@
 
 
 
-<!-- PIE. Mismo markup en index.html y en donde/index.html: si se cambia uno, se
-     cambia el otro. Cierra con el sello de la etiqueta -el laberinto, la palabra
-     y "Mendoza | Argentina", apilados y centrados como en la botella-: es el
-     unico lugar del sitio que rompe el canal de la izquierda, a proposito. -->
-<footer class="pie" id="contacto" aria-label="Contacto">
+<!-- PIE. Mismo markup en las tres paginas, salvo los href: si se cambia uno, se
+     cambian los tres. Cierra con el sello de la etiqueta -el laberinto, la
+     palabra y "Mendoza | Argentina", apilados y centrados como en la botella-:
+     es el unico lugar del sitio que rompe el canal de la izquierda, a proposito.
+     El contacto tiene su pagina: aca va el link, no el bloque. -->
+<footer class="pie">
   <div class="canal">
-    <div class="pie__arriba">
-      <div>
-        <p class="etiqueta pie__rotulo" data-reveal>La bodega</p>
-        <h2 data-reveal>Escribinos.</h2>
-        <a class="pie__cta" href="https://wa.me/541148632188" data-reveal>WhatsApp &nbsp;&rarr;</a>
-        <p class="pie__frase" data-reveal>La vida tiene LABERINTOS…</p>
-      </div>
-      <!-- el telefono y el mail son lo que se busca en un pie: van en la voz de la
-           marca y grandes, no en una columna de 14px -->
-      <ul class="pie__contacto" data-reveal>
-        <li><a href="tel:+541148632188">+54 11 4863-2188</a></li>
-        <li><a href="mailto:laberintosvinos@gmail.com">laberintosvinos@gmail.com</a></li>
-      </ul>
-    </div>
-
     <div class="pie__cols">
       <div data-reveal>
-        <h3>Seguinos</h3>
-        <ul><li><a href="https://www.instagram.com/laberintosvinos" target="_blank" rel="noopener">Instagram</a></li></ul>
+        <h3>La bodega</h3>
+        <ul>
+          <li><a href="contacto/">Contacto</a></li>
+          <li><a href="https://wa.me/541148632188">WhatsApp</a></li>
+          <li><a href="https://www.instagram.com/laberintosvinos" target="_blank" rel="noopener">Instagram<span aria-hidden="true">&nbsp;↗</span></a></li>
+        </ul>
       </div>
       <div data-reveal>
         <h3>Comprá</h3>
         <ul>
           <!-- Tienda actual en TiendaNube. Se va a rehacer como theme de PepperLabs,
                igual que Inyesoft y Materiales Matheu; cuando eso pase, cambia la URL
-               de aca, la del nav y la de donde/, y nada mas. -->
+               de aca, la del nav y la de donde/ y contacto/, y nada mas. -->
           <li><a href="https://laberintosvinos.mitiendanube.com/" target="_blank" rel="noopener">Tienda online<span aria-hidden="true">&nbsp;↗</span></a></li>
           <li><a href="donde/">Dónde comprar</a></li>
         </ul>
@@ -871,9 +873,12 @@ function recorrer(ahora){
    cualquier gesto hacia arriba la corta y devuelve el control.
    La curva es la "ease" de CSS, cubic-bezier(.25,.1,.25,1): de las que se
    probaron es la unica que arranca a moverse enseguida —a los 100ms ya se ve—,
-   asi el scroll no se siente trabado. Con 5500ms: el titulo se va a 0.9s, el
-   corte cae a 1.4s, el blanco a 2.3s y las tres lineas entran de 2.6 a 4.5s. */
-const ENTRADA=5500, P_FRASE=0.90;
+   asi el scroll no se siente trabado.
+   Era 5500ms, y eran cinco segundos y medio con la rueda tragada. Con 3500ms:
+   el titulo se va a 0.55s, el corte cae a 0.9s, el blanco satura a 1.9s y las
+   tres lineas entran de 1.6 a 2.8s. La frase no se apura para leerla: queda
+   quieta hasta el proximo gesto. */
+const ENTRADA=3500, P_FRASE=0.90;
 const AUTO={activo:false,t0:0,desde:0,hasta:0,dur:0,ultimo:0};
 /* cubic-bezier como en CSS: se despeja t para la x pedida (Newton) y se
    devuelve la y */
@@ -954,7 +959,8 @@ function frame(){
        Ahora el blanco se sostiene y lo que se va es la frase: la camara termina
        en papel liso. Como el indice usa el mismo --papel, cuando el sticky se
        suelta y la camara se desliza hacia arriba no hay union visible. */
-    manif.style.setProperty('--salida', (1-suave(tramo(p,0.948,0.998))).toFixed(3));
+    /* arranca en 0.915 y no en 0.948 desde que el umbral mide 300vh: ver el CSS */
+    manif.style.setProperty('--salida', (1-suave(tramo(p,0.915,0.998))).toFixed(3));
 
     for(const e of escenas){
       const q=e.getBoundingClientRect();
@@ -980,7 +986,7 @@ requestAnimationFrame(frame);
 
 
 /* navegación del índice: scroll suave, y sin animación si el sistema lo pide */
-document.querySelectorAll('.cuatro .ir, .nav nav a[href^="#"], .pie a[href^="#"]').forEach(a=>{
+document.querySelectorAll('.cuatro .ir, .nav nav a[href^="#"]').forEach(a=>{
   a.addEventListener('click', e=>{
     const destino = document.querySelector(a.getAttribute('href'));
     if(!destino) return;
@@ -1003,7 +1009,7 @@ document.querySelectorAll('.cuatro .ir, .nav nav a[href^="#"], .pie a[href^="#"]
    propia. Saltar al indice se llevaba puesta la frase, que es el final del
    recorrido y no un tramo para saltear.
    El punto: la tercera linea termina de entrar en 0.880 y la frase empieza a
-   apagarse en 0.948. Se cae en 0.90, con margen a los dos lados: la frase
+   apagarse en 0.915. Se cae en 0.90, con margen a los dos lados: la frase
    completa y todavia entera.
    Con movimiento reducido el manifiesto esta en display:none y el umbral mide
    una pantalla, asi que ahi no se intercepta nada y vale el href al indice. */

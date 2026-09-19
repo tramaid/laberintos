@@ -6,7 +6,7 @@
    no R, que es el de index.html). */
 const movReducido=matchMedia('(prefers-reduced-motion: reduce)');
 
-/* Menu de telefono. Abajo de 700px los links de la barra no entran y el panel
+/* Menu de telefono. Abajo de 900px los links de la barra no entran y el panel
    los muestra a pantalla completa. El panel es el MISMO <nav>, asi que el
    listener de scroll suave de aca abajo ya los toma con el selector que ya
    tenia: solo hay que cerrarle el menu antes de navegar. */
@@ -84,7 +84,8 @@ if(puerta && puertaAbierta()){
     const abrir=()=>{
       html.classList.remove('edad','edad-sale');
       /* el foco va al primer destino de la pagina ("Entrar" en la portada, el
-         titulo en donde/): si no, se pierde con el boton que desaparece */
+         titulo en donde/ y en contacto/): si no, se pierde con el boton que
+         desaparece */
       const destino=document.querySelector("[data-foco-inicial]");
       if(destino) destino.focus({preventScroll:true});
     };

@@ -94,20 +94,28 @@ a{color:inherit;text-decoration:none}
 .etiqueta{font-family:var(--dato);font-size:var(--etiqueta);letter-spacing:.16em;text-transform:uppercase}
 
 /* ============================================================
-   NAV — la marca firma como en la etiqueta: el laberinto y la
-   palabra. Antes era "LABERINTOS" suelto a 15px y dos links en
-   mono de 11px contra el borde: no se leía como marca ni como
-   navegación. Los links van en la voz de la marca, Special Elite,
-   la misma que ya usaba el panel del teléfono.
-   Sigue en mix-blend-mode difference sobre las escenas: blanco
-   sobre tinta, tinta sobre papel, sin fondo propio.
+   NAV — una faja de tinta, como la banda negra de la etiqueta, y
+   LABERINTOS encima, sola. Los links van en la voz de la marca,
+   Special Elite, la misma del panel del teléfono.
+   Para no volver atrás: hasta el 18/09/2026 la barra no tenía
+   fondo -iba en mix-blend-mode difference- y llevaba el laberinto
+   circular al lado de la palabra. Sobre las escenas los links
+   quedaban pelados encima de la foto, y el laberinto a 34px se
+   leía como un círculo manchado. Ahora el fondo es tinta al 90% en
+   todas las secciones, claras u oscuras, y el texto es siempre
+   papel: 13,4:1 en el peor caso, la barra encima de papel.
+   Sin backdrop-filter a propósito: además de ser un efecto que el
+   sitio no usa, convierte a la barra en el bloque contenedor de
+   sus hijos fixed, y el panel del teléfono dejaría de ocupar la
+   pantalla.
    ============================================================ */
 /* el <symbol> del laberinto: presente en el documento, fuera de la vista */
 .simbolos{position:absolute;width:0;height:0;overflow:hidden}
 .solo-lectores{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;
  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .nav{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;
- align-items:center;padding:12px var(--canal);mix-blend-mode:difference;color:#fff}
+ align-items:center;padding:12px var(--canal);color:var(--papel);
+ background:color-mix(in srgb,var(--ink) 90%,transparent);border-bottom:1px solid var(--linea)}
 /* Se esconde al bajar y vuelve al subir. Con la barra nueva, mas grande, el
    texto que pasaba por debajo se pisaba con el logo al leer. Es un cambio de
    estado, no algo atado al scroll: va con transition. transform SOLO en el
@@ -117,13 +125,10 @@ a{color:inherit;text-decoration:none}
 .nav.is-oculta{transform:translate3d(0,-100%,0)}
 .nav.is-oculta:focus-within,body.menu-abierto .nav.is-oculta{transform:none}
 @media(prefers-reduced-motion:reduce){.nav{transition:none}}
-.logo{display:inline-flex;align-items:center;gap:12px;min-height:44px}
-/* Trazo 44 sobre 1254: a 34px las dos líneas de cada muro se juntan y el
-   laberinto se lee macizo, como impreso en la etiqueta. Con el trazo del
-   SVG original (2) a este tamaño no se veía nada. */
-.logo__marca{width:34px;height:34px;flex:none;fill:none;stroke:currentColor;stroke-width:44;
- stroke-linecap:round;stroke-linejoin:round}
-.logo__palabra{font-family:var(--display);font-size:22px;line-height:1;letter-spacing:.08em}
+/* sin el laberinto al lado, la palabra sola tiene que sostener la marca: de
+   22px pasa a 26px, una vez y media el cuerpo de los links (17px) */
+.logo{display:inline-flex;align-items:center;min-height:44px}
+.logo__palabra{font-family:var(--display);font-size:26px;line-height:1;letter-spacing:.08em}
 .nav nav{display:flex;align-items:center;gap:clamp(22px,2.6vw,40px);
  font-family:var(--display);font-size:17px;line-height:1}
 .nav nav a{display:inline-flex;align-items:center;min-height:44px;
@@ -133,7 +138,9 @@ a{color:inherit;text-decoration:none}
 /* la pagina en la que se está queda subrayada */
 .nav nav a[aria-current="page"]{text-decoration-color:currentColor}
 /* la tienda es la única acción que saca del sitio: va en caja, con esquinas rectas */
-.nav nav .nav__tienda{min-height:40px;padding:0 14px;border:1px solid currentColor}
+/* 44px como el resto de los links: con 40 era el único toque de la barra que
+   no llegaba al mínimo */
+.nav nav .nav__tienda{min-height:44px;padding:0 16px;border:1px solid currentColor}
 @media(prefers-reduced-motion:reduce){.nav nav a{transition:none}}
 
 /* ============================================================
@@ -151,9 +158,8 @@ a{color:inherit;text-decoration:none}
 .menu__marca{display:none}
 @media(max-width:900px){
   .nav nav{display:none}
-  .nav{padding-top:10px;padding-bottom:10px}
-  .logo__marca{width:30px;height:30px}
-  .logo__palabra{font-size:19px}
+  .nav{padding-top:8px;padding-bottom:8px}
+  .logo__palabra{font-size:21px}
   .menu__boton{display:inline-flex;align-items:center;min-height:44px;
     padding:0;border:0;background:none;color:inherit;cursor:pointer;
     font-family:var(--display);font-size:18px;line-height:1;
@@ -161,11 +167,6 @@ a{color:inherit;text-decoration:none}
        dentro de la misma barra y si no los taparía */
     position:relative;z-index:1}
   .nav>.logo{position:relative;z-index:1}
-  /* .nav va en mix-blend-mode:difference. Con el panel de tinta detrás el texto
-     de la barra se invierte contra su propio fondo y deja de ser confiable:
-     mientras el menú está abierto se apaga la mezcla y se fija el color.
-     --papel sobre --ink da 16,5:1. */
-  body.menu-abierto .nav{mix-blend-mode:normal;color:var(--papel)}
   body.menu-abierto .nav nav{display:flex;flex-direction:column;align-items:stretch;gap:0;
     position:fixed;inset:0;background:var(--ink);
     /* los links bajan a un tercio de la pantalla y la marca cierra al pie: el
@@ -186,37 +187,27 @@ a{color:inherit;text-decoration:none}
 @media(prefers-reduced-motion:reduce){body.menu-abierto .nav nav{animation:none}}
 
 /* ============================================================
-   PIE — cierra el sitio. Oscuro, como el umbral: el recorrido
-   termina donde empezó. Y termina con la firma de la etiqueta:
-   el laberinto, la palabra y el origen, apilados y centrados como
-   en la botella. Es el único lugar que rompe el canal de la
-   izquierda, a propósito: es el sello.
-   Antes el contacto iba en columnas de 14px y la marca era una
-   marca de agua al 5%: lo que se viene a buscar a un pie no se leía.
+   PIE — cierra cada página. Oscuro, como el umbral: el recorrido
+   termina donde empezó. Tres columnas de links y la firma de la
+   etiqueta: el laberinto, la palabra y el origen, apilados y
+   centrados como en la botella. Es el único lugar que rompe el
+   canal de la izquierda, a propósito: es el sello.
+   El contacto ya no está acá: desde el 18/09/2026 tiene su página,
+   contacto/, y el pie lleva el link. Antes arriba de todo iba
+   "Escribinos." en grande con el teléfono y el mail, y en la
+   portada se leía como una sección más del relato.
    ============================================================ */
+/* el filete va en el borde del pie y no arriba de las columnas: en la portada
+   separa el pie de la foto de familia, que también es tinta. En las páginas de
+   papel cae justo en el cambio de fondo y no se ve, que es lo que corresponde */
 .pie{position:relative;background:var(--ink);color:var(--papel);overflow:hidden;
- padding:clamp(110px,15vh,160px) 0 clamp(34px,5vh,54px)}
+ padding:clamp(56px,8vh,90px) 0 clamp(34px,5vh,54px);border-top:1px solid var(--linea-2)}
 .pie .canal{max-width:none;margin:0;padding-left:clamp(20px,3.2vw,48px);padding-right:var(--canal)}
-.pie__arriba{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);
- gap:44px clamp(24px,4vw,64px);align-items:end}
-.pie h2{font-size:var(--h1);letter-spacing:-.03em;margin-top:10px}
-/* 44px de area de toque, crecida hacia ARRIBA: el margen baja lo mismo (30 - 15)
-   y el texto y la linea quedan donde estaban. Medía 29px */
-.pie__cta{display:inline-flex;align-items:flex-end;gap:14px;margin-top:15px;min-height:44px;
- font-family:var(--dato);font-size:13px;letter-spacing:.16em;text-transform:uppercase;
- border-bottom:1px solid currentColor;padding-bottom:8px;
- transition:gap var(--hover) var(--ease)}
-@media(hover:hover){.pie__cta:hover{gap:26px}}
-.pie__frase{margin-top:26px;color:var(--muted);max-width:36ch;font-size:clamp(15px,1.2vw,18px)}
-/* teléfono y mail: en la voz de la marca y grandes */
-.pie__contacto{list-style:none;margin:0;padding:0;display:grid;justify-items:start;gap:4px;
- font-family:var(--display);font-size:clamp(20px,2.1vw,30px);line-height:1.15}
-.pie__contacto a,.pie__cols a{display:inline-flex;align-items:center;min-height:44px;
+.pie__cols a{display:inline-flex;align-items:center;min-height:44px;
  text-decoration:underline 1px;text-decoration-color:transparent;text-underline-offset:6px;
  transition:text-decoration-color var(--hover) var(--ease)}
-@media(hover:hover){.pie__contacto a:hover,.pie__cols a:hover{text-decoration-color:currentColor}}
-.pie__cols{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,48px);
- margin-top:clamp(64px,10vh,120px);padding-top:clamp(30px,4vh,44px);border-top:1px solid var(--linea-2)}
+@media(hover:hover){.pie__cols a:hover{text-decoration-color:currentColor}}
+.pie__cols{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,48px)}
 .pie__cols h3{margin:0;font-family:var(--dato);font-size:var(--etiqueta);font-weight:400;
  letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
 /* 14px pasa a 17-20: son links que se tocan con el dedo, no una nota al pie */
@@ -243,9 +234,8 @@ a{color:inherit;text-decoration:none}
  margin-top:clamp(60px,9vh,100px);padding-top:22px;border-top:1px solid var(--linea-2);
  font-family:var(--dato);font-size:11px;letter-spacing:.1em;color:var(--muted)}
 .pie__legal b{color:var(--papel);font-weight:400}
-@media(prefers-reduced-motion:reduce){.pie__contacto a,.pie__cols a{transition:none}}
+@media(prefers-reduced-motion:reduce){.pie__cols a{transition:none}}
 @media(max-width:820px){
-  .pie__arriba{grid-template-columns:1fr;align-items:start}
   /* dos columnas; exportamos, que no tiene links, ocupa el renglón entero */
   .pie__cols{grid-template-columns:1fr 1fr;gap:34px 20px}
   .pie__cols>:last-child{grid-column:1/-1}
@@ -305,9 +295,11 @@ html.edad .puerta{position:fixed;inset:0;z-index:40;display:grid;align-items:cen
  transition:opacity var(--hover) var(--ease)}
 html.edad.edad-sale .puerta{opacity:0}
 .puerta__caja{padding:clamp(28px,6vh,64px) var(--canal) clamp(28px,6vh,64px) clamp(20px,3.2vw,48px)}
-/* la marca en el mismo lugar y cuerpo que en la barra del sitio */
-.puerta__marca{position:absolute;top:18px;left:var(--canal);font-family:var(--display);
- font-size:15px;letter-spacing:.06em}
+/* la marca en el mismo lugar y cuerpo que en la barra del sitio: si cambia
+   .logo, cambia esto */
+.puerta__marca{position:absolute;top:12px;left:var(--canal);display:flex;align-items:center;
+ min-height:44px;font-family:var(--display);font-size:26px;line-height:1;letter-spacing:.08em}
+@media(max-width:900px){.puerta__marca{top:8px;font-size:21px}}
 .puerta h2{font-size:var(--h4);max-width:16ch}
 .puerta__aviso{margin-top:18px;color:var(--muted);max-width:40ch;font-size:clamp(15px,1.2vw,18px)}
 .puerta fieldset{border:0;padding:0;margin:clamp(30px,5vh,48px) 0 0;min-width:0}

@@ -17,8 +17,9 @@ import fs from 'node:fs/promises';
 const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /* pathToFileURL escapa espacios y # de la ruta, que la concatenación a mano rompía */
 const sitio = pathToFileURL(path.join(raiz, 'docs', 'index.html')).href;
-/* los puntos de venta tienen pagina propia desde el 18/09/2026 */
-const paginaDonde = pathToFileURL(path.join(raiz, 'docs', 'donde', 'index.html')).href;
+/* los puntos de venta y el contacto tienen pagina propia desde el 18/09/2026 */
+const PAGINAS = ['donde', 'contacto'].map(n =>
+  [n, pathToFileURL(path.join(raiz, 'docs', n, 'index.html')).href]);
 const etiqueta = process.argv[2] ?? 'actual';
 const salida = path.join(raiz, 'capturas', etiqueta);
 
@@ -226,21 +227,23 @@ try {
         }
       }
 
-      /* La pagina de puntos de venta. El dato de la puerta de edad ya esta en el
+      /* Las paginas interiores. El dato de la puerta de edad ya esta en el
          localStorage de este contexto, pero en file:// cada archivo puede ser su
          propio origen: si la puerta aparece igual, se pasa de nuevo. */
-      await pag.goto(paginaDonde, { waitUntil: 'load' });
-      if (await pag.$('html.edad')) {
-        await pag.evaluate(() => localStorage.setItem('laberintos-edad', '18'));
-        await pag.reload({ waitUntil: 'load' });
+      for (const [nombre, url] of PAGINAS) {
+        await pag.goto(url, { waitUntil: 'load' });
+        if (await pag.$('html.edad')) {
+          await pag.evaluate(() => localStorage.setItem('laberintos-edad', '18'));
+          await pag.reload({ waitUntil: 'load' });
+        }
+        await asentar(pag);
+        await esperar(pag, IMAGENES_VISIBLES_LISTAS, 'imagenes visibles cargadas', `${donde} · ${nombre}/`);
+        await esperar(pag, NADA_ANIMANDO, 'ninguna animacion corriendo', `${donde} · ${nombre}/`);
+        await pag.screenshot({ path: path.join(dir, `${nombre}-pagina.png`) });
+        await pag.evaluate(() => { for (const el of document.querySelectorAll('[data-reveal]')) el.classList.add('is-in'); });
+        await esperar(pag, NADA_ANIMANDO, 'ninguna animacion corriendo', `${donde} · ${nombre}/ completa`);
+        await pag.screenshot({ path: path.join(dir, `${nombre}-pagina-completa.png`), fullPage: true });
       }
-      await asentar(pag);
-      await esperar(pag, IMAGENES_VISIBLES_LISTAS, 'imagenes visibles cargadas', `${donde} · donde/`);
-      await esperar(pag, NADA_ANIMANDO, 'ninguna animacion corriendo', `${donde} · donde/`);
-      await pag.screenshot({ path: path.join(dir, 'donde-pagina.png') });
-      await pag.evaluate(() => { for (const el of document.querySelectorAll('[data-reveal]')) el.classList.add('is-in'); });
-      await esperar(pag, NADA_ANIMANDO, 'ninguna animacion corriendo', `${donde} · donde/ completa`);
-      await pag.screenshot({ path: path.join(dir, 'donde-pagina-completa.png'), fullPage: true });
 
       await ctx.close();
     }
