@@ -40,8 +40,8 @@ cosechas (valen las de la ficha técnica: 2024 / 2023 / 2022).
 3. **La crianza del Syrah.** Dice "7 meses" a secas porque el dato que llegó no
    especifica la vasija. Si es roble, es una línea.
 
-Resuelto el 18/09: la dirección de la bodega **no se publica** (ya no está en
-Estrada 411), así que el código postal y el 411/611 dejaron de ser preguntas.
+Resuelto el 18/09: la dirección de la bodega **no se publica** (la de antes ya
+no vale), así que el código postal y la duda con Villa uva dejaron de ser preguntas.
 Villa uva sigue en Estrada 611: es un punto de venta, no la bodega.
 
 ### Notas que no caducan
