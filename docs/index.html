@@ -156,14 +156,74 @@
 /* --mf es la entrada de la frase y --salida su apagado al final del umbral.
    Van multiplicadas y no sumadas: una sube al principio y la otra baja al
    cierre, asi que el texto solo esta visible cuando las dos valen 1. */
-.manifiesto{position:absolute;inset:0;z-index:8;display:grid;align-items:center;justify-items:start;
+.manifiesto{position:absolute;inset:0;z-index:8;display:grid;align-items:center;
  color:var(--ink);opacity:calc(var(--mf,0) * var(--salida,1));pointer-events:none}
-.manifiesto h2{font-size:var(--h4);max-width:20ch}
-.manifiesto .canal{max-width:none;margin:0;padding-left:var(--canal);padding-right:var(--canal)}
-.manifiesto .linea{display:block;opacity:var(--l1,0);transform:translate3d(0,calc((1 - var(--l1,0)) * 22px),0)}
-.manifiesto .linea:nth-child(2){opacity:var(--l2,0);transform:translate3d(0,calc((1 - var(--l2,0)) * 22px),0)}
-.manifiesto .linea:nth-child(3){opacity:var(--l3,0);transform:translate3d(0,calc((1 - var(--l3,0)) * 22px),0)}
-.manifiesto .marca{margin-top:34px;color:var(--muted-claro);opacity:var(--l3,0)}
+.manifiesto .canal{max-width:none;width:100%;margin:0;padding-left:var(--canal);padding-right:var(--canal)}
+
+/* ============================================================
+   EL MANIFIESTO COMO RECORRIDO (19/09/2026). Antes eran las tres
+   frases apiladas a la izquierda sobre un papel vacío. Ahora bajan
+   en escalera y una ruta las une, y la ruta hace lo que dice cada
+   frase: "se recorren", entra desde el borde y baja; "se
+   comparten", otro camino llega desde la derecha y se juntan en un
+   nudo; "no tienen apuro", en vez de ir derecho va y vuelve dos
+   veces antes de llegar. Termina en un punto, y ahí firma la marca.
+   Es el terracota del recorrido del desvío: el mismo hilo.
+
+   La composición es una lámina de proporción fija, como el mapa del
+   desvío: el texto se ubica en % de la lámina y mide en cqw, así
+   que la ruta cae siempre en el mismo lugar respecto de las letras,
+   a cualquier ancho. Hay dos láminas: la ancha (1000x440) y la
+   vertical (400x520), donde cada frase va en dos renglones. Las
+   coordenadas salen de medir las frases en Special Elite: si se
+   cambia una palabra, hay que rehacerlas.
+   ============================================================ */
+/* el ancho manda y el alto sale de la proporción. En una pantalla baja se
+   achica para entrar: 200px son la barra y el aire de arriba y de abajo */
+.lamina{position:relative;width:min(100%,(100vh - 200px) * 2.2727);aspect-ratio:1000/440;
+ container-type:inline-size}
+.manifiesto h2{position:absolute;inset:0;margin:0;font-size:3.5cqw;line-height:1}
+/* --x y --y son la posición en % de la lámina; --y es la línea de base, que en
+   Special Elite cae a .7em del tope de una caja de line-height 1 */
+.manifiesto .linea{position:absolute;left:calc(var(--x) * 1%);top:calc(var(--y) * 1%);white-space:nowrap;
+ opacity:var(--l);transform:translate3d(0,calc(-.7em + (1 - var(--l)) * 22px),0)}
+.manifiesto .linea:nth-child(1){--l:var(--l1,0)}
+.manifiesto .linea:nth-child(2){--l:var(--l2,0)}
+.manifiesto .linea:nth-child(3){--l:var(--l3,0)}
+.manifiesto .corte-v{display:none}
+.manifiesto .marca{position:absolute;right:0;top:93.6%;color:var(--muted-claro);opacity:var(--l3,0)}
+/* La ruta se dibuja con stroke-dashoffset, como la del desvío y por la misma
+   razón: una línea que se dibuja no tiene otra forma. Cada tramo sale de la
+   línea que acompaña (--l1, --l2, --l3), así texto y ruta entran juntos.
+   overflow visible: los caminos arrancan afuera de la lámina, en el borde de
+   la pantalla. */
+.ruta-frase{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.ruta-frase--vertical{display:none}
+.tramo{fill:none;stroke:var(--et-syrah-texto);stroke-width:1.6;stroke-linecap:round;
+ stroke-dasharray:1;stroke-dashoffset:calc(1 - var(--l))}
+.tramo--1{--l:var(--l1,0)}
+.tramo--2{--l:var(--l2,0)}
+.tramo--3{--l:var(--l3,0)}
+/* los dos puntos aparecen cuando su tramo llega: el nudo donde se juntan los
+   caminos y el final */
+.nudo{fill:var(--et-syrah-texto)}
+.nudo--2{opacity:calc((var(--l2,0) - .9) * 10)}
+.nudo--3{opacity:calc((var(--l3,0) - .9) * 10)}
+/* La vertical va por ancho, como el resto del sitio, y además en toda pantalla
+   que no sea bien apaisada (6/5): a 900x900 la ancha quedaba en 28px en medio
+   del papel. 1024x768 y 1280x1024 siguen con la ancha */
+@media(max-width:900px),(max-aspect-ratio:6/5){
+  /* vertical: cada frase en dos renglones y la escalera más corta. Tope de
+     560px para que en una tableta la frase no pase de 50px */
+  .lamina{width:min(100%,560px,(100vh - 200px) * .769);aspect-ratio:400/520}
+  .manifiesto h2{font-size:9cqw}
+  .manifiesto .linea{left:calc(var(--xv) * 1%);top:calc(var(--yv) * 1%)}
+  .manifiesto .corte-v{display:inline}
+  .ruta-frase--ancha{display:none}
+  .ruta-frase--vertical{display:block}
+  .tramo{stroke-width:2.4}
+  .manifiesto .marca{top:94.2%}
+}
 
 
 .vino{position:relative;min-height:104vh;display:grid;align-items:center;overflow:hidden;--acento:var(--et-malbec)}
@@ -580,13 +640,39 @@
       <a class="etiqueta entrar" href="#indice" data-foco-inicial>Entrar &nbsp;→</a>
     </div></div>
 
+    <!-- El manifiesto como recorrido: ver el CSS de .lamina. Las coordenadas de
+         las rutas y los --x/--y de las frases van juntos: las frases miden, a
+         1000 de ancho y cuerpo 35, 518 / 451 / 514. Ancha: bases en 60, 195 y
+         330, arranques en 0, 256 y 432. Los codos caen en los espacios entre
+         palabras: la ruta subraya "Hay caminos" y dobla, y los dos caminos se
+         juntan entre "Y otros" y "que se comparten" (216 y 392). Vertical, a
+         cuerpo 36 y en dos renglones: bases en 50, 215 y 380, arranques en 0,
+         40 y 80. -->
     <div class="manifiesto"><div class="canal">
-      <h2>
-        <span class="linea">Hay caminos que se recorren.</span>
-        <span class="linea">Y otros que se comparten.</span>
-        <span class="linea">Los mejores no tienen apuro.</span>
-      </h2>
-      <p class="etiqueta marca">Laberintos · Mendoza, Argentina</p>
+      <div class="lamina">
+        <svg class="ruta-frase ruta-frase--ancha" viewBox="0 0 1000 440" aria-hidden="true" focusable="false">
+          <path class="tramo tramo--1" pathLength="1" d="M-80 80H216V215"/>
+          <path class="tramo tramo--2" pathLength="1" d="M216 215H392"/>
+          <path class="tramo tramo--2" pathLength="1" d="M1300 215H392"/>
+          <path class="tramo tramo--3" pathLength="1" d="M392 215V350H946V372H432V394H990"/>
+          <circle class="nudo nudo--2" cx="392" cy="215" r="4.5"/>
+          <circle class="nudo nudo--3" cx="990" cy="394" r="5.5"/>
+        </svg>
+        <svg class="ruta-frase ruta-frase--vertical" viewBox="0 0 400 520" aria-hidden="true" focusable="false">
+          <path class="tramo tramo--1" pathLength="1" d="M-40 106H20V271"/>
+          <path class="tramo tramo--2" pathLength="1" d="M20 271H60"/>
+          <path class="tramo tramo--2" pathLength="1" d="M700 271H60"/>
+          <path class="tramo tramo--3" pathLength="1" d="M60 271V436H387V454H80V472H392"/>
+          <circle class="nudo nudo--2" cx="60" cy="271" r="4.5"/>
+          <circle class="nudo nudo--3" cx="392" cy="472" r="5.5"/>
+        </svg>
+        <h2>
+          <span class="linea" style="--x:0;--y:13.64;--xv:0;--yv:9.62">Hay caminos <br class="corte-v">que se recorren.</span>
+          <span class="linea" style="--x:25.6;--y:44.32;--xv:10;--yv:41.35">Y otros <br class="corte-v">que se comparten.</span>
+          <span class="linea" style="--x:43.2;--y:75;--xv:20;--yv:73.08">Los mejores <br class="corte-v">no tienen apuro.</span>
+        </h2>
+        <p class="etiqueta marca">Laberintos · Mendoza, Argentina</p>
+      </div>
     </div></div>
   </div>
 </section>
