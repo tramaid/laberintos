@@ -29,7 +29,7 @@ gh api repos/tramaid/laberintos/pages/builds/latest | ConvertFrom-Json | Select-
 
 ```bash
 npm run capturas final    # código 0 y cero AVISOS
-npm run contraste         # código 0 y "8 de 8 tokens desde el CSS"
+npm run contraste         # código 0 y "9 de 9 tokens desde el CSS"
 ```
 
 ## Por qué el sitio tiene `noindex`

@@ -143,11 +143,23 @@ try {
       });
       pag.on('pageerror', e => errores.push(`${donde} · excepción · ${e.message}`));
 
-      await pag.goto(sitio, { waitUntil: 'load' });
-      await esperar(pag, PANEL_ENTRADO, 'panel del umbral entrado (--pn = 1.000)', donde);
-
       const dir = path.join(salida, `${ancho}-${movimiento}`);
       await fs.mkdir(dir, { recursive: true });
+
+      await pag.goto(sitio, { waitUntil: 'load' });
+      /* La puerta de edad tapa todo en la primera visita. Se la fotografía una vez
+         por contexto y se entra como un visitante mayor de edad: se guarda el dato
+         que guarda el formulario y se recarga. Si la puerta no aparece es un
+         cambio de estructura del sitio y hay que verlo. */
+      if (await pag.$('html.edad')) {
+        await pag.evaluate(() => document.fonts.ready);
+        await pag.screenshot({ path: path.join(dir, 'puerta.png') });
+        await pag.evaluate(() => localStorage.setItem('laberintos-edad', '18'));
+        await pag.reload({ waitUntil: 'load' });
+      } else {
+        console.warn(`AVISO · ${donde} · no apareció la puerta de edad`);
+      }
+      await esperar(pag, PANEL_ENTRADO, 'panel del umbral entrado (--pn = 1.000)', donde);
 
       const nodo = await pag.$('#umbral');
       if (!nodo) throw new Error(`${donde} · no se encontró #umbral: cambió la estructura del sitio`);

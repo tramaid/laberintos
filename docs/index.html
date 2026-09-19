@@ -1,5 +1,9 @@
 <!doctype html><html lang="es"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- La puerta de edad se decide ACA, antes del primer pintado: si esperara al
+     script del final, el sitio se veria un instante y despues se taparia.
+     Sin JavaScript la clase no se pone y la puerta no bloquea nada. -->
+<script>try{if(localStorage.getItem('laberintos-edad')!=='18')document.documentElement.classList.add('edad')}catch(e){document.documentElement.classList.add('edad')}</script>
 <title>Laberintos — Vinos de Mendoza y San Juan</title>
 <meta name="description" content="No todos los caminos buscan una salida. Malbec de Luján de Cuyo y Valle de Uco, y Syrah de San Juan. Bodega Laberintos, Argentina.">
 <meta name="theme-color" content="#0b0a09">
@@ -457,7 +461,8 @@ a{color:inherit;text-decoration:none}
  transition:gap var(--hover) var(--ease)}
 @media(hover:hover){.pie__cta:hover{gap:26px}}
 .pie__frase{margin-top:26px;color:var(--muted);max-width:36ch;font-size:clamp(15px,1.2vw,18px)}
-.pie__cols{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(20px,3vw,48px);
+/* tres columnas: "Donde estamos" se saco, no se publica direccion */
+.pie__cols{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,48px);
  margin-top:clamp(56px,9vh,110px);padding-top:clamp(30px,4vh,44px);border-top:1px solid var(--linea-2)}
 .pie__cols h3{font-family:var(--dato);font-size:11px;font-weight:400;letter-spacing:.16em;
  text-transform:uppercase;color:var(--muted)}
@@ -671,6 +676,53 @@ a{color:inherit;text-decoration:none}
 .cuatro span{display:block;font-family:var(--dato);font-size:11px;letter-spacing:.16em;
  text-transform:uppercase;color:var(--muted-claro);margin-top:8px}
 @media(max-width:820px){.cuatro{grid-template-columns:repeat(2,1fr);gap:34px 20px}}
+/* ============================================================
+   PUERTA DE EDAD — la pide el Código Conjunto de la Industria de
+   Bebidas Alcohólicas para la Autorregulación Publicitaria
+   (Bodegas de Argentina, Cerveceros Argentinos y la Federación de
+   la Industria Licorista), punto 4.6.2.2: al comienzo, un aviso de
+   que hay publicidad de bebidas alcohólicas y la fecha de
+   nacimiento ESCRITA por el usuario, con bloqueo automático. El
+   4.6.4 pide además las leyendas al comienzo: van al pie de la
+   puerta. La ley 24.788 y su decreto 149/2009 no piden puerta; sí
+   las leyendas, que también están en el pie del sitio.
+   Se muestra una vez por equipo: el dato queda en localStorage.
+   ============================================================ */
+.puerta{display:none}
+html.edad{overflow:hidden}
+html.edad .puerta{position:fixed;inset:0;z-index:40;display:grid;align-items:center;
+ overflow-y:auto;background:var(--ink);color:var(--papel);
+ transition:opacity var(--hover) var(--ease)}
+html.edad.edad-sale .puerta{opacity:0}
+.puerta__caja{padding:clamp(28px,6vh,64px) var(--canal) clamp(28px,6vh,64px) clamp(20px,3.2vw,48px)}
+/* la marca en el mismo lugar y cuerpo que en la barra del sitio */
+.puerta__marca{position:absolute;top:18px;left:var(--canal);font-family:var(--display);
+ font-size:15px;letter-spacing:.06em}
+.puerta h2{font-size:var(--h4);max-width:16ch}
+.puerta__aviso{margin-top:18px;color:var(--muted);max-width:40ch;font-size:clamp(15px,1.2vw,18px)}
+.puerta fieldset{border:0;padding:0;margin:clamp(30px,5vh,48px) 0 0;min-width:0}
+.puerta legend,.puerta label{font-family:var(--dato);font-size:var(--etiqueta);letter-spacing:.16em;
+ text-transform:uppercase;color:var(--muted);padding:0}
+.puerta__fecha{display:flex;gap:clamp(16px,3vw,28px);margin-top:18px}
+.puerta label{display:grid;gap:10px}
+/* 26px: arriba de 16px para que iOS no haga zoom al tocar el campo */
+.puerta input{width:2.6ch;padding:0 0 6px;border:0;border-bottom:1px solid var(--muted-2);
+ background:none;color:var(--papel);font-family:var(--dato);font-size:26px;letter-spacing:.04em}
+.puerta input[name=anio]{width:4.6ch}
+.puerta input::placeholder{color:var(--muted-2);opacity:1}
+.puerta input:focus{outline:none;border-bottom-color:var(--papel)}
+.puerta__entrar{display:inline-flex;align-items:center;min-height:44px;margin-top:34px;padding:0 0 5px;
+ border:0;border-bottom:1px solid currentColor;background:none;color:inherit;cursor:pointer;
+ font-family:var(--dato);font-size:var(--etiqueta);letter-spacing:.16em;text-transform:uppercase}
+/* el terracota de la etiqueta del Syrah sobre tinta da 6.05:1 */
+.puerta__error{margin-top:16px;min-height:1.5em;color:var(--et-syrah);font-size:clamp(15px,1.2vw,18px)}
+.puerta__legal{margin-top:clamp(40px,8vh,80px);font-family:var(--dato);font-size:11px;
+ letter-spacing:.1em;color:var(--muted)}
+.puerta__legal b{color:var(--papel);font-weight:400}
+/* menor de 18: el formulario se va y queda el aviso. Por la sesión, no para siempre */
+.puerta.is-menor fieldset,.puerta.is-menor .puerta__entrar{display:none}
+@media(prefers-reduced-motion:reduce){html.edad .puerta{transition:none}}
+
 [data-reveal]{opacity:0;transform:translate3d(0,var(--dist),0);
  transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease);transition-delay:var(--d,0ms)}
 [data-reveal].is-in{opacity:1;transform:none}
@@ -690,6 +742,28 @@ a{color:inherit;text-decoration:none}
 <link rel="preload" as="image" href="assets/hero-z1500-059cc8e5.webp" fetchpriority="high">
 <link rel="preload" as="image" href="assets/hero-z2600-625c67d7.webp" fetchpriority="high">
 </head><body>
+
+<!-- PUERTA DE EDAD. El texto del aviso es el del Codigo Conjunto de la industria
+     (4.6.2.2), con "sitio" en lugar de "mensaje". Ver el CSS de .puerta. -->
+<div class="puerta" id="puerta" role="dialog" aria-modal="true" aria-labelledby="puerta-titulo" aria-describedby="puerta-aviso">
+  <p class="puerta__marca">LABERINTOS</p>
+  <form class="puerta__caja" id="puerta-form" novalidate>
+    <h2 id="puerta-titulo">Antes de entrar<br>al laberinto.</h2>
+    <p class="puerta__aviso" id="puerta-aviso">Este sitio contiene publicidad de bebidas alcohólicas.
+      No debe accederse si se es menor de 18&nbsp;años.</p>
+    <fieldset>
+      <legend>Tu fecha de nacimiento</legend>
+      <div class="puerta__fecha">
+        <label>Día<input name="dia" inputmode="numeric" autocomplete="bday-day" maxlength="2" placeholder="DD" required></label>
+        <label>Mes<input name="mes" inputmode="numeric" autocomplete="bday-month" maxlength="2" placeholder="MM" required></label>
+        <label>Año<input name="anio" inputmode="numeric" autocomplete="bday-year" maxlength="4" placeholder="AAAA" required></label>
+      </div>
+    </fieldset>
+    <button type="submit" class="puerta__entrar">Entrar &nbsp;→</button>
+    <p class="puerta__error" id="puerta-error" aria-live="polite"></p>
+    <p class="puerta__legal"><b>Beber con moderación.</b> Prohibida su venta a menores de 18&nbsp;años. · Industria&nbsp;Argentina</p>
+  </form>
+</div>
 
 <header class="nav"><b>LABERINTOS</b>
   <!-- "Origen" se saco: esa seccion no existe en el sitio. Cuando se construya,
@@ -828,7 +902,7 @@ a{color:inherit;text-decoration:none}
     <h2 data-reveal>Otro suelo, otra uva,<br>otro <strong>LABERINTO</strong></h2>
     <p class="bajada" data-reveal>Los tres Malbec vienen de Mendoza. El cuarto no:<br class="corte">
       cruza a San Juan y cambia de variedad.<br class="corte">
-      Es el único camino que sale del mapa.</p>
+      Es el único camino que sale de Mendoza.</p>
   </div>
   <div class="mapa">
     <img class="mapa__base" src="assets/mapa-26c4d21a.svg" alt="" loading="lazy" width="613" height="607">
@@ -894,11 +968,7 @@ a{color:inherit;text-decoration:none}
 
 <!-- Los puntos de venta. Van sobre papel y no sobre tinta a proposito: la foto
      de familia y el pie son los dos oscuros, y sin este corte quedaban dos
-     bloques negros pegados al final del recorrido.
-     PENDIENTE DE VERIFICAR: el pie dice que la bodega esta en Estrada 411,
-     Belen de Escobar, y Villa uva esta en Estrada 611, Escobar. Misma calle,
-     mismo partido, numero distinto: o son dos lugares a dos cuadras, o uno de
-     los dos esta mal transcripto. -->
+     bloques negros pegados al final del recorrido. -->
 <section class="donde" id="donde" aria-label="Dónde encontrarnos">
   <div class="canal">
     <p class="etiqueta" data-reveal>Dónde encontrarnos</p>
@@ -974,11 +1044,8 @@ a{color:inherit;text-decoration:none}
           <li><a href="mailto:laberintosvinos@gmail.com">laberintosvinos@gmail.com</a></li>
         </ul>
       </div>
-      <div data-reveal>
-        <h3>Dónde estamos</h3>
-        <!-- PENDIENTE: verificar el código postal. "01423" no tiene formato argentino -->
-        <ul><li>Estrada 411, Belén de Escobar<br>Buenos Aires, Argentina</li></ul>
-      </div>
+<!-- Aca iba "Donde estamos" con Estrada 411, Belen de Escobar. La bodega ya no
+     esta ahi y se decidio no publicar direccion: se saco la columna entera. -->
       <div data-reveal>
         <h3>Seguinos</h3>
         <ul>
@@ -996,8 +1063,10 @@ a{color:inherit;text-decoration:none}
     </div>
 
     <div class="pie__legal">
-      <span><b>Beber con moderación.</b> Prohibida su venta a menores de 18 años.</span>
-      <span>Sitio para mayores de 18 años</span>
+      <span><b>Beber con moderación.</b> Prohibida su venta a menores de 18&nbsp;años.</span>
+      <!-- "Industria Argentina": la pide el Codigo Conjunto de autorregulacion de la
+           industria (3.4 y 4.6.4) para los productos elaborados en el pais -->
+      <span>Industria Argentina · Sitio para mayores de 18&nbsp;años</span>
       <span>© 2026 Laberintos · Mendoza, Argentina</span>
       <span class="pie__firma">Diseño <a href="https://tramaid.com.ar" target="_blank" rel="noopener">TRAMA</a></span>
     </div>
@@ -1272,15 +1341,19 @@ if(entrar) entrar.addEventListener('click', e=>{
 /* Los gestos que disparan la entrada. Hacia abajo: arrancan la entrada, o se
    los traga mientras corre. Hacia arriba: la cortan y pasan de largo, asi que
    el control vuelve en el mismo gesto.
-   wheel y touchmove van con passive:false porque hay que poder cancelarlos. */
+   wheel y touchmove van con passive:false porque hay que poder cancelarlos.
+   Con la puerta de edad abierta no hacen nada: la entrada arranca despues. */
+const puertaAbierta=()=>document.documentElement.classList.contains('edad');
 addEventListener('wheel',e=>{
-  if(R.matches || e.ctrlKey || !e.deltaY || Math.abs(e.deltaY)<Math.abs(e.deltaX) || menuAbierto()) return;
+  if(R.matches || e.ctrlKey || !e.deltaY || Math.abs(e.deltaY)<Math.abs(e.deltaX) || menuAbierto() || puertaAbierta()) return;
   if(e.deltaY<0) return soltarEntrada();
   if(entrarSolo()) e.preventDefault();
 },{passive:false});
 
 addEventListener('keydown',e=>{
-  if(R.matches || e.altKey || e.ctrlKey || e.metaKey || menuAbierto()) return;
+  if(R.matches || e.altKey || e.ctrlKey || e.metaKey || menuAbierto() || puertaAbierta()) return;
+  /* en un campo de texto las flechas y el espacio son del campo */
+  if(e.target.closest && e.target.closest('input,textarea,select')) return;
   const k=e.key;
   if(k==='ArrowUp'||k==='PageUp'||k==='Home'||k==='Escape'||(k===' '&&e.shiftKey)) return soltarEntrada();
   if(k!=='ArrowDown'&&k!=='PageDown'&&k!==' ') return;
@@ -1295,7 +1368,7 @@ addEventListener('keydown',e=>{
 const toque={y:null,abajo:null};
 addEventListener('touchstart',e=>{ toque.y=e.touches[0].clientY; toque.abajo=null; },{passive:true});
 addEventListener('touchmove',e=>{
-  if(R.matches || toque.y===null || e.touches.length>1 || menuAbierto()) return;
+  if(R.matches || toque.y===null || e.touches.length>1 || menuAbierto() || puertaAbierta()) return;
   if(toque.abajo===null){
     const dy=toque.y-e.touches[0].clientY;      // > 0: el dedo sube, la pagina baja
     if(Math.abs(dy)<2) return;
@@ -1304,6 +1377,57 @@ addEventListener('touchmove',e=>{
   }
   if(toque.abajo && entrarSolo() && e.cancelable) e.preventDefault();
 },{passive:false});
+
+/* PUERTA DE EDAD. La clase .edad la pone el script del <head>; aca se maneja el
+   formulario. Mientras esta abierta, el resto de la pagina va inert: ni el Tab
+   ni un lector de pantalla pueden llegar detras. */
+const puerta=document.getElementById('puerta');
+if(puerta && puertaAbierta()){
+  const form=document.getElementById('puerta-form'), error=document.getElementById('puerta-error');
+  const campos=[...form.querySelectorAll('input')];
+  const resto=[...document.body.children].filter(e=>e!==puerta);
+  resto.forEach(e=>{ e.inert=true; });
+  /* "el sistema generara un bloqueo automatico" (4.6.2.2): un menor queda
+     bloqueado por la sesion, sin volver a ver el formulario */
+  const bloquear=()=>{ puerta.classList.add('is-menor'); error.textContent='Este sitio es solo para mayores de 18 años.'; };
+  let menor=false;
+  try{ menor=sessionStorage.getItem('laberintos-edad')==='menor'; }catch(e){}
+  if(menor) bloquear(); else campos[0].focus();
+
+  /* solo digitos, y al completar un campo pasa al siguiente */
+  campos.forEach((c,i)=>c.addEventListener('input',()=>{
+    c.value=c.value.replace(/\D/g,'');
+    if(c.value.length===c.maxLength && campos[i+1]) campos[i+1].focus();
+  }));
+
+  form.addEventListener('submit',e=>{
+    e.preventDefault();
+    const [d,m,a]=campos.map(c=>+c.value), hoy=new Date(), f=new Date(a,m-1,d);
+    /* new Date corre las fechas imposibles (31/02 da 3/03): si no vuelve igual, no existe */
+    if(a<1900 || f.getFullYear()!==a || f.getMonth()!==m-1 || f.getDate()!==d || f>hoy){
+      error.textContent='Revisá la fecha: día, mes y año.';
+      return;
+    }
+    const cumplio=hoy.getMonth()>m-1 || (hoy.getMonth()===m-1 && hoy.getDate()>=d);
+    if(hoy.getFullYear()-a-(cumplio?0:1)<18){
+      try{ sessionStorage.setItem('laberintos-edad','menor'); }catch(e){}
+      return bloquear();
+    }
+    try{ localStorage.setItem('laberintos-edad','18'); }catch(e){}
+    resto.forEach(e=>{ e.inert=false; });
+    const html=document.documentElement;
+    const abrir=()=>{
+      html.classList.remove('edad','edad-sale');
+      /* el foco va a "Entrar": si no, se pierde con el boton que desaparece */
+      const entrarLink=document.querySelector('.entrar');
+      if(entrarLink) entrarLink.focus({preventScroll:true});
+    };
+    if(R.matches) return abrir();
+    html.classList.add('edad-sale');
+    puerta.addEventListener('transitionend',abrir,{once:true});
+    setTimeout(abrir,700);   // por si transitionend no llega
+  });
+}
 
 const io=new IntersectionObserver(es=>es.forEach(e=>{
   if(!e.isIntersecting) return;

@@ -351,3 +351,25 @@ de familia, candidata a cerrar la sección de vinos o a abrir las fichas.
 - "Beber con moderación. Prohibida su venta a menores de 18 años."
 - Puerta de edad o, como mínimo, la leyenda visible en el pie.
 - Sin promesas de salud ni de efectos del consumo.
+
+**Qué pide cada norma** (revisado el 18/09/2026):
+
+- **Ley 24.788 y decreto 149/2009, art. 6:** la publicidad de bebidas
+  alcohólicas lleva "BEBER CON MODERACIÓN" y "PROHIBIDA SU VENTA A MENORES DE 18
+  AÑOS". El decreto nombra la televisión, el cine, la radio y la gráfica, y
+  termina en "etc.": no menciona internet ni pide puerta de edad.
+- **Código Conjunto de la Industria de Bebidas Alcohólicas para la
+  Autorregulación Publicitaria** (Bodegas de Argentina, Cerveceros Argentinos y
+  la Federación de la Industria Licorista). Su capítulo 4 cubre la publicidad
+  digital, incluidos los sitios propios:
+  - 4.6.2.2: al comienzo, un aviso de que hay publicidad de bebidas alcohólicas
+    y la **fecha de nacimiento escrita por el usuario**, con bloqueo automático.
+  - 4.6.4: las leyendas y "Industria Argentina" al comienzo.
+  - 3.4: "Industria Argentina" en los productos elaborados en el país.
+
+  Obliga a las empresas socias de esas cámaras (las sanciones son suspensión o
+  expulsión de la cámara), pero es el estándar del sector.
+
+**Cómo se cumple:** la puerta de edad del sitio sigue el 4.6.2.2 al pie de la
+letra. Pide la fecha de nacimiento, bloquea por la sesión a un menor y lleva las
+leyendas y "Industria Argentina". El pie repite las leyendas.

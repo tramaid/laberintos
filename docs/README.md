@@ -39,10 +39,10 @@ cosechas (valen las de la ficha técnica: 2024 / 2023 / 2022).
    mandar el suyo.
 3. **La crianza del Syrah.** Dice "7 meses" a secas porque el dato que llegó no
    especifica la vasija. Si es roble, es una línea.
-4. **El código postal de Escobar**, marcado en el markup.
-5. **Estrada 411 vs 611.** El pie dice que la bodega está en Estrada 411, Belén
-   de Escobar, y Villa uva está en Estrada 611, Escobar. Misma calle, mismo
-   partido. Está marcado en el markup.
+
+Resuelto el 18/09: la dirección de la bodega **no se publica** (ya no está en
+Estrada 411), así que el código postal y el 411/611 dejaron de ser preguntas.
+Villa uva sigue en Estrada 611: es un punto de venta, no la bodega.
 
 ### Notas que no caducan
 

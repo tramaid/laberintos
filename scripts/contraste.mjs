@@ -108,6 +108,7 @@ const PARES = [
   ['--muted-claro',    '#6b6459', '--papel', true,  'labels sobre papel (ya existe)'],
   ['--et-syrah-texto', '#7a3f37', '--papel', true,  'terracota legible sobre papel'],
   ['--mapa',           '#6c4d38', '--papel', true,  'nombres de provincia del mapa del desvío'],
+  ['--et-syrah',       '#c07d74', '--ink',   true,  'error de la puerta de edad sobre tinta'],
   ['--muted',          '#8a8479', '--ink',   true,  'texto atenuado sobre tinta (ya existe)'],
   ['--linea-2',        '#1c1916', '--ink',   false, 'separadores de 1px sobre tinta'],
   ['--linea',          '#2a2622', '--ink',   false, 'separadores de 1px sobre tinta'],
@@ -130,8 +131,8 @@ for (const [nombre, propuesto, tokenFondo, texto, rol] of PARES) {
 }
 
 /* Resumen para que el estado se lea de un vistazo sin mirar la columna de origen.
-   Tienen que venir todos del CSS: hoy son 8 de 8 (el octavo, --mapa, entró con el
-   mapa del desvío). */
+   Tienen que venir todos del CSS: hoy son 9 de 9 (--mapa entró con el
+   mapa del desvío, --et-syrah sobre tinta con la puerta de edad). */
 const desdeCss = PARES.length - faltantes.length;
 console.log(`\n${desdeCss} de ${PARES.length} tokens desde el CSS, ${faltantes.length} propuestos.`);
 if (faltantes.length) {
