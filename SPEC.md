@@ -70,24 +70,6 @@ error recurrente fue alargar el efecto de entrada en vez del silencio de
 después: lo que hace falta es tiempo **con la frase ya puesta**. Con la
 entrada automática ese tiempo ya no es scroll: la frase espera al visitante.
 
-### La frase, adentro de un laberinto
-Desde el 19/09/2026. La idea: un camino que hace lo que dice cada frase. Un
-camino en serpentina, con las vueltas redondas de los pasillos de la etiqueta,
-deja a cada frase en su pasillo. "Se recorren": el camino terracota —el del
-recorrido del desvío— entra desde el borde de la pantalla, pasa por debajo y da
-la vuelta. "Se comparten": otro camino, en tinta, entra desde la derecha y sigue
-al lado del primero. "No tienen apuro": los dos, juntos, ondulan en vez de ir
-derecho y llegan al laberinto de la marca, donde firma. Cada camino lleva su
-viajero en la punta mientras se dibuja.
-
-Una primera puesta —frases en escalera, filetes finos cruzando la pantalla y un
-zigzag en ángulo recto— se leía como un diagrama y se descartó el mismo día.
-
-Es una lámina de proporción fija con el texto en cqw, como el mapa: ancha
-(1000x430) o vertical (400x400, en pantallas de hasta 900px o que no sean bien
-apaisadas). Las coordenadas salen de scripts que miden las frases: están
-comentadas en el markup.
-
 ### La entrada va sola
 El umbral no se recorre a mano. El primer gesto hacia abajo —rueda, flecha,
 barra espaciadora, deslizar el dedo o "Entrar"— reproduce la entrada sola

@@ -156,87 +156,14 @@
 /* --mf es la entrada de la frase y --salida su apagado al final del umbral.
    Van multiplicadas y no sumadas: una sube al principio y la otra baja al
    cierre, asi que el texto solo esta visible cuando las dos valen 1. */
-.manifiesto{position:absolute;inset:0;z-index:8;display:grid;align-items:center;
+.manifiesto{position:absolute;inset:0;z-index:8;display:grid;align-items:center;justify-items:start;
  color:var(--ink);opacity:calc(var(--mf,0) * var(--salida,1));pointer-events:none}
-.manifiesto .canal{max-width:none;width:100%;margin:0;padding-left:var(--canal);padding-right:var(--canal)}
-
-/* ============================================================
-   EL MANIFIESTO, ADENTRO DE UN LABERINTO (19/09/2026).
-   Antes eran las tres frases apiladas a la izquierda sobre un papel
-   vacío. La idea: un camino que hace lo que dice cada frase. La
-   primera puesta -frases en escalera, filetes finos que cruzaban la
-   pantalla y un zigzag en ángulo recto- se leía como un diagrama y
-   se descartó. Ahora la frase está ADENTRO de un laberinto: un
-   camino en serpentina, con las vueltas redondas de los pasillos de
-   la etiqueta, deja a cada frase en su pasillo.
-   - "se recorren": el camino entra desde el borde de la pantalla,
-     pasa por debajo de la frase y da la vuelta.
-   - "se comparten": otro camino, en tinta, entra desde la derecha y
-     sigue al lado del primero, por dentro de la vuelta.
-   - "no tienen apuro": los dos, juntos, ondulan en vez de ir
-     derecho, y llegan al laberinto de la marca, donde firma.
-   Cada camino lleva su viajero en la punta, como el del desvío.
-   El terracota es el del recorrido del desvío: el mismo hilo.
-
-   Es una lámina de proporción fija, como el mapa del desvío: el
-   texto se ubica en % de la lámina y mide en cqw, así que los
-   caminos caen siempre en el mismo lugar respecto de las letras. Hay
-   dos: la ancha (1000x430) y la vertical (400x400), donde cada
-   frase va en dos renglones.
-   ============================================================ */
-/* el ancho manda y el alto sale de la proporción. En una pantalla baja se
-   achica para entrar: 200px son la barra y el aire de arriba y de abajo */
-.lamina{position:relative;width:min(100%,(100vh - 200px) * 2.3256);aspect-ratio:1000/430;
- container-type:inline-size}
-.manifiesto h2{position:absolute;inset:0;margin:0;font-size:4.4cqw;line-height:1}
-/* --x y --y son la posición en % de la lámina; --y es la línea de base, que en
-   Special Elite cae a .7em del tope de una caja de line-height 1 */
-.manifiesto .linea{position:absolute;left:calc(var(--x) * 1%);top:calc(var(--y) * 1%);white-space:nowrap;
- opacity:var(--l);transform:translate3d(0,calc(-.7em + (1 - var(--l)) * 22px),0)}
-.manifiesto .linea:nth-child(1){--l:var(--l1,0)}
-.manifiesto .linea:nth-child(2){--l:var(--l2,0)}
-.manifiesto .linea:nth-child(3){--l:var(--l3,0)}
-.manifiesto .corte-v{display:none}
-/* la firma cierra contra la vuelta de la derecha, que llega al 96% de la lámina */
-.manifiesto .marca{position:absolute;right:4%;top:93.95%;color:var(--muted-claro);opacity:var(--l3,0)}
-/* Los caminos se dibujan con stroke-dashoffset, como el del desvío y por la
-   misma razón: una línea que se dibuja no tiene otra forma. Cada tramo sale de
-   la frase que acompaña (--l1, --l2, --l3), así texto y camino entran juntos.
-   overflow visible: los caminos arrancan afuera de la lámina, en el borde de
-   la pantalla. */
-.ruta-frase{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.ruta-frase--vertical{display:none}
-.tramo{fill:none;stroke:var(--et-syrah-texto);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
- stroke-dasharray:1;stroke-dashoffset:calc(1 - var(--l))}
-.tramo--otro{stroke:var(--ink)}
-.tramo--1{--l:var(--l1,0)}
-.tramo--2{--l:var(--l2,0)}
-.tramo--3{--l:var(--l3,0)}
-/* los viajeros los ubica el script; el borde de papel los despega de la línea.
-   Aparecen cuando arranca su camino y se van al llegar: al final quedan los
-   caminos y el laberinto, no dos puntos sueltos */
-.viajero-frase{fill:var(--et-syrah-texto);stroke:var(--papel);stroke-width:2.5;
- opacity:min(calc(var(--l1,0) * 10),calc((1 - var(--l3,0)) * 8))}
-.viajero-frase--otro{fill:var(--ink);opacity:min(calc(var(--l2,0) * 10),calc((1 - var(--l3,0)) * 8))}
-/* el laberinto de la etiqueta aparece cuando los caminos llegan. El trazo va en
-   unidades del símbolo (1254), como en el sello del pie */
-.frase-laberinto{fill:none;stroke:var(--ink);stroke-width:44;stroke-linecap:round;stroke-linejoin:round;
- opacity:calc((var(--l3,0) - .75) * 4)}
-/* La vertical va por ancho, como el resto del sitio, y además en toda pantalla
-   que no sea bien apaisada (6/5): a 900x900 la ancha quedaba en 28px en medio
-   del papel. 1024x768 y 1280x1024 siguen con la ancha */
-@media(max-width:900px),(max-aspect-ratio:6/5){
-  /* cada frase en dos renglones. Tope de 560px para que en una tableta la frase
-     no pase de 48px */
-  .lamina{width:min(100%,560px,100vh - 200px);aspect-ratio:1}
-  .manifiesto h2{font-size:8.5cqw}
-  .manifiesto .linea{left:calc(var(--xv) * 1%);top:calc(var(--yv) * 1%)}
-  .manifiesto .corte-v{display:inline}
-  .ruta-frase--ancha{display:none}
-  .ruta-frase--vertical{display:block}
-  .tramo{stroke-width:2.4}
-  .manifiesto .marca{top:95.5%;right:2%}
-}
+.manifiesto h2{font-size:var(--h4);max-width:20ch}
+.manifiesto .canal{max-width:none;margin:0;padding-left:var(--canal);padding-right:var(--canal)}
+.manifiesto .linea{display:block;opacity:var(--l1,0);transform:translate3d(0,calc((1 - var(--l1,0)) * 22px),0)}
+.manifiesto .linea:nth-child(2){opacity:var(--l2,0);transform:translate3d(0,calc((1 - var(--l2,0)) * 22px),0)}
+.manifiesto .linea:nth-child(3){opacity:var(--l3,0);transform:translate3d(0,calc((1 - var(--l3,0)) * 22px),0)}
+.manifiesto .marca{margin-top:34px;color:var(--muted-claro);opacity:var(--l3,0)}
 
 
 .vino{position:relative;min-height:104vh;display:grid;align-items:center;overflow:hidden;--acento:var(--et-malbec)}
@@ -653,43 +580,13 @@
       <a class="etiqueta entrar" href="#indice" data-foco-inicial>Entrar &nbsp;→</a>
     </div></div>
 
-    <!-- El manifiesto dentro de un laberinto de pasillos: ver el CSS de .lamina.
-         Las rutas y los --x/--y de las frases salen de un mismo calculo, con las
-         frases medidas en Special Elite (a cuerpo 44: 652 / 567 / 646 de 1000).
-         Ancha, 1000x430: pasadas en y 112, 232 y 364, vueltas en x 900 y 100;
-         frases con base en 80, 190 y 314. Vertical, 400x400, cuerpo 34, cada
-         frase en dos renglones: pasadas en 106, 218 y 342. El segundo camino va
-         9 (u 8) por dentro del primero. Si se cambia una palabra, hay que
-         rehacer las cuentas. -->
     <div class="manifiesto"><div class="canal">
-      <div class="lamina">
-        <svg class="ruta-frase ruta-frase--ancha" viewBox="0 0 1000 430" aria-hidden="true" focusable="false">
-          <path class="tramo tramo--1" data-camino="1" pathLength="1" d="M-80 112H900A60 60 0 0 1 900 232"/>
-          <path class="tramo tramo--2" data-camino="1" pathLength="1" d="M900 232H100A66 66 0 0 0 100 364"/>
-          <path class="tramo tramo--3" data-camino="1" pathLength="1" d="M100 364L104 365L108 366L112 366.9L116 367.7L120 368.3L124 368.8L128 369L132 369L136 368.8L140 368.3L144 367.7L148 366.9L152 366L156 365L160 364L164 363L168 362L172 361.1L176 360.3L180 359.7L184 359.2L188 359L192 359L196 359.2L200 359.7L204 360.3L208 361.1L212 362L216 363L220 364L224 365L228 366L232 366.9L236 367.7L240 368.3L244 368.8L248 369L252 369L256 368.8L260 368.3L264 367.7L268 366.9L272 366L276 365L280 364L284 363L288 362L292 361.1L296 360.3L300 359.7L304 359.2L308 359L312 359L316 359.2L320 359.7L324 360.3L328 361.1L332 362L336 363L340 364L344 365L348 366L352 366.9L356 367.7L360 368.3L364 368.8L368 369L372 369L376 368.8L380 368.3L384 367.7L388 366.9L392 366L396 365L400 364L404 363L408 362L412 361.1L416 360.3L420 359.7L424 359.2L428 359L432 359L436 359.2L440 359.7L444 360.3L448 361.1L452 362L456 363L460 364L464 365L468 366L472 366.9L476 367.7L480 368.3L484 368.8L488 369L492 369L496 368.8L500 368.3L504 367.7L508 366.9L512 366L516 365L520 364L524 363L528 362L532 361.1L536 360.3L540 359.7L544 359.2L548 359L552 359L556 359.2L560 359.7L564 360.3L568 361.1L572 362L576 363L580 364L584 365L588 366L592 366.9L596 367.7L600 368.3L604 368.8L608 369L612 369L616 368.8L620 368.3L624 367.7L628 366.9L632 366L636 365L640 364L644 363L648 362L652 361.1L656 360.3L660 359.7L664 359.2L668 359L672 359L676 359.2L680 359.7L684 360.3L688 361.1L692 362L696 363L700 364L704 365L708 366L712 366.9L716 367.7L720 368.3L724 368.8L728 369L732 369L736 368.8L740 368.3L744 367.7L748 366.9L752 366L756 365L760 364L764 363L768 362L772 361.1L776 360.3L780 359.7L784 359.2L788 359L792 359L796 359.2L800 359.7L804 360.3L808 361.1L812 362L816 363L820 364L824 365L828 366L832 366.9L836 367.7L840 368.3L844 368.8L848 369L852 369L856 368.8L860 368.3L864 367.7L868 366.9L872 366"/>
-          <path class="tramo tramo--2 tramo--otro" data-camino="2" pathLength="1" d="M1200 241H100A57 57 0 0 0 100 355"/>
-          <path class="tramo tramo--3 tramo--otro" data-camino="2" pathLength="1" d="M100 355L104 356L108 357L112 357.9L116 358.7L120 359.3L124 359.8L128 360L132 360L136 359.8L140 359.3L144 358.7L148 357.9L152 357L156 356L160 355L164 354L168 353L172 352.1L176 351.3L180 350.7L184 350.2L188 350L192 350L196 350.2L200 350.7L204 351.3L208 352.1L212 353L216 354L220 355L224 356L228 357L232 357.9L236 358.7L240 359.3L244 359.8L248 360L252 360L256 359.8L260 359.3L264 358.7L268 357.9L272 357L276 356L280 355L284 354L288 353L292 352.1L296 351.3L300 350.7L304 350.2L308 350L312 350L316 350.2L320 350.7L324 351.3L328 352.1L332 353L336 354L340 355L344 356L348 357L352 357.9L356 358.7L360 359.3L364 359.8L368 360L372 360L376 359.8L380 359.3L384 358.7L388 357.9L392 357L396 356L400 355L404 354L408 353L412 352.1L416 351.3L420 350.7L424 350.2L428 350L432 350L436 350.2L440 350.7L444 351.3L448 352.1L452 353L456 354L460 355L464 356L468 357L472 357.9L476 358.7L480 359.3L484 359.8L488 360L492 360L496 359.8L500 359.3L504 358.7L508 357.9L512 357L516 356L520 355L524 354L528 353L532 352.1L536 351.3L540 350.7L544 350.2L548 350L552 350L556 350.2L560 350.7L564 351.3L568 352.1L572 353L576 354L580 355L584 356L588 357L592 357.9L596 358.7L600 359.3L604 359.8L608 360L612 360L616 359.8L620 359.3L624 358.7L628 357.9L632 357L636 356L640 355L644 354L648 353L652 352.1L656 351.3L660 350.7L664 350.2L668 350L672 350L676 350.2L680 350.7L684 351.3L688 352.1L692 353L696 354L700 355L704 356L708 357L712 357.9L716 358.7L720 359.3L724 359.8L728 360L732 360L736 359.8L740 359.3L744 358.7L748 357.9L752 357L756 356L760 355L764 354L768 353L772 352.1L776 351.3L780 350.7L784 350.2L788 350L792 350L796 350.2L800 350.7L804 351.3L808 352.1L812 353L816 354L820 355L824 356L828 357L832 357.9L836 358.7L840 359.3L844 359.8L848 360L852 360L856 359.8L860 359.3L864 358.7L868 357.9L872 357"/>
-          <use class="frase-laberinto" href="#laberinto" x="883" y="331" width="58" height="58"/>
-          <circle class="viajero-frase" data-camino="1" r="5.5" cx="0" cy="0"/>
-          <circle class="viajero-frase viajero-frase--otro" data-camino="2" r="5.5" cx="0" cy="0"/>
-        </svg>
-        <svg class="ruta-frase ruta-frase--vertical" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
-          <path class="tramo tramo--1" data-camino="1" pathLength="1" d="M-40 106H336A56 56 0 0 1 336 218"/>
-          <path class="tramo tramo--2" data-camino="1" pathLength="1" d="M336 218H64A62 62 0 0 0 64 342"/>
-          <path class="tramo tramo--3" data-camino="1" pathLength="1" d="M64 342L68 343.2L72 344.2L76 345L80 345.4L84 345.4L88 345L92 344.2L96 343.2L100 342L104 340.8L108 339.8L112 339L116 338.6L120 338.6L124 339L128 339.8L132 340.8L136 342L140 343.2L144 344.2L148 345L152 345.4L156 345.4L160 345L164 344.2L168 343.2L172 342L176 340.8L180 339.8L184 339L188 338.6L192 338.6L196 339L200 339.8L204 340.8L208 342L212 343.2L216 344.2L220 345L224 345.4L228 345.4L232 345L236 344.2L240 343.2L244 342L248 340.8L252 339.8L256 339L260 338.6L264 338.6L268 339L272 339.8L276 340.8L280 342L284 343.2L288 344.2L292 345L296 345.4L300 345.4L304 345L308 344.2L312 343.2L316 342L320 340.8L324 339.8"/>
-          <path class="tramo tramo--2 tramo--otro" data-camino="2" pathLength="1" d="M560 226H64A54 54 0 0 0 64 334"/>
-          <path class="tramo tramo--3 tramo--otro" data-camino="2" pathLength="1" d="M64 334L68 335.2L72 336.2L76 337L80 337.4L84 337.4L88 337L92 336.2L96 335.2L100 334L104 332.8L108 331.8L112 331L116 330.6L120 330.6L124 331L128 331.8L132 332.8L136 334L140 335.2L144 336.2L148 337L152 337.4L156 337.4L160 337L164 336.2L168 335.2L172 334L176 332.8L180 331.8L184 331L188 330.6L192 330.6L196 331L200 331.8L204 332.8L208 334L212 335.2L216 336.2L220 337L224 337.4L228 337.4L232 337L236 336.2L240 335.2L244 334L248 332.8L252 331.8L256 331L260 330.6L264 330.6L268 331L272 331.8L276 332.8L280 334L284 335.2L288 336.2L292 337L296 337.4L300 337.4L304 337L308 336.2L312 335.2L316 334L320 332.8L324 331.8"/>
-          <use class="frase-laberinto" href="#laberinto" x="336" y="326" width="40" height="40"/>
-          <circle class="viajero-frase" data-camino="1" r="5" cx="0" cy="0"/>
-          <circle class="viajero-frase viajero-frase--otro" data-camino="2" r="5" cx="0" cy="0"/>
-        </svg>
-        <h2>
-          <span class="linea" style="--x:0;--y:18.6;--xv:0;--yv:11">Hay caminos <br class="corte-v">que se recorren.</span>
-          <span class="linea" style="--x:29.3;--y:44.19;--xv:6;--yv:39">Y otros <br class="corte-v">que se comparten.</span>
-          <span class="linea" style="--x:14;--y:73.02000000000001;--xv:24;--yv:67">Los mejores <br class="corte-v">no tienen apuro.</span>
-        </h2>
-        <p class="etiqueta marca">Laberintos · Mendoza, Argentina</p>
-      </div>
+      <h2>
+        <span class="linea">Hay caminos que se recorren.</span>
+        <span class="linea">Y otros que se comparten.</span>
+        <span class="linea">Los mejores no tienen apuro.</span>
+      </h2>
+      <p class="etiqueta marca">Laberintos · Mendoza, Argentina</p>
     </div></div>
   </div>
 </section>
@@ -1054,27 +951,6 @@ function avanzarEntrada(ahora){
   if(q>=1) soltarEntrada();
 }
 
-/* Los viajeros de la frase van en la punta de cada camino, como el del desvio:
-   sobre el ultimo tramo que ya arranco, en la fraccion que lleva dibujada. Solo
-   se ubican en la lamina que se ve (ancha o vertical); el largo se mide recien
-   ahi, porque la otra esta en display:none. */
-const FRASE=[...document.querySelectorAll('.ruta-frase')].map(svg=>({svg,
-  caminos:[1,2].map(c=>({v:svg.querySelector(`.viajero-frase[data-camino="${c}"]`),
-    tramos:[...svg.querySelectorAll(`.tramo[data-camino="${c}"]`)].map(t=>({t,largo:0,
-      n:+t.getAttribute('class').match(/tramo--(\d)/)[1]}))}))}));
-function ubicarViajeros(ls){
-  for(const f of FRASE){
-    if(!f.svg.getBoundingClientRect().width) continue;
-    for(const c of f.caminos){
-      let tr=c.tramos[0];
-      for(const x of c.tramos) if(ls[x.n-1]>0) tr=x;
-      if(!tr.largo) tr.largo=tr.t.getTotalLength();
-      const q=tr.t.getPointAtLength(tr.largo*ls[tr.n-1]);
-      c.v.setAttribute('transform',`translate(${q.x.toFixed(1)} ${q.y.toFixed(1)})`);
-    }
-  }
-}
-
 function frame(){
   if(!R.matches){
     /* primero el scroll y despues la lectura: asi la camara dibuja el scroll
@@ -1107,11 +983,9 @@ function frame(){
     blanco.style.setProperty('--bl', suave(tramo(p,0.648,0.767)).toFixed(3));   // eran 0.60 y 0.71
     // 3) el texto entra sobre el blanco ya saturado, línea por línea
     manif.style.setProperty('--mf', suave(tramo(p,0.670,0.724)).toFixed(3));    // eran 0.620 y 0.670
-    const ls=[suave(tramo(p,0.691,0.745)),     // eran 0.640 y 0.690
-              suave(tramo(p,0.761,0.815)),     // eran 0.705 y 0.755
-              suave(tramo(p,0.826,0.880))];    // eran 0.765 y 0.815
-    ls.forEach((l,i)=>manif.style.setProperty('--l'+(i+1), l.toFixed(3)));
-    if(p>0.66 && p<1) ubicarViajeros(ls);
+    manif.style.setProperty('--l1', suave(tramo(p,0.691,0.745)).toFixed(3));    // eran 0.640 y 0.690
+    manif.style.setProperty('--l2', suave(tramo(p,0.761,0.815)).toFixed(3));    // eran 0.705 y 0.755
+    manif.style.setProperty('--l3', suave(tramo(p,0.826,0.880)).toFixed(3));    // eran 0.765 y 0.815
 
     /* El cierre: se apaga el TEXTO, no la pantalla.
        Antes aca subia una capa de tinta sobre todo. Ese apagon existia para que
