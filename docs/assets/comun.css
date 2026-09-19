@@ -75,8 +75,8 @@
   /* --- ritmo --- */
   --seccion: clamp(90px, 12vh, 160px);
   --ancho: 1180px;
-  /* El margen lateral de todo el sitio, a los dos lados, salvo el titulo del
-     umbral (ver .titulo en index.html). Hasta el 19/09 eran dos valores
+  /* El margen lateral de todo el sitio, a los dos lados, incluido el titulo
+     del umbral (ver .panel en index.html). Hasta el 19/09 eran dos valores
      distintos -48px a la izquierda y 40 a la derecha como mucho- y en una
      pantalla de 1900 el texto quedaba a 2,5% del borde.
      Crece rapido en las pantallas grandes y poco en las medianas: 24px hasta
