@@ -82,8 +82,10 @@ se sentía largo: eran cinco segundos y medio con la rueda tragada.
 - Mientras corre, los gestos hacia abajo se tragan. **Cualquier gesto hacia
   arriba la corta** y devuelve el control en el mismo gesto; también un link
   del nav, la barra de scroll o Escape.
-- Pasada la frase, el scroll es normal: un gesto más apaga la frase y suelta
-  el sticky.
+- **La salida también va sola.** Parado en la frase, el gesto siguiente hacia
+  abajo apaga la frase y lleva hasta el índice en **1,2 s**, con `ease-in-out`.
+  A mano eran 20vh de apagado y 100vh de papel liso saliendo, y se sentía
+  larguísimo. Con el índice arriba, el scroll es normal.
 - Con movimiento reducido no existe: el umbral mide una pantalla.
 
 La duración es `ENTRADA` en `docs/index.html`. Los cortes de la tabla de arriba

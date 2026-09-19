@@ -882,7 +882,7 @@ function recorrer(ahora){
    tres lineas entran de 1.6 a 2.8s. La frase no se apura para leerla: queda
    quieta hasta el proximo gesto. */
 const ENTRADA=3500, P_FRASE=0.90;
-const AUTO={activo:false,t0:0,desde:0,hasta:0,dur:0,ultimo:0};
+const AUTO={activo:false,t0:0,desde:0,hasta:0,dur:0,ultimo:0,curva:null};
 /* cubic-bezier como en CSS: se despeja t para la x pedida (Newton) y se
    devuelve la y */
 const bezier=(x1,y1,x2,y2)=>{
@@ -892,18 +892,33 @@ const bezier=(x1,y1,x2,y2)=>{
     return Y(clamp(t)); };
 };
 const curvaEntrada=bezier(.25,.1,.25,1);
+/* LA SALIDA TAMBIEN VA SOLA. Parado en la frase, el gesto siguiente hacia abajo
+   apaga la frase y desliza la camara hasta dejar el indice arriba, en SALIDA ms.
+   A mano eran 20vh de apagado y 100vh de papel liso saliendo: diez golpes de
+   rueda para pasar de una pantalla clara a otra, y se sentia larguisimo.
+   La curva es ease-in-out y no la de la entrada: con "ease" la frase se apagaba
+   en 120ms, de golpe. Asi se apaga de 0.14 a 0.34s y el indice se posa suave. */
+const SALIDA=1200, curvaSalida=bezier(.42,0,.58,1);
 const recorridoUmbral=()=>umbral.offsetHeight-cam.offsetHeight;
 const pUmbral=()=>clamp((scrollY-umbral.offsetTop)/recorridoUmbral());
-/* Devuelve true si la entrada esta corriendo, para que quien llama se trague
-   el gesto. Pasada la frase no hace nada: de ahi en adelante el scroll es normal. */
+/* Devuelve true si la entrada o la salida estan corriendo, para que quien llama
+   se trague el gesto. Con el indice ya arriba no hace nada: de ahi en adelante
+   el scroll es normal. */
 function entrarSolo(){
   if(R.matches) return false;
   if(AUTO.activo) return true;
-  const p0=pUmbral();
-  if(p0>=P_FRASE-.005) return false;
+  const p0=pUmbral(), frase=umbral.offsetTop+P_FRASE*recorridoUmbral();
+  if(p0<P_FRASE-.005){
+    Object.assign(AUTO,{activo:true,t0:performance.now(),desde:scrollY,ultimo:scrollY,
+      hasta:frase,curva:curvaEntrada,dur:Math.max(900,ENTRADA*(P_FRASE-p0)/P_FRASE)});
+    return true;
+  }
+  /* el indice queda arriba cuando termina el umbral. Si se arranca mas abajo de
+     la frase -volviendo desde el indice, por ejemplo- tarda la parte proporcional */
+  const fin=umbral.offsetTop+umbral.offsetHeight;
+  if(scrollY>=fin-2) return false;
   Object.assign(AUTO,{activo:true,t0:performance.now(),desde:scrollY,ultimo:scrollY,
-    hasta:umbral.offsetTop+P_FRASE*recorridoUmbral(),
-    dur:Math.max(900,ENTRADA*(P_FRASE-p0)/P_FRASE)});
+    hasta:fin,curva:curvaSalida,dur:Math.max(350,SALIDA*(fin-scrollY)/(fin-frase))});
   return true;
 }
 const soltarEntrada=()=>{ AUTO.activo=false; };
@@ -912,7 +927,7 @@ function avanzarEntrada(ahora){
      buscar en la pagina—: se suelta en vez de pelearle */
   if(Math.abs(scrollY-AUTO.ultimo)>2) return soltarEntrada();
   const q=clamp((ahora-AUTO.t0)/AUTO.dur);
-  scrollTo(0,AUTO.desde+(AUTO.hasta-AUTO.desde)*curvaEntrada(q));
+  scrollTo(0,AUTO.desde+(AUTO.hasta-AUTO.desde)*AUTO.curva(q));
   AUTO.ultimo=scrollY;
   if(q>=1) soltarEntrada();
 }
@@ -1029,9 +1044,10 @@ if(entrar) entrar.addEventListener('click', e=>{
   umbral.focus({preventScroll:true});
 });
 
-/* Los gestos que disparan la entrada. Hacia abajo: arrancan la entrada, o se
-   los traga mientras corre. Hacia arriba: la cortan y pasan de largo, asi que
-   el control vuelve en el mismo gesto.
+/* Los gestos que disparan la entrada y la salida. Hacia abajo: arrancan la que
+   toque segun donde este el scroll, o se los traga mientras corre. Hacia
+   arriba: la cortan y pasan de largo, asi que el control vuelve en el mismo
+   gesto.
    wheel y touchmove van con passive:false porque hay que poder cancelarlos.
    Con la puerta de edad abierta no hacen nada: la entrada arranca despues. */
 addEventListener('wheel',e=>{
