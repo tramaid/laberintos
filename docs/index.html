@@ -1089,18 +1089,42 @@ addEventListener('keydown',e=>{
 
 /* En touch la direccion se decide con el PRIMER movimiento del gesto: si ese
    no se cancela, el navegador empieza a scrollear y los siguientes ya no se
-   pueden cancelar. De ahi toque.abajo, que queda fijo hasta soltar el dedo. */
-const toque={y:null,abajo:null};
-addEventListener('touchstart',e=>{ toque.y=e.touches[0].clientY; toque.abajo=null; },{passive:true});
+   pueden cancelar. De ahi toque.abajo, que queda fijo hasta soltar el dedo.
+   En iPhone eso vale al pie de la letra: solo el primer touchmove puede frenar
+   el scroll, y llega con 0 o 1px de recorrido. Antes ese primero se dejaba
+   pasar por no tener direccion, la pagina se iba con el dedo y la entrada
+   arrancaba y se soltaba sola en cada frame, porque el scroll no estaba donde
+   lo habia dejado: habia que deslizar diez veces para cruzar el umbral.
+   Ahora, adentro del umbral, el primer movimiento se frena siempre, tenga
+   direccion o no (toque.retenido). Si el gesto resulta ser hacia arriba, el
+   navegador ya no lo va a scrollear, asi que la pagina sigue al dedo a mano.
+   Un primer movimiento claramente hacia arriba no se retiene: ese scroll
+   sigue siendo del navegador, con inercia y todo. Sobre un link o un boton
+   tampoco, para no arriesgar el clic. */
+const toque={y:null,ultimo:0,abajo:null,primero:false,retenido:false,control:false};
+/* true si un gesto hacia abajo lo tomaria entrarSolo(): la misma cuenta que hace ella */
+const enUmbral=()=>AUTO.activo || scrollY<umbral.offsetTop+umbral.offsetHeight-2;
+addEventListener('touchstart',e=>{
+  toque.y=toque.ultimo=e.touches[0].clientY; toque.abajo=null;
+  toque.primero=true; toque.retenido=false;
+  toque.control=!!(e.target.closest && e.target.closest('a,button'));
+},{passive:true});
 addEventListener('touchmove',e=>{
+  const primero=toque.primero; toque.primero=false;
   if(R.matches || toque.y===null || e.touches.length>1 || menuAbierto() || puertaAbierta()) return;
+  const y=e.touches[0].clientY, paso=toque.ultimo-y;
+  toque.ultimo=y;
   if(toque.abajo===null){
-    const dy=toque.y-e.touches[0].clientY;      // > 0: el dedo sube, la pagina baja
+    const dy=toque.y-y;                         // > 0: el dedo sube, la pagina baja
+    if(primero && dy>-2 && e.cancelable && !toque.control && enUmbral()){
+      toque.retenido=true; e.preventDefault();
+    }
     if(Math.abs(dy)<2) return;
     toque.abajo=dy>0;
     if(!toque.abajo) soltarEntrada();
   }
-  if(toque.abajo && entrarSolo() && e.cancelable) e.preventDefault();
+  if(toque.abajo && entrarSolo()){ if(e.cancelable) e.preventDefault(); return; }
+  if(toque.retenido){ if(e.cancelable) e.preventDefault(); scrollBy(0,paso); }
 },{passive:false});
 
 

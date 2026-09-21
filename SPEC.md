@@ -87,6 +87,13 @@ se sentía largo: eran cinco segundos y medio con la rueda tragada.
   A mano eran 20vh de apagado y 100vh de papel liso saliendo, y se sentía
   larguísimo. Con el índice arriba, el scroll es normal.
 - Con movimiento reducido no existe: el umbral mide una pantalla.
+- **En iPhone solo el primer `touchmove` puede frenar el scroll**, y llega con
+  0 o 1px de recorrido, sin dirección. Si se lo deja pasar, la página se va con
+  el dedo y la entrada se suelta sola en cada frame: el 21/09/2026 hacía falta
+  deslizar diez veces para cruzar el umbral. Adentro del umbral ese primer
+  movimiento se frena siempre, salvo que ya vaya claramente hacia arriba o
+  empiece sobre un link; si después resulta ser hacia arriba, la página sigue
+  al dedo a mano.
 
 La duración es `ENTRADA` en `docs/index.html`. Los cortes de la tabla de arriba
 siguen valiendo: están en p, y la entrada solo cambia a qué velocidad se pasa
