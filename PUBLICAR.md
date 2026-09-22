@@ -32,6 +32,41 @@ npm run capturas final    # código 0 y cero AVISOS
 npm run contraste         # código 0 y "9 de 9 tokens desde el CSS"
 ```
 
+## Vercel
+
+El sitio también puede publicarse en Vercel. Es el mismo `docs/`: no cambia
+nada del código ni del flujo de trabajo.
+
+**El `vercel.json` de la raíz no es opcional.** En el repo conviven el sitio
+estático de `docs/` y el proyecto Next.js a medio hacer. Sin ese archivo,
+Vercel encuentra el `package.json` con Next, lo compila y publica el proyecto
+incompleto —el umbral es un componente vacío— en vez del sitio. El archivo
+apaga la detección (`framework: null`), saltea la instalación y el build, y
+sirve `docs/` tal cual.
+
+### Conectarlo la primera vez
+
+1. En [vercel.com/new](https://vercel.com/new), **Import Git Repository** →
+   `tramaid/laberintos`. Hay que darle acceso al repo a la app de Vercel en
+   GitHub si es la primera vez.
+2. **Deploy**, sin tocar ninguna opción: las toma del `vercel.json`. Si la
+   pantalla muestra "Next.js" como framework, es que no está leyendo el
+   archivo; ahí hay que poner Framework Preset en **Other** y Output
+   Directory en **docs** a mano.
+3. Queda en `<nombre-del-proyecto>.vercel.app`.
+
+Desde ahí, **cada push a `main` publica en los dos lados**: GitHub Pages por el
+workflow de `.github/workflows/pages.yml` y Vercel por su integración con
+GitHub. Los dos sirven exactamente lo mismo. Conviene tenerlo presente cuando
+haya que apagar uno.
+
+### Si el dominio va a Vercel y no a Pages
+
+Los pasos del DNS de más abajo apuntan a GitHub. Para Vercel son otros
+registros, los que muestre **Settings → Domains** del proyecto: no se mezclan
+con los de acá. Y el `docs/CNAME` de la rama `dominio` es de Pages; en Vercel
+no hace nada.
+
 ## Por qué el sitio tiene `noindex`
 
 Está fuera de los buscadores a propósito, para que esta versión provisoria no le
