@@ -12,37 +12,32 @@ Todo lo que hay adentro se sirve tal cual.
 - `assets/` — 17 imágenes WebP, el mapa del desvío, el laberinto SVG, los
   favicons (`favicon.svg`, `favicon-32.png`, `apple-touch-icon.png`) y la
   imagen para compartir
-- `404.html` — "Este camino no lleva a ningún lado"
-- `.nojekyll` — **no borrar.** Sin este archivo GitHub Pages pasa todo por
-  Jekyll, que ignora las carpetas que empiezan con guión bajo y agrega
-  demoras al deploy sin ninguna ventaja para un sitio estático.
+- `404.html` — "Este camino no lleva a ningún lado". Es la única página con
+  rutas absolutas, porque se sirve en cualquier ruta que no exista.
+- `.nojekyll` — quedó de la etapa de GitHub Pages. No molesta.
 - `robots.txt`
 
 ## Rutas relativas
 
-Todos los `src` y `href` son **relativos** (`assets/...`, `./`). Eso hace que
-el sitio funcione igual servido desde la raíz de un dominio propio que desde
-`usuario.github.io/laberintos/`. Si se cambian por rutas absolutas (`/assets/`),
-el sitio se rompe en la URL de proyecto de GitHub. Es el error clásico.
+Todos los `src` y `href` son **relativos** (`assets/...`, `./`), salvo los de
+`404.html`. Vienen de cuando el sitio vivía en `usuario.github.io/laberintos/`,
+donde las absolutas lo rompían. En el dominio propio funcionan igual, así que
+se quedan como están: cambiarlas no arregla nada y toca las tres páginas.
 
 ## Estado
 
-**El sitio está publicado** en https://tramaid.github.io/laberintos/
-y lleva `noindex` a propósito, porque esa URL es provisoria. Ver `../PUBLICAR.md`.
+**El sitio está publicado** en https://laberintos-wines.com.ar/ y se indexa.
+Lo sirve Cloudflare desde esta carpeta. Ver `../PUBLICAR.md`.
 
 Resuelto: el canonical falso, los enlaces de Instagram y de la tienda, y las
 cosechas (valen las de la ficha técnica: 2024 / 2023 / 2022).
 
 ### Lo que sigue abierto
 
-1. **El dominio.** `laberintos-wines.com.ar` está comprado pero sin delegar:
-   todavía no resuelve. Es lo único que bloquea sacar el `noindex`. Los pasos y
-   el orden están en `../PUBLICAR.md`; el cambio del repo ya está hecho en la
-   rama `dominio`.
-2. **La contraetiqueta del Syrah.** Lo que hay publicado es un **borrador
+1. **La contraetiqueta del Syrah.** Lo que hay publicado es un **borrador
    nuestro**, marcado como tal en el markup. La bodega tiene que aprobarlo o
    mandar el suyo.
-3. **La crianza del Syrah.** Dice "7 meses" a secas porque el dato que llegó no
+2. **La crianza del Syrah.** Dice "7 meses" a secas porque el dato que llegó no
    especifica la vasija. Si es roble, es una línea.
 
 Resuelto el 18/09: la dirección de la bodega **no se publica** (la de antes ya

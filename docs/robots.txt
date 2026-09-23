@@ -1,12 +1,11 @@
-# Queda ABIERTO a proposito, aunque el sitio todavia no deba aparecer en Google.
-# Lo que lo mantiene fuera de los buscadores es <meta name="robots" content="noindex">
-# en index.html, no un Disallow aca.
+# Abierto. El sitio ya esta en su dominio, laberintos-wines.com.ar, y se indexa.
 #
-# Por que: un Disallow impide RASTREAR pero no impide INDEXAR -la URL puede
+# Mientras vivio en una URL provisoria, lo que lo mantenia fuera de los
+# buscadores era <meta name="robots" content="noindex"> en cada pagina, nunca un
+# Disallow aca: un Disallow impide RASTREAR pero no impide INDEXAR -la URL puede
 # aparecer igual en los resultados, sin contenido- y de paso frena a los robots
-# que arman la vista previa cuando alguien comparte el link. Para que el noindex
-# funcione, el robot tiene que poder leer la pagina.
+# que arman la vista previa cuando alguien comparte el link.
 #
-# No cambiar esto por un Disallow sin leer el comentario del <head>.
+# Si alguna vez hay que sacar el sitio de Google, va el noindex, no un Disallow.
 User-agent: *
 Allow: /

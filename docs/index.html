@@ -19,26 +19,15 @@
 <meta property="og:site_name" content="Laberintos">
 <meta property="og:title" content="Laberintos — Vinos">
 <meta property="og:description" content="No todos los caminos buscan una salida.">
-<!-- El sitio vive en una URL provisoria de GitHub Pages, tramaid.github.io, hasta
-     que el dominio laberintos-wines.com.ar resuelva (ver PUBLICAR.md).
-     Por eso NO lleva canonical: apuntar a una direccion que va a cambiar es peor
-     que no tener ninguna.
-     Y lleva noindex, para que esta version no le compita en los buscadores a la
-     definitiva cuando haya dominio propio.
-
-     El noindex va ACA y no como Disallow en robots.txt, a proposito: un Disallow
-     impide rastrear pero no impide indexar -la URL puede aparecer igual, sin
-     contenido- y ademas frena a los robots que arman la vista previa al
-     compartir un link. Con robots.txt abierto y noindex aca, Google no la lista
-     y WhatsApp sigue mostrando la imagen.
-
-     EL DIA QUE HAYA DOMINIO: sacar el noindex, agregar <link rel="canonical">, y
-     cambiar las dos URLs absolutas de aca abajo. -->
-<meta name="robots" content="noindex">
-<!-- El repo paso de matiasmercado88-debug a tramaid y la URL vieja da 404: con
-     ella, compartir el link salia sin imagen. -->
-<meta property="og:url" content="https://tramaid.github.io/laberintos/">
-<meta property="og:image" content="https://tramaid.github.io/laberintos/assets/og.jpg">
+<!-- El sitio vive en su dominio, laberintos-wines.com.ar, servido por Cloudflare
+     (ver PUBLICAR.md). Mientras estuvo en la URL provisoria de GitHub Pages
+     llevo noindex y no tuvo canonical: apuntar a una direccion que iba a cambiar
+     era peor que no tener ninguna. Con el dominio se invierten los dos.
+     El dominio responde igual con y sin www: el canonical dice cual es la buena.
+     Si algun dia cambia el dominio, cambian las tres URLs de aca abajo. -->
+<link rel="canonical" href="https://laberintos-wines.com.ar/">
+<meta property="og:url" content="https://laberintos-wines.com.ar/">
+<meta property="og:image" content="https://laberintos-wines.com.ar/assets/og.jpg">
 <meta property="og:locale" content="es_AR">
 <meta name="twitter:card" content="summary_large_image">
 
