@@ -238,12 +238,22 @@ a{color:inherit;text-decoration:none}
 .pie__origen{margin-top:12px;font-family:var(--dato);font-size:var(--etiqueta);
  letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
 
-/* crédito de estudio: va con los legales, en el mismo peso.
-   Firmar más fuerte que el cliente en su propio sitio es de mal gusto. */
-.pie__firma{display:inline-flex;align-items:baseline;gap:7px}
-.pie__firma a{border-bottom:1px solid transparent;color:var(--papel);
- transition:border-color var(--hover) var(--ease)}
-@media(hover:hover){.pie__firma a:hover{border-bottom-color:currentColor}}
+/* Crédito de estudio. Hasta el 22/09/2026 era una palabra entre los legales:
+   "Diseño TRAMA", al mismo cuerpo que la letra chica. Ahora va el logo, a un
+   tamaño que se ve. El orden lo mantiene en su lugar igual: entra DESPUÉS del
+   sello de la bodega y de las columnas, y a la derecha, del lado opuesto al
+   sello, así no compiten dos marcas en la misma esquina.
+   El SVG trae su propio color —el rojo del monograma y la palabra en papel—,
+   por eso no hereda currentColor como el resto del pie. */
+.pie__firma{display:grid;width:max-content;justify-items:start;
+ gap:clamp(10px,1.2vh,14px);margin-top:clamp(44px,6vh,72px);color:var(--muted)}
+.pie__firma span{font-family:var(--dato);font-size:var(--etiqueta);
+ letter-spacing:.16em;text-transform:uppercase}
+.pie__firma img{display:block;width:clamp(168px,16vw,232px);height:auto;
+ transition:opacity var(--hover) var(--ease)}
+@media(hover:hover){.pie__firma:hover img{opacity:.72}}
+@media(prefers-reduced-motion:reduce){.pie__firma img{transition:none}}
+@media(min-width:901px){.pie__firma{margin-left:auto;justify-items:end}}
 .pie__legal{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
  margin-top:clamp(48px,7vh,80px);padding-top:22px;border-top:1px solid var(--linea-2);
  font-family:var(--dato);font-size:11px;letter-spacing:.1em;color:var(--muted)}

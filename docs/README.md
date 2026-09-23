@@ -10,8 +10,10 @@ Todo lo que hay adentro se sirve tal cual.
   tokens, nav, pie, puerta de edad y reveals. El markup del nav, del pie y de
   la puerta está repetido en las tres: si se cambia en una, se cambia en todas
 - `assets/` — 17 imágenes WebP, el mapa del desvío, el laberinto SVG, los
-  favicons (`favicon.svg`, `favicon-32.png`, `apple-touch-icon.png`) y la
-  imagen para compartir
+  favicons (`favicon.svg`, `favicon-32.png`, `apple-touch-icon.png`), la
+  imagen para compartir y el logo de TRAMA en sus dos versiones:
+  `trama-papel-*.svg` para el pie, que es tinta, y `trama-tinta-*.svg` para
+  la página de contacto, que es papel
 - `404.html` — "Este camino no lleva a ningún lado". Es la única página con
   rutas absolutas, porque se sirve en cualquier ruta que no exista.
 - `.nojekyll` — quedó de la etapa de GitHub Pages. No molesta.

@@ -59,6 +59,21 @@ body{background:var(--papel)}
  margin-top:clamp(56px,8vh,96px);font-size:clamp(16px,1.3vw,19px);color:var(--muted-claro)}
 .contacto__compra a{display:inline-flex;align-items:center;min-height:44px;color:var(--ink);
  font-family:var(--display);text-decoration:underline 1px;text-underline-offset:6px}
+/* La firma del estudio, mas grande que en el pie y sobre papel. Esta es la
+   pagina donde alguien llega buscando con quien hablar, asi que es donde tiene
+   sentido que se vea quien hizo el sitio. Va al final, despues de los canales
+   de la bodega, separada por un filete: es un credito, no un canal mas.
+   El SVG es la version oscura del logo: la clara no se lee sobre papel. */
+.firma{display:grid;width:max-content;justify-items:start;gap:14px;
+ margin-top:clamp(64px,9vh,110px);padding-top:clamp(24px,3vh,34px);
+ border-top:1px solid var(--linea-clara)}
+.firma .etiqueta,.firma__url{color:var(--muted-claro)}
+.firma img{display:block;width:clamp(210px,26vw,330px);height:auto;
+ transition:opacity var(--hover) var(--ease)}
+.firma__url{font-family:var(--dato);font-size:var(--etiqueta);letter-spacing:.14em;
+ text-transform:uppercase}
+@media(hover:hover){.firma:hover img{opacity:.76}}
+@media(prefers-reduced-motion:reduce){.firma img{transition:none}}
 @media(max-width:640px){
   /* en vertical el nombre del canal va arriba de la direccion, como un rotulo */
   .canales>div{grid-template-columns:1fr;gap:2px}
@@ -127,6 +142,11 @@ body{background:var(--papel)}
       <div data-reveal><dt>Instagram</dt><dd><a href="https://www.instagram.com/laberintosvinos" target="_blank" rel="noopener">@laberintosvinos<span aria-hidden="true">&nbsp;↗</span><span class="solo-lectores"> (se abre en otra pestaña)</span></a></dd></div>
     </dl>
     <p class="contacto__compra" data-reveal><span>¿Buscás un vino?</span><a href="../donde/">Dónde comprar</a><a href="https://laberintosvinos.mitiendanube.com/" target="_blank" rel="noopener">Tienda online&nbsp;↗</a></p>
+    <a class="firma" href="https://tramaid.com.ar" target="_blank" rel="noopener" data-reveal>
+      <span class="etiqueta">Diseño y desarrollo</span>
+      <img src="../assets/trama-tinta-e6f1631f.svg" alt="TRAMA" width="876" height="168" loading="lazy">
+      <span class="firma__url">tramaid.com.ar<span aria-hidden="true">&nbsp;↗</span><span class="solo-lectores"> (se abre en otra pestaña)</span></span>
+    </a>
   </div>
 </section>
 </main>
@@ -172,13 +192,23 @@ body{background:var(--papel)}
       </div>
     </div>
 
+    <!-- La firma del estudio. Hasta el 22/09/2026 era una palabra suelta entre
+         los legales; ahora es el logo, en su propio renglon. Sigue DESPUES del
+         sello de la bodega y del cierre de las columnas: primero firma el dueño
+         del sitio. El SVG claro es para tinta; el oscuro, trama-tinta, va en la
+         pagina de contacto, que es papel. -->
+    <a class="pie__firma" href="https://tramaid.com.ar" target="_blank" rel="noopener">
+      <span>Diseño y desarrollo</span>
+      <img src="../assets/trama-papel-b9641a28.svg" alt="TRAMA" width="876" height="168" loading="lazy">
+      <span class="solo-lectores">(se abre en otra pestaña)</span>
+    </a>
+
     <div class="pie__legal">
       <span><b>Beber con moderación.</b> Prohibida su venta a menores de 18&nbsp;años.</span>
       <!-- "Industria Argentina": la pide el Codigo Conjunto de autorregulacion de la
            industria (3.4 y 4.6.4) para los productos elaborados en el pais -->
       <span>Industria Argentina · Sitio para mayores de 18&nbsp;años</span>
       <span>© 2026 Laberintos · Mendoza, Argentina</span>
-      <span class="pie__firma">Diseño <a href="https://tramaid.com.ar" target="_blank" rel="noopener">TRAMA</a></span>
     </div>
   </div>
 </footer>
