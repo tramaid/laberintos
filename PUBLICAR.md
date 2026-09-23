@@ -70,12 +70,6 @@ cuando sirve Cloudflare, al revés que apuntando a un host externo.
 Para verificar a mano desde esta carpeta: `npx wrangler deploy --dry-run` no
 publica nada y avisa si la configuración está rota.
 
-### Pendiente: lo que quedó de la vuelta por Vercel
-
-El `vercel.json` de la raíz es de ese intento y hoy no se usa. **Mientras exista
-el proyecto `laberintos` en Vercel conectado al repo, cada push también publica
-allá**, en una URL `.vercel.app`. Dar de baja ese proyecto y borrar el archivo.
-
 ## Buscadores
 
 El sitio **se indexa** desde el 22/09/2026 y cada página lleva su `canonical`
