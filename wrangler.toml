@@ -1,5 +1,14 @@
-# Cloudflare Pages. El sitio es docs/, ya construido: no hay build.
-# Sin esto, el proyecto encuentra el package.json con Next, compila el
-# esqueleto —el umbral es un componente vacio— y publica eso en vez del sitio.
+# Cloudflare Workers sirviendo assets estaticos. El sitio es docs/, ya
+# construido: no hay build, no hay codigo de Worker, solo archivos.
+#
+# Sin esta configuracion el proyecto encuentra el package.json con Next,
+# compila el esqueleto —el umbral es un componente vacio— y publica eso en
+# vez del sitio. Por eso el comando de compilacion tambien va VACIO en el
+# panel: aca no se compila nada.
 name = "laberintos"
-pages_build_output_dir = "docs"
+compatibility_date = "2026-09-22"
+
+[assets]
+directory = "./docs"
+# el 404 del sitio, el mismo que sirve GitHub Pages
+not_found_handling = "404-page"

@@ -32,31 +32,41 @@ npm run capturas final    # código 0 y cero AVISOS
 npm run contraste         # código 0 y "9 de 9 tokens desde el CSS"
 ```
 
-## Cloudflare Pages
+## Cloudflare
 
 Es donde va a vivir el sitio con el dominio propio. Es el mismo `docs/`: no
 cambia nada del código ni del flujo de trabajo.
 
+Va como **Worker con assets estáticos**, no como Pages: es el camino que ofrece
+hoy el panel al importar un repositorio, y un Worker creado así sí se puede
+conectar a Git después, cosa que un proyecto de Pages no.
+
 **El `wrangler.toml` de la raíz no es opcional.** En el repo conviven el sitio
 estático de `docs/` y el proyecto Next.js a medio hacer. Sin ese archivo, el
 proyecto encuentra el `package.json` con Next, lo compila y publica el proyecto
-incompleto —el umbral es un componente vacío— en vez del sitio. El archivo fija
-`pages_build_output_dir = "docs"`, y el build command va vacío.
+incompleto —el umbral es un componente vacío— en vez del sitio. El archivo
+declara `docs/` como carpeta de assets y el 404 propio del sitio; no hay código
+de Worker.
 
 ### Conectarlo la primera vez
 
-1. Cloudflare → **Workers & Pages** → Create → **Pages** → Connect to Git →
-   `tramaid/laberintos`. Hay que darle acceso al repo a la app de Cloudflare en
-   GitHub si es la primera vez.
-2. Framework preset **None**, build command **vacío**, output directory
-   **`docs`** (lo toma del `wrangler.toml`).
-3. Queda en `<proyecto>.pages.dev`, y cada push a `main` publica.
-4. **Custom domains** → agregar `laberintos-wines.com.ar` y `www`. El DNS ya
+1. Cloudflare → **Workers & Pages** → Create → importar el repositorio
+   `tramaid/laberintos`. Hay que darle acceso a la app de Cloudflare en GitHub
+   si es la primera vez.
+2. Nombre del proyecto **`laberintos`**, el mismo que declara el
+   `wrangler.toml`.
+3. **Comando de compilación: vacío.** Viene con `npm run build` puesto, que es
+   justo lo que no hay que hacer. El comando de despliegue queda en
+   `npx wrangler deploy`.
+4. **Domains & Routes** → agregar `laberintos-wines.com.ar` y `www`. El DNS ya
    está en Cloudflare, así que crea los registros solo. Hay que aceptar que
    reemplace los `A` que apuntaban a otro lado.
 
-Con Pages los registros del dominio van **proxied** (nube naranja): es así como
-funciona, al revés que apuntando a un host externo.
+Los registros del dominio van **proxied** (nube naranja): es así como funciona
+cuando sirve Cloudflare, al revés que apuntando a un host externo.
+
+Para verificar a mano desde esta carpeta: `npx wrangler deploy --dry-run` no
+publica nada y avisa si la configuración está rota.
 
 ### Lo que quedó de la vuelta por Vercel
 
