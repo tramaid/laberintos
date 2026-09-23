@@ -3,7 +3,7 @@
 <!-- La puerta de edad se decide antes del primer pintado. Igual que en ../index.html -->
 <script>try{if(localStorage.getItem('laberintos-edad')!=='18')document.documentElement.classList.add('edad')}catch(e){document.documentElement.classList.add('edad')}</script>
 <title>Contacto | Laberintos</title>
-<meta name="description" content="Escribile a la bodega Laberintos por WhatsApp, por teléfono, por mail o por Instagram.">
+<meta name="description" content="Escribile a la bodega Laberintos por WhatsApp, por mail o por Instagram.">
 <meta name="theme-color" content="#0b0a09">
 <link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
@@ -12,7 +12,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Laberintos">
 <meta property="og:title" content="Contacto — Laberintos">
-<meta property="og:description" content="WhatsApp, teléfono, mail e Instagram de la bodega.">
+<meta property="og:description" content="WhatsApp, mail e Instagram de la bodega.">
 <!-- en el dominio, como la portada: se indexa y lleva canonical. Ver PUBLICAR.md -->
 <link rel="canonical" href="https://laberintos-wines.com.ar/contacto/">
 <meta property="og:url" content="https://laberintos-wines.com.ar/contacto/">
@@ -136,9 +136,12 @@ body{background:var(--papel)}
     <h1 id="contacto-titulo" tabindex="-1" data-foco-inicial data-reveal>Escribinos.</h1>
     <!-- sin direccion de la bodega: la de antes ya no vale y no se publica otra -->
     <dl class="canales">
-      <div data-reveal><dt>WhatsApp</dt><dd><a href="https://wa.me/5491168632185">Mandanos un mensaje&nbsp;&nbsp;→</a></dd></div>
-      <!-- el mismo numero que el WhatsApp de arriba: es un celular, por eso el 9 -->
-      <div data-reveal><dt>Teléfono</dt><dd><a href="tel:+5491168632185">+54 9 11 6863-2185</a></dd></div>
+      <!-- Un solo renglon. Antes eran dos —"WhatsApp · mandanos un mensaje" y
+           "Telefono · el numero"— y eran dos caminos al mismo lado: la bodega
+           tiene un celular y atiende por WhatsApp. Asi el numero queda a la
+           vista, que es lo que alguien viene a buscar y lo que se copia para
+           agendar, y el toque abre el chat, que es donde contestan. -->
+      <div data-reveal><dt>WhatsApp</dt><dd><a href="https://wa.me/5491168632185">+54 9 11 6863-2185<span aria-hidden="true">&nbsp;&nbsp;→</span></a></dd></div>
       <div data-reveal><dt>Mail</dt><dd><a href="mailto:laberintosvinos@gmail.com">laberintosvinos@gmail.com</a></dd></div>
       <div data-reveal><dt>Instagram</dt><dd><a href="https://www.instagram.com/laberintosvinos" target="_blank" rel="noopener">@laberintosvinos<span aria-hidden="true">&nbsp;↗</span><span class="solo-lectores"> (se abre en otra pestaña)</span></a></dd></div>
     </dl>
