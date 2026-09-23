@@ -1,0 +1,5 @@
+# Cloudflare Pages. El sitio es docs/, ya construido: no hay build.
+# Sin esto, el proyecto encuentra el package.json con Next, compila el
+# esqueleto —el umbral es un componente vacio— y publica eso en vez del sitio.
+name = "laberintos"
+pages_build_output_dir = "docs"

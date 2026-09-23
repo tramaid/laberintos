@@ -32,40 +32,38 @@ npm run capturas final    # código 0 y cero AVISOS
 npm run contraste         # código 0 y "9 de 9 tokens desde el CSS"
 ```
 
-## Vercel
+## Cloudflare Pages
 
-El sitio también puede publicarse en Vercel. Es el mismo `docs/`: no cambia
-nada del código ni del flujo de trabajo.
+Es donde va a vivir el sitio con el dominio propio. Es el mismo `docs/`: no
+cambia nada del código ni del flujo de trabajo.
 
-**El `vercel.json` de la raíz no es opcional.** En el repo conviven el sitio
-estático de `docs/` y el proyecto Next.js a medio hacer. Sin ese archivo,
-Vercel encuentra el `package.json` con Next, lo compila y publica el proyecto
-incompleto —el umbral es un componente vacío— en vez del sitio. El archivo
-apaga la detección (`framework: null`), saltea la instalación y el build, y
-sirve `docs/` tal cual.
+**El `wrangler.toml` de la raíz no es opcional.** En el repo conviven el sitio
+estático de `docs/` y el proyecto Next.js a medio hacer. Sin ese archivo, el
+proyecto encuentra el `package.json` con Next, lo compila y publica el proyecto
+incompleto —el umbral es un componente vacío— en vez del sitio. El archivo fija
+`pages_build_output_dir = "docs"`, y el build command va vacío.
 
 ### Conectarlo la primera vez
 
-1. En [vercel.com/new](https://vercel.com/new), **Import Git Repository** →
-   `tramaid/laberintos`. Hay que darle acceso al repo a la app de Vercel en
+1. Cloudflare → **Workers & Pages** → Create → **Pages** → Connect to Git →
+   `tramaid/laberintos`. Hay que darle acceso al repo a la app de Cloudflare en
    GitHub si es la primera vez.
-2. **Deploy**, sin tocar ninguna opción: las toma del `vercel.json`. Si la
-   pantalla muestra "Next.js" como framework, es que no está leyendo el
-   archivo; ahí hay que poner Framework Preset en **Other** y Output
-   Directory en **docs** a mano.
-3. Queda en `<nombre-del-proyecto>.vercel.app`.
+2. Framework preset **None**, build command **vacío**, output directory
+   **`docs`** (lo toma del `wrangler.toml`).
+3. Queda en `<proyecto>.pages.dev`, y cada push a `main` publica.
+4. **Custom domains** → agregar `laberintos-wines.com.ar` y `www`. El DNS ya
+   está en Cloudflare, así que crea los registros solo. Hay que aceptar que
+   reemplace los `A` que apuntaban a otro lado.
 
-Desde ahí, **cada push a `main` publica en los dos lados**: GitHub Pages por el
-workflow de `.github/workflows/pages.yml` y Vercel por su integración con
-GitHub. Los dos sirven exactamente lo mismo. Conviene tenerlo presente cuando
-haya que apagar uno.
+Con Pages los registros del dominio van **proxied** (nube naranja): es así como
+funciona, al revés que apuntando a un host externo.
 
-### Si el dominio va a Vercel y no a Pages
+### Lo que quedó de la vuelta por Vercel
 
-Los pasos del DNS de más abajo apuntan a GitHub. Para Vercel son otros
-registros, los que muestre **Settings → Domains** del proyecto: no se mezclan
-con los de acá. Y el `docs/CNAME` de la rama `dominio` es de Pages; en Vercel
-no hace nada.
+El `vercel.json` de la raíz es de ese intento y hoy no se usa. Mientras exista
+el proyecto en Vercel conectado al repo, cada push también publica allá. Cuando
+Cloudflare Pages esté sirviendo el dominio, dar de baja ese proyecto y borrar
+el archivo.
 
 ## Por qué el sitio tiene `noindex`
 

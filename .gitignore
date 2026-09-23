@@ -6,3 +6,4 @@ out/
 capturas/
 
 .vercel
+.wrangler/
